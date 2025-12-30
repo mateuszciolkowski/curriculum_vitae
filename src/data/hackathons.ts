@@ -20,13 +20,14 @@ export const HACKATHONS: Hackathon[] = [
     role: "Frontend",
     description: `Moduł do aplikacji "Karta Łodzianina" gamifikujący życie miejskie poprzez punktowanie ekologicznych wyborów, udziału w wydarzeniach lokalnych i codziennych wyzwań generowanych przez AI. Wprowadza ranking osiedli oraz użytkowników, wzmacniając zaangażowanie mieszkańców. Projekt zdobył 1. miejsce podczas hackathonu ŁÓDŹ_HACK. Użyte technologie: React, Docker`,
     images: [
-      "/src/assets/images/fintech/kartalodz.png",
-      "/src/assets/images/fintech/stronaglowna.png",
-      "/src/assets/images/fintech/ranking.png",
-      "/src/assets/images/fintech/wydarzenia.png",
-      "/src/assets/images/fintech/fintech_1.jpeg",
-      "/src/assets/images/fintech/fintech_2.jpeg",
-      "/src/assets/images/fintech/fintech_3.jpeg",
+      new URL("../assets/images/fintech/kartalodz.png", import.meta.url).href,
+      new URL("../assets/images/fintech/stronaglowna.png", import.meta.url)
+        .href,
+      new URL("../assets/images/fintech/ranking.png", import.meta.url).href,
+      new URL("../assets/images/fintech/wydarzenia.png", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_1.jpeg", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_2.jpeg", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_3.jpeg", import.meta.url).href,
     ],
     links: {
       // article: "https://fintechcentral.pl/2025/12/19/lodz_hack-podsumowanie/",
@@ -42,11 +43,16 @@ export const HACKATHONS: Hackathon[] = [
     description:
       "Daily tracker dla branży farmaceutycznej, dostarcza farmaceutom powiadomienia o nowych i wycofanych lekach oraz zmianach prawnych, eliminując potrzebę ręcznego przeglądania wielu źródeł. Projekt zajął 2. miejsce na hackathonie HackAndPlay. Użyte technologie: Django, React, Docker, Postgresql",
     images: [
-      "/src/assets/images/pharmaradar/Landing.png",
-      "/src/assets/images/pharmaradar/News.png",
-      "/src/assets/images/pharmaradar/pharmaradar_1.jpg",
-      "/src/assets/images/pharmaradar/pharmaradar_2.jpeg",
-      "/src/assets/images/pharmaradar/pharmaradar_3.jpg",
+      new URL("../assets/images/pharmaradar/Landing.png", import.meta.url).href,
+      new URL("../assets/images/pharmaradar/News.png", import.meta.url).href,
+      new URL("../assets/images/pharmaradar/pharmaradar_1.jpg", import.meta.url)
+        .href,
+      new URL(
+        "../assets/images/pharmaradar/pharmaradar_2.jpeg",
+        import.meta.url
+      ).href,
+      new URL("../assets/images/pharmaradar/pharmaradar_3.jpg", import.meta.url)
+        .href,
     ],
     links: {
       linkedin:
@@ -61,12 +67,14 @@ export const HACKATHONS: Hackathon[] = [
     description:
       "Aplikacja webowa wykorzystująca AI do analizy wpisów dziennikowych, oceniająca samopoczucie użytkowników i identyfikująca trendy emocjonalne na podstawie regularnych notatek. Automatyzuje proces monitoringu zdrowia psychicznego. Użyte technologie: FastAPI, React, Docker.",
     images: [
-      "/src/assets/images/wellness/powitalna.png",
-      "/src/assets/images/wellness/pytania.png",
-      "/src/assets/images/wellness/chat.png",
-      "/src/assets/images/wellness/wykres.png",
-      "/src/assets/images/wellness/wellness_1.jpeg",
-      "/src/assets/images/wellness/wellness_2.jpeg",
+      new URL("../assets/images/wellness/powitalna.png", import.meta.url).href,
+      new URL("../assets/images/wellness/pytania.png", import.meta.url).href,
+      new URL("../assets/images/wellness/chat.png", import.meta.url).href,
+      new URL("../assets/images/wellness/wykres.png", import.meta.url).href,
+      new URL("../assets/images/wellness/wellness_1.jpeg", import.meta.url)
+        .href,
+      new URL("../assets/images/wellness/wellness_2.jpeg", import.meta.url)
+        .href,
     ],
     links: {
       github: "https://github.com/mateuszciolkowski/HACKATHON_WELLNESS",
@@ -79,10 +87,10 @@ export const HACKATHONS: Hackathon[] = [
     description:
       "Aplikacja webowa do analizy emocji pacjentów na podstawie danych biometrycznych z opaski, wizualizująca poziom stresu oraz emocji w trakcje sesji terapeutycznej. Projekt zdobył 2. miejsce na hackathonie UBIHACK 2.0. Użyte technologie : Django, React, Postgresql, Docker. ",
     images: [
-      "/src/assets/images/synaptis/landing.png",
-      "/src/assets/images/synaptis/1.png",
-      "/src/assets/images/synaptis/2.png",
-      "/src/assets/images/synaptis/3.png",
+      new URL("../assets/images/synaptis/landing.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/1.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/2.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/3.png", import.meta.url).href,
     ],
     links: {
       linkedin:

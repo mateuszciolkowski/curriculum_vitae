@@ -3,8 +3,9 @@ export const HOBBIES = [
     icon: "🎣",
     label: "Wędkarstwo",
     images: [
-      "/src/assets/images/hobbies/wedkarstwo.jpeg",
-      "/src/assets/images/hobbies/wedkarstwo2.jpeg",
+      new URL("../assets/images/hobbies/wedkarstwo.jpeg", import.meta.url).href,
+      new URL("../assets/images/hobbies/wedkarstwo2.jpeg", import.meta.url)
+        .href,
     ],
   },
   {
