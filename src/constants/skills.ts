@@ -3,7 +3,6 @@ export const SKILLS = [
   "Modelowanie baz danych SQL",
   "Konteneryzacja Docker",
   "Architektura Full-stack",
-  "Zarządzanie stanem TS",
   "Deployment i CI/CD",
 ] as const;
 

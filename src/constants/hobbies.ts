@@ -2,12 +2,15 @@ export const HOBBIES = [
   {
     icon: "🎣",
     label: "Wędkarstwo",
-    image: "/src/assets/images/hobbies/wedkarstwo.jpeg",
+    images: [
+      "/src/assets/images/hobbies/wedkarstwo.jpeg",
+      "/src/assets/images/hobbies/wedkarstwo2.jpeg",
+    ],
   },
   {
     icon: "🏋️",
     label: "Siłownia",
-    image: "/src/assets/images/hobbies/silownia.jpeg",
+    images: [],
   },
 ] as const;
 
