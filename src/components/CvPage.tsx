@@ -137,14 +137,16 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
                   </a>
                 </div>
                 <p className="mx-auto lg:mx-0 max-w-2xl text-xs md:text-sm text-slate-300 leading-relaxed">
-                  Projektuje oraz tworzę aplikacje webowe od podstaw. Z
-                  wszystkimi technologiami pokazanymi obok pracowalem mniej lub
-                  więcej, ale najbardziej rozwijam się w technologiach{" "}
+                  Projektuję i tworzę aplikacje webowe od podstaw, rozwijając
+                  swoje umiejętności głównie w technologiach takich jak{" "}
                   <span className="font-semibold text-white">
                     Node.js, Django
                   </span>{" "}
                   oraz{" "}
                   <span className="font-semibold text-white">React.js</span>.
+                  Pracuję z różnymi narzędziami, budując funkcjonalne
+                  rozwiązania i zdobywając praktyczne doświadczenie w każdym
+                  projekcie.
                 </p>
               </header>
 
@@ -157,14 +159,14 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
                   <span className="font-semibold text-white">
                     Politechnice Łódzkiej
                   </span>{" "}
-                  moim głównym obszarem zainteresowań jest budowanie aplikacji
-                  webowych oraz mobilnych. Do moich zainteresowań nalezą równiez
-                  zagadnienia zwiazane ze sztuczna inteligencja. Oprocz pisania
-                  programow jestem aktywnym uczestnikiem{" "}
-                  <span className="font-semibold text-white">hackathonów</span>{" "}
-                  , które otworzyly mi drzwi oraz zachecily do tworzenia
-                  oprogramowania. Na dole stworzyłem zakładke w której pokazuje
-                  moje osiągnięcia w tych konkursach:)
+                  i specjalizuję się w tworzeniu aplikacji webowych. Interesuję
+                  się również sztuczną inteligencją i jej zastosowaniem w
+                  praktycznych rozwiązaniach. Aktywnie uczestniczę w{" "}
+                  <span className="font-semibold text-white">hackathonach</span>{" "}
+                  , które pokazały mi jak wygląda praca nad rzeczywistymi
+                  problemami i zmotywowały do dalszego rozwijania swoich
+                  umiejętności – obok przygotowałem sekcję z moimi osiągnięciami
+                  w tych konkursach :)
                 </p>
               </section>
 
