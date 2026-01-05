@@ -18,23 +18,51 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
     (typeof HOBBIES)[number] | null
   >(null);
   const [activeHobbySlide, setActiveHobbySlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || !selectedHobby) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      setActiveHobbySlide((prev) => (prev + 1) % selectedHobby.images.length);
+    } else if (isRightSwipe) {
+      setActiveHobbySlide((prev) => (prev - 1 + selectedHobby.images.length) % selectedHobby.images.length);
+    }
+  };
 
   return (
     <>
       <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden">
         <div className="mx-auto flex flex-col gap-4 px-4 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-5">
-          {/* LEWY PASEK */}
-          <aside className="w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-70">
+          
+          {/* LEWA STRONA (SIDEBAR) - na mobile druga */}
+          <aside className="w-full lg:w-80 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1">
             <div className="text-center pt-2">
               <button
                 onClick={onHackathonsClick}
-                className="w-[calc(100%+10px)] -ml-1.25 rounded-xl bg-cyan-500 py-3 text-s font-black text-slate-950 uppercase tracking-widest shadow-lg transition-all hover:scale-105 mb-7"
+                className="w-full rounded-xl bg-cyan-500 py-3 text-sm font-black text-slate-950 uppercase tracking-widest shadow-lg transition-all hover:scale-105 mb-7"
               >
                 {t(translations.hackathons)}
               </button>
             </div>
+            
             <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
               {t(translations.toolsAndTech)}
             </h2>
@@ -91,8 +119,8 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
             </div>
           </aside>
 
-          {/* PRAWA STRONA CV - reszta bez zmian */}
-          <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md">
+          {/* PRAWA STRONA (MAIN CONTENT) - na mobile pierwsza */}
+          <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2">
             <div className="space-y-4">
               <header className="space-y-1.5 text-center lg:text-left">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
@@ -188,14 +216,14 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
                 </h2>
 
                 <div className="group rounded-2xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-cyan-500/50">
-                  <div className="flex flex-col gap-2 mb-2">
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <h3 className="text-lg font-black italic text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight pr-6">
+                  <div className="flex flex-col gap-3 mb-2">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                        <h3 className="text-lg font-black italic text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight text-center lg:text-left">
                           GYMGATE
                         </h3>
 
-                        <div className="flex gap-1.5 items-center">
+                        <div className="flex gap-1.5 items-center flex-wrap justify-center lg:justify-start">
                           <span className="flex items-center h-4 text-[8px] px-1.5 bg-cyan-500/10 text-cyan-400 rounded border border-cyan-500/20 uppercase font-bold tracking-widest">
                             Node.js
                           </span>
@@ -211,7 +239,7 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 justify-center lg:justify-end">
                         <a
                           href="https://github.com/mateuszciolkowski/gymgate"
                           target="_blank"
@@ -338,11 +366,15 @@ export function CvPage({ onHackathonsClick }: CvPageProps): ReactElement {
             >
               <div className="flex flex-col lg:flex-row gap-8 items-center">
                 {selectedHobby.images.length > 0 ? (
-                  <div className="relative w-80 h-80 lg:w-96 lg:h-96">
+                  <div className="relative w-80 h-80 lg:w-96 lg:h-96"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
                     <img
                       src={selectedHobby.images[activeHobbySlide]}
                       alt={t(selectedHobby.label)}
-                      className="w-full h-full object-cover rounded-2xl shadow-2xl ring-2 ring-cyan-500/30"
+                      className="w-full h-full object-cover rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 select-none"
                     />
                     {selectedHobby.images.length > 1 && (
                       <>

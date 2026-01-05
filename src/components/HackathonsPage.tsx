@@ -13,6 +13,8 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
   const [activeHackathonId, setActiveHackathonId] = useState<string>("fintech");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const activeHackathon = HACKATHONS.find((h) => h.id === activeHackathonId)!;
   const totalSlides = activeHackathon.images.length;
@@ -21,6 +23,30 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
     setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   const goNextSlide = () =>
     setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      goNextSlide();
+    } else if (isRightSwipe) {
+      goPrevSlide();
+    }
+  };
 
   return (
     <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
@@ -132,15 +158,19 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
             {/* GALLERY */}
             <section className="space-y-3">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 md:gap-3">
                 <button
                   onClick={goPrevSlide}
-                  className="hidden md:flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
                 >
                   ‹
                 </button>
 
-                <div className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl">
+                <div className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
+                >
                   <div className="flex h-full w-full items-center justify-center p-3 sm:p-5">
                     <img
                       src={activeHackathon.images[activeSlideIndex]}
@@ -150,7 +180,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                           activeHackathon.images[activeSlideIndex]
                         )
                       }
-                      className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500"
+                      className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
                     />
                   </div>
 
@@ -161,7 +191,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
                 <button
                   onClick={goNextSlide}
-                  className="hidden md:flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
                 >
                   ›
                 </button>
