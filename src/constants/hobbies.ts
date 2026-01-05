@@ -1,7 +1,7 @@
 export const HOBBIES = [
   {
     icon: "🎣",
-    label: "Wędkarstwo",
+    label: { pl: "Wędkarstwo", en: "Fishing" },
     images: [
       new URL("../assets/images/hobbies/wedkarstwo.jpeg", import.meta.url).href,
       new URL("../assets/images/hobbies/wedkarstwo2.jpeg", import.meta.url)
@@ -10,7 +10,7 @@ export const HOBBIES = [
   },
   {
     icon: "🏋️",
-    label: "Siłownia",
+    label: { pl: "Siłownia", en: "Gym" },
     images: [],
   },
 ] as const;

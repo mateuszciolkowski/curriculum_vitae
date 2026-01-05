@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { HACKATHONS } from "../data/hackathons";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../constants/translations";
 
 type HackathonsPageProps = {
   onBackToCv: () => void;
 };
 
 export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
+  const { language, setLanguage, t } = useLanguage();
   const [activeHackathonId, setActiveHackathonId] = useState<string>("fintech");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
@@ -24,15 +27,23 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
       <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6">
         {/* SIDEBAR */}
         <aside className="w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65">
-          <button
-            onClick={onBackToCv}
-            className="group mb-6 inline-flex items-center gap-2 rounded-xl bg-slate-800/50 px-4 py-2 text-[15px] font-bold text-cyan-400 ring-1 ring-slate-700/50 transition hover:bg-slate-700 hover:text-white"
-          >
-            ← Powrót do CV
-          </button>
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={onBackToCv}
+              className="flex-1 group inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800/50 px-4 py-2 text-[15px] font-bold text-cyan-400 ring-1 ring-slate-700/50 transition hover:bg-slate-700 hover:text-white"
+            >
+              ← {t(translations.backToCv)}
+            </button>
+            <button
+              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+            >
+              {language === "pl" ? "EN" : "PL"}
+            </button>
+          </div>
 
           <h2 className="mb-4 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500 border-l-2 border-slate-700 pl-4">
-            Projekty
+            {t(translations.myProjects)}
           </h2>
 
           <div className="space-y-3">
@@ -56,7 +67,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                       : "text-cyan-500"
                   }`}
                 >
-                  {hack.role}
+                  {t(hack.role)}
                 </p>
                 <p className="text-sm md:text-base font-black uppercase leading-tight">
                   {hack.name}
@@ -83,7 +94,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                 {/* Prawa strona - Opis */}
                 <div className="flex-1 lg:border-l lg:border-slate-700/50 lg:pl-4">
                   <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
-                    {activeHackathon.description}
+                    {t(activeHackathon.description)}
                   </p>
                 </div>
 
