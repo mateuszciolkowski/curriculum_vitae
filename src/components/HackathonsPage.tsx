@@ -3,6 +3,7 @@ import { HACKATHONS } from "../data/hackathons";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { useLanguage } from "../contexts/LanguageContext";
 import { translations } from "../constants/translations";
+import { buttonStyles } from "../styles/buttonStyles";
 
 type HackathonsPageProps = {
   onBackToCv: () => void;
@@ -56,13 +57,13 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
           <div className="flex gap-2 mb-4">
             <button
               onClick={onBackToCv}
-              className="flex-1 group inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800/50 px-4 py-2 text-[15px] font-bold text-cyan-400 ring-1 ring-slate-700/50 transition hover:bg-slate-700 hover:text-white"
+              className={`flex-1 ${buttonStyles.dark}`}
             >
               ← {t(translations.backToCv)}
             </button>
             <button
               onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
-              className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+              className={buttonStyles.cyan}
             >
               {language === "pl" ? "EN" : "PL"}
             </button>
@@ -95,7 +96,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                 >
                   {t(hack.role)}
                 </p>
-                <p className="text-sm md:text-base font-black uppercase leading-tight">
+                <p className="text-xs md:text-sm font-black uppercase leading-tight">
                   {hack.name}
                 </p>
               </button>
@@ -166,7 +167,8 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                   ‹
                 </button>
 
-                <div className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
+                <div
+                  className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
                   onTouchStart={onTouchStart}
                   onTouchMove={onTouchMove}
                   onTouchEnd={onTouchEnd}
@@ -177,7 +179,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                       alt="Preview"
                       onClick={() =>
                         setFullscreenSrc(
-                          activeHackathon.images[activeSlideIndex]
+                          activeHackathon.images[activeSlideIndex],
                         )
                       }
                       className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"

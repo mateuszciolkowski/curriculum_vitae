@@ -1,0 +1,2282 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.github/
+  workflows/
+    deploy.yml
+public/
+  CNAME
+  vite.svg
+src/
+  assets/
+    cv/
+      CV_MATEUSZ_CIOLKOWSKI_ENG.pdf
+      CV_MATEUSZ_CIOLKOWSKI_PL.pdf
+    images/
+      fintech/
+        fintech_1.jpeg
+        fintech_2.jpeg
+        fintech_3.jpeg
+        fintech_4.jpeg
+        kartalodz.png
+        ranking.png
+        stronaglowna.png
+        wydarzenia.png
+      hobbies/
+        wedkarstwo.jpeg
+        wedkarstwo2.jpeg
+      pharmaradar/
+        Landing.png
+        News.png
+        Pharma.png
+        Pharma.svg
+        pharmaradar_1.jpg
+        pharmaradar_2.jpeg
+        pharmaradar_3.jpg
+        Pills-2.png
+        Pills.png
+      synaptis/
+        1.png
+        2.png
+        3.png
+        landing.png
+        logo.png
+      wellness/
+        chat.png
+        pamietnik.png
+        powitalna.png
+        pytania.png
+        wellness_1.jpeg
+        wellness_2.jpeg
+        wpisy.png
+        wykres.png
+  components/
+    CvPage.tsx
+    HackathonsPage.tsx
+    init.ts
+    ProjectDetailPage.tsx
+    ProjectsPage.tsx
+  constants/
+    hobbies.ts
+    skills.ts
+    technologies.ts
+    translations.ts
+  contexts/
+    LanguageContext.tsx
+  data/
+    hackathons.ts
+    linki.txt
+    projects.ts
+  App.css
+  App.tsx
+  index.css
+  main.tsx
+.gitignore
+eslint.config.js
+index.html
+package.json
+README.md
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="src/components/ProjectDetailPage.tsx">
+import { useState } from "react";
+import { PROJECTS } from "../data/projects";
+import { FaGithub, FaGlobe } from "react-icons/fa";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../constants/translations";
+
+type ProjectDetailPageProps = {
+  projectId: string;
+  onBackToCv: () => void;
+};
+
+export function ProjectDetailPage({
+  projectId,
+  onBackToCv,
+}: ProjectDetailPageProps) {
+  const { language, setLanguage, t } = useLanguage();
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const project = PROJECTS.find((p) => p.id === projectId);
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-100">
+        <p>Project not found</p>
+      </div>
+    );
+  }
+
+  // Extract technologies with icons
+  const technologies = [
+    { name: "Node.js", icon: "devicon-nodejs-plain" },
+    { name: "React.js", icon: "devicon-react-original" },
+    { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+    { name: "Docker", icon: "devicon-docker-plain" },
+  ];
+
+  const totalSlides = project.images.length;
+  const hasImages = totalSlides > 0;
+
+  const goPrevSlide = () =>
+    setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const goNextSlide = () =>
+    setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      goNextSlide();
+    } else if (isRightSwipe) {
+      goPrevSlide();
+    }
+  };
+
+  return (
+    <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
+      <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row w-full lg:px-6 lg:py-6">
+        {/* SIDEBAR */}
+        <aside className="w-full shrink-0 rounded-3xl bg-slate-900/80 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65 lg:min-h-[calc(100vh-3rem)] flex flex-col">
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={onBackToCv}
+              className="flex-1 group inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800/50 px-4 py-2 text-[15px] font-bold text-cyan-400 ring-1 ring-slate-700/50 transition hover:bg-slate-700 hover:text-white"
+            >
+              ← {t(translations.backToCv)}
+            </button>
+            <button
+              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+            >
+              {language === "pl" ? "EN" : "PL"}
+            </button>
+          </div>
+
+          <h2 className="mb-4 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500 border-l-2 border-slate-700 pl-4">
+            {t(translations.technologies)}
+          </h2>
+
+          <div className="grid grid-cols-2 gap-2 mb-6">
+            {technologies.map((tech) => (
+              <div
+                key={tech.name}
+                className="flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-2.5 transition hover:bg-slate-700/60 ring-1 ring-slate-700/30 aspect-square"
+              >
+                <i className={`${tech.icon} text-2xl text-slate-300`} />
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider text-center">
+                  {tech.name}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {project.links?.live && (
+            <a
+              href={project.links.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-white uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+            >
+              <FaGlobe />
+              {t(translations.viewApp)}
+            </a>
+          )}
+
+          {/* Spacer to push content to fill height */}
+          <div className="flex-1" />
+        </aside>
+
+        {/* MAIN CONTENT */}
+        <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md lg:min-h-[calc(100vh-3rem)]">
+          <div className="space-y-4">
+            {/* PROJECT HEADER */}
+            <section className="bg-slate-800/40 p-3 md:p-4 rounded-2xl ring-1 ring-slate-700/50">
+              <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
+                {/* Title */}
+                <div className="shrink-0">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
+                    {project.name}
+                  </h1>
+                  <div className="mt-2 h-1 w-16 bg-cyan-500 rounded-full" />
+                </div>
+
+                {/* Description */}
+                <div className="flex-1 lg:border-l lg:border-slate-700/50 lg:pl-4">
+                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
+                    {t(project.description)}
+                  </p>
+                </div>
+
+                {/* GitHub Link */}
+                <div className="flex gap-2 shrink-0 lg:border-l lg:border-slate-700/50 lg:pl-4">
+                  {project.links?.github && (
+                    <a
+                      href={project.links.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-slate-700 rounded-xl transition-all ring-1 ring-slate-700/50 hover:ring-slate-600"
+                      title="GitHub"
+                    >
+                      <FaGithub className="text-lg text-slate-300 hover:text-white" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* GALLERY */}
+            {hasImages ? (
+              <section className="space-y-3">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <button
+                    onClick={goPrevSlide}
+                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                  >
+                    ‹
+                  </button>
+
+                  <div
+                    className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    <div className="flex h-full w-full items-center justify-center p-3 sm:p-5">
+                      <img
+                        src={project.images[activeSlideIndex]}
+                        alt="Preview"
+                        onClick={() =>
+                          setFullscreenSrc(project.images[activeSlideIndex])
+                        }
+                        className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
+                      />
+                    </div>
+
+                    <div className="absolute top-5 right-5 rounded-lg bg-black/60 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-white ring-1 ring-white/10">
+                      {activeSlideIndex + 1} / {totalSlides}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={goNextSlide}
+                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                <div className="flex justify-center gap-2">
+                  {project.images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveSlideIndex(index)}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        index === activeSlideIndex
+                          ? "w-10 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                          : "w-2 bg-slate-700 hover:bg-slate-600"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <section className="bg-slate-800/10 p-6 rounded-2xl ring-1 ring-slate-800/50">
+                <p className="text-center text-slate-400 text-sm italic">
+                  {t(translations.noImages)}
+                </p>
+              </section>
+            )}
+          </div>
+        </main>
+      </div>
+
+      {/* FULLSCREEN MODAL */}
+      {fullscreenSrc && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          onClick={() => setFullscreenSrc(null)}
+        >
+          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all">
+            {language === "pl" ? "Zamknij" : "Close"} ✕
+          </button>
+          <img
+            src={fullscreenSrc}
+            className="max-h-full max-w-full object-contain shadow-2xl"
+            alt="Fullscreen"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/ProjectsPage.tsx">
+import { type ReactElement, useState } from "react";
+import {
+  FaGithub,
+  FaExternalLinkAlt,
+  FaArrowLeft,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../constants/translations";
+import { PROJECTS } from "../data/projects";
+
+type ProjectsPageProps = {
+  onBackToCv: () => void;
+};
+
+export function ProjectsPage({ onBackToCv }: ProjectsPageProps): ReactElement {
+  const { language, setLanguage, t } = useLanguage();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const project = PROJECTS[0]; // Na razie tylko GymGate
+  const hasImages = project.images.length > 0;
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && activeSlide < project.images.length - 1) {
+      setActiveSlide((prev) => prev + 1);
+    }
+    if (isRightSwipe && activeSlide > 0) {
+      setActiveSlide((prev) => prev - 1);
+    }
+  };
+
+  return (
+    <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden">
+      <div className="mx-auto max-w-6xl px-4 py-6 lg:px-8 lg:py-10">
+        {/* Header */}
+        <header className="mb-8 space-y-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="space-y-2">
+              <button
+                onClick={onBackToCv}
+                className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-widest hover:text-cyan-300 transition-colors group"
+              >
+                <FaArrowLeft className="text-xs group-hover:-translate-x-1 transition-transform" />
+                {t(translations.backToCv)}
+              </button>
+              <h1 className="text-4xl md:text-5xl font-black tracking-tighter leading-none uppercase">
+                {t(translations.myPersonalProjects)}
+              </h1>
+            </div>
+            <button
+              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600 w-fit"
+            >
+              {language === "pl" ? "EN" : "PL"}
+            </button>
+          </div>
+        </header>
+
+        {/* Project Card */}
+        <div className="rounded-3xl bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-6 md:p-8 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md">
+          <div className="space-y-6">
+            {/* Project Header */}
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h2 className="text-3xl md:text-4xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 uppercase tracking-tight">
+                    {project.name}
+                  </h2>
+                  <span
+                    className={`flex items-center h-6 text-xs px-3 rounded-lg border font-bold uppercase tracking-widest ${
+                      project.status === "in-progress"
+                        ? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                        : "bg-green-500/10 text-green-500 border-green-500/20"
+                    }`}
+                  >
+                    {project.status === "in-progress"
+                      ? t(translations.inProgress)
+                      : t(translations.completed)}
+                  </span>
+                </div>
+                <p className="text-sm text-slate-400 uppercase tracking-wider">
+                  <span className="text-cyan-400 font-bold">
+                    {t(translations.role)}:
+                  </span>{" "}
+                  {t(project.role)}
+                </p>
+              </div>
+
+              {/* Links */}
+              <div className="flex gap-2">
+                {project.links?.github && (
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700 rounded-lg transition-all ring-1 ring-slate-700/50 hover:ring-slate-600 text-sm font-bold uppercase tracking-wider"
+                  >
+                    <FaGithub />
+                    GitHub
+                  </a>
+                )}
+                {project.links?.live && (
+                  <a
+                    href={project.links.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-slate-950 rounded-lg transition-all text-sm font-bold uppercase tracking-wider"
+                  >
+                    <FaExternalLinkAlt />
+                    {t(translations.liveDemo)}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Technologies */}
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <span
+                  key={tech}
+                  className="flex items-center h-7 text-xs px-3 bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20 uppercase font-bold tracking-widest"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {/* Description */}
+            <div className="space-y-2">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">
+                {t(translations.projectDetails)}
+              </h3>
+              <p className="text-sm md:text-base text-slate-300 leading-relaxed">
+                {t(project.description)}
+              </p>
+            </div>
+
+            {/* Gallery Section */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">
+                {t(translations.gallery)}
+              </h3>
+
+              {hasImages ? (
+                <div className="relative">
+                  {/* Image Slider */}
+                  <div
+                    className="relative w-full aspect-video bg-slate-800/50 rounded-2xl overflow-hidden ring-1 ring-slate-700/50"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    <img
+                      src={project.images[activeSlide]}
+                      alt={`${project.name} - ${activeSlide + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+
+                    {/* Navigation Arrows */}
+                    {project.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={() =>
+                            setActiveSlide((prev) => Math.max(0, prev - 1))
+                          }
+                          disabled={activeSlide === 0}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center ring-1 ring-slate-700/50"
+                        >
+                          <FaChevronLeft className="text-white" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setActiveSlide((prev) =>
+                              Math.min(project.images.length - 1, prev + 1),
+                            )
+                          }
+                          disabled={activeSlide === project.images.length - 1}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900/80 hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center ring-1 ring-slate-700/50"
+                        >
+                          <FaChevronRight className="text-white" />
+                        </button>
+                      </>
+                    )}
+
+                    {/* Slide Counter */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-slate-900/80 text-xs font-bold text-white">
+                      {activeSlide + 1} / {project.images.length}
+                    </div>
+                  </div>
+
+                  {/* Thumbnails */}
+                  {project.images.length > 1 && (
+                    <div className="flex gap-2 mt-3 overflow-x-auto pb-2">
+                      {project.images.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveSlide(idx)}
+                          className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden ring-2 transition-all ${
+                            idx === activeSlide
+                              ? "ring-cyan-500 scale-105"
+                              : "ring-slate-700/50 opacity-60 hover:opacity-100"
+                          }`}
+                        >
+                          <img
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="w-full aspect-video bg-slate-800/50 rounded-2xl ring-1 ring-slate-700/50 flex items-center justify-center">
+                  <p className="text-slate-400 text-sm italic">
+                    {t(translations.noImages)}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="public/CNAME">
+mateuszciolkowski.pl
+</file>
+
+<file path="public/vite.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+</file>
+
+<file path="src/assets/images/pharmaradar/Pharma.svg">
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="700.000000pt" height="700.000000pt" viewBox="0 0 700.000000 700.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,700.000000) scale(0.100000,-0.100000)"
+fill="#333333" stroke="none">
+<path d="M1200 4914 c-148 -29 -302 -130 -386 -254 -45 -66 -83 -169 -95 -257
+-6 -50 -9 -358 -7 -858 3 -723 5 -784 22 -835 89 -270 304 -430 577 -430 159
+0 282 48 399 157 95 87 167 219 184 333 6 42 9 46 46 57 21 7 61 26 88 42 l49
+29 189 -189 c202 -202 216 -211 262 -169 21 20 27 37 22 70 -1 8 -85 99 -188
+202 l-186 187 20 23 c58 65 101 176 110 288 16 185 -58 361 -202 480 -50 41
+-160 100 -188 100 -14 0 -16 26 -16 258 0 286 -8 338 -63 450 -40 80 -136 186
+-211 231 -100 60 -178 83 -296 86 -58 2 -116 1 -130 -1z m225 -139 c135 -36
+242 -124 303 -252 l37 -78 3 -261 3 -261 -77 -7 c-170 -16 -321 -99 -408 -225
+l-29 -41 -208 0 -209 0 0 363 c0 388 4 427 53 526 30 62 126 162 185 194 102
+55 233 71 347 42z m458 -1019 c113 -40 191 -112 245 -225 68 -141 53 -296 -39
+-425 -150 -209 -466 -236 -648 -54 -100 100 -145 238 -123 370 29 167 158 311
+309 347 76 18 184 12 256 -13z"/>
+<path d="M3010 4050 l0 -390 100 0 100 0 0 158 c0 129 3 163 18 192 31 62 108
+80 159 36 l28 -24 3 -181 3 -181 101 0 100 0 -4 203 c-3 179 -6 207 -24 247
+-56 122 -204 164 -338 96 l-46 -23 0 128 0 129 -100 0 -100 0 0 -390z"/>
+<path d="M2250 4031 l0 -371 100 0 100 0 0 95 0 95 68 0 c219 1 339 63 378
+197 42 145 -33 283 -179 329 -38 12 -108 17 -259 21 l-208 6 0 -372z m395 187
+c47 -21 67 -85 45 -142 -15 -40 -58 -56 -155 -56 l-85 0 0 105 0 105 85 0 c46
+0 96 -5 110 -12z"/>
+<path d="M3874 4225 c-50 -11 -115 -35 -132 -50 -2 -1 12 -32 29 -68 l33 -66
+36 19 c87 44 197 34 225 -20 8 -16 15 -31 15 -33 0 -2 -46 -7 -102 -10 -128
+-8 -169 -20 -213 -58 -58 -51 -68 -133 -24 -204 54 -90 232 -111 319 -39 l30
+26 0 -31 0 -31 96 0 96 0 -4 198 c-3 187 -4 200 -28 246 -32 64 -80 101 -155
+121 -71 18 -138 18 -221 0z m206 -364 c0 -45 -43 -81 -96 -81 -46 0 -84 25
+-84 55 0 8 9 24 20 35 16 16 33 20 90 20 l70 0 0 -29z"/>
+<path d="M4715 4231 c-36 -9 -91 -37 -100 -51 -12 -20 -25 -10 -25 20 l0 30
+-90 0 -90 0 0 -285 0 -285 95 0 95 0 0 138 c0 75 5 154 10 174 16 55 60 88
+121 88 l49 0 0 90 c0 99 1 97 -65 81z"/>
+<path d="M5160 4229 c-19 -6 -50 -22 -67 -35 l-33 -25 0 30 0 31 -95 0 -95 0
+0 -285 0 -285 100 0 100 0 0 161 c0 125 3 168 15 194 28 58 104 74 146 29 23
+-25 24 -31 27 -205 l3 -179 100 0 99 0 0 165 c0 175 8 212 49 235 30 15 76 12
+100 -7 32 -26 40 -79 41 -245 l0 -148 96 0 95 0 -3 218 c-3 196 -5 220 -23
+251 -70 119 -243 145 -361 55 -36 -28 -46 -31 -50 -19 -20 50 -164 88 -244 64z"/>
+<path d="M6130 4234 c-56 -11 -152 -47 -156 -59 -3 -7 8 -40 25 -73 l30 -60
+43 21 c89 44 217 20 226 -42 3 -19 -1 -21 -50 -21 -88 -1 -186 -17 -226 -37
+-74 -39 -102 -125 -68 -207 48 -116 267 -142 348 -42 17 21 18 21 18 -16 l0
+-38 90 0 90 0 0 188 c0 103 -5 203 -10 223 -28 102 -113 157 -250 164 -47 2
+-96 1 -110 -1z m170 -378 c0 -46 -37 -76 -93 -76 -67 0 -99 49 -60 92 13 14
+31 18 85 18 l68 0 0 -34z"/>
+<path d="M4470 3160 l0 -129 -35 23 c-66 45 -167 45 -256 1 -94 -48 -143 -137
+-143 -260 0 -88 20 -145 69 -203 73 -87 230 -115 328 -60 l47 27 0 -25 c0 -24
+1 -24 95 -24 l95 0 0 390 0 390 -100 0 -100 0 0 -130z m-34 -264 c31 -31 34
+-39 34 -92 0 -97 -41 -144 -127 -144 -26 0 -43 8 -67 33 -87 86 -35 237 81
+237 38 0 50 -5 79 -34z"/>
+<path d="M2638 3245 c-5 -5 -8 -172 -8 -372 l0 -363 105 0 105 0 0 100 0 100
+58 0 57 0 68 -100 68 -100 110 0 111 0 -76 110 c-42 60 -76 113 -76 117 0 4
+17 20 38 35 21 14 51 50 67 79 24 45 28 64 28 125 -1 59 -6 81 -29 124 -32 60
+-89 104 -159 126 -55 17 -454 33 -467 19z m410 -190 c37 -31 48 -73 32 -120
+-17 -50 -51 -65 -155 -65 l-85 0 0 105 0 105 89 0 c81 0 92 -2 119 -25z"/>
+<path d="M3534 3075 c-50 -11 -115 -35 -132 -50 -2 -1 12 -32 29 -68 l33 -66
+36 19 c87 44 197 34 225 -20 8 -16 15 -31 15 -33 0 -2 -46 -7 -102 -10 -128
+-8 -169 -20 -213 -58 -58 -51 -68 -133 -24 -204 54 -90 232 -111 319 -39 l30
+26 0 -31 0 -31 96 0 96 0 -4 198 c-3 187 -4 200 -28 246 -32 64 -80 101 -155
+121 -71 18 -138 18 -221 0z m206 -364 c0 -45 -43 -81 -96 -81 -46 0 -84 25
+-84 55 0 8 9 24 20 35 16 16 33 20 90 20 l70 0 0 -29z"/>
+<path d="M4960 3084 c-56 -11 -152 -47 -156 -59 -3 -7 8 -40 25 -73 l30 -60
+43 21 c89 44 217 20 226 -42 3 -19 -1 -21 -50 -21 -88 -1 -186 -17 -226 -37
+-74 -39 -102 -125 -68 -207 48 -116 267 -142 348 -42 17 21 18 21 18 -16 l0
+-38 90 0 90 0 0 188 c0 103 -5 203 -10 223 -28 102 -113 157 -250 164 -47 2
+-96 1 -110 -1z m170 -378 c0 -46 -37 -76 -93 -76 -67 0 -99 49 -60 92 13 14
+31 18 85 18 l68 0 0 -34z"/>
+<path d="M5753 3076 c-22 -8 -55 -23 -72 -35 l-31 -22 0 30 0 31 -95 0 -95 0
+0 -285 0 -285 100 0 100 0 0 155 c0 173 8 203 60 230 16 8 49 15 75 15 l45 0
+0 90 c0 102 -1 103 -87 76z"/>
+</g>
+</svg>
+</file>
+
+<file path="src/constants/technologies.ts">
+export const TECHNOLOGIES = [
+  { name: "React", className: "devicon-react-original colored" },
+  { name: "Django", className: "devicon-django-plain colored" },
+  { name: "Node.js", className: "devicon-nodejs-plain colored" },
+  { name: "TS", className: "devicon-typescript-plain colored" },
+  { name: "JS", className: "devicon-javascript-plain colored" },
+  { name: "Python", className: "devicon-python-plain" },
+  { name: "Postgres", className: "devicon-postgresql-plain colored" },
+  { name: "SQL Ser", className: "devicon-microsoftsqlserver-plain colored" },
+  { name: "Docker", className: "devicon-docker-plain colored" },
+  { name: "Java", className: "devicon-java-plain colored" },
+  { name: "Redis", className: "devicon-redis-plain colored" },
+  { name: "Git", className: "devicon-git-plain colored" },
+  { name: "HTML", className: "devicon-html5-plain colored" },
+  { name: "CSS", className: "devicon-css3-plain colored" },
+  { name: "Tailwind", className: "devicon-tailwindcss-plain colored" },
+  { name: "MongoDB", className: "devicon-mongodb-plain colored" },
+] as const;
+
+export type Technology = (typeof TECHNOLOGIES)[number];
+</file>
+
+<file path="src/constants/translations.ts">
+export const translations = {
+  // Navigation & Buttons
+  hackathons: { pl: "Hackathony", en: "Hackathons" },
+  backToCv: { pl: "Powrót do CV", en: "Back to CV" },
+  downloadCv: { pl: "Curriculum Vitae", en: "Curriculum Vitae" },
+
+  // Sections
+  toolsAndTech: { pl: "Narzędzia i Technologie", en: "Tools & Technologies" },
+  skills: { pl: "Umiejętności", en: "Skills" },
+  hobbies: { pl: "Hobby", en: "Hobbies" },
+  aboutMe: { pl: "O mnie", en: "About Me" },
+  currentProjects: { pl: "Aktualne projekty", en: "Current Projects" },
+  myPersonalProjects: {
+    pl: "Moje Projekty Osobiste",
+    en: "My Personal Projects",
+  },
+  achievements: { pl: "Osiągnięcia", en: "Achievements" },
+
+  // Job Title
+  jobTitle: { pl: "Fullstack Developer", en: "Fullstack Developer" },
+
+  // Contact
+  email: { pl: "Email", en: "Email" },
+  github: { pl: "GitHub", en: "GitHub" },
+  linkedin: { pl: "LinkedIn", en: "LinkedIn" },
+
+  // About section
+  aboutIntro: {
+    pl: "Projektuję i tworzę aplikacje webowe od podstaw, rozwijając swoje umiejętności głównie w technologiach takich jak",
+    en: "I design and build web applications from scratch, developing my skills primarily in technologies such as",
+  },
+  aboutIntro2: {
+    pl: "oraz",
+    en: "and",
+  },
+  aboutIntro3: {
+    pl: "Pracuję z różnymi narzędziami, budując funkcjonalne rozwiązania i zdobywając praktyczne doświadczenie w każdym projekcie.",
+    en: "I work with various tools, building functional solutions and gaining practical experience with each project.",
+  },
+
+  aboutMe1: {
+    pl: "Jestem studentem informatyki stosowanej na",
+    en: "I am a computer science student at",
+  },
+  aboutMe2: {
+    pl: "i specjalizuję się w tworzeniu aplikacji webowych. Interesuję się również sztuczną inteligencją i jej zastosowaniem w praktycznych rozwiązaniach. Aktywnie uczestniczę w",
+    en: "and I specialize in web application development. I am also interested in artificial intelligence and its application in practical solutions. I actively participate in",
+  },
+  aboutMe3: {
+    pl: ", które pokazały mi jak wygląda praca nad rzeczywistymi problemami i zmotywowały do dalszego rozwijania swoich umiejętności – obok przygotowałem sekcję z moimi osiągnięciami w tych konkursach :)",
+    en: ", which showed me what working on real-world problems looks like and motivated me to further develop my skills – I've prepared a section with my achievements in these competitions :)",
+  },
+
+  university: {
+    pl: "Politechnice Łódzkiej",
+    en: "Lodz University of Technology",
+  },
+  hackathonsWord: { pl: "hackathonach", en: "hackathons" },
+
+  // Project GymGate
+  gymgateDescription: {
+    pl: "Intuicyjna platforma treningowa umożliwiająca użytkownikom precyzyjne śledzenie serii, powtórzeń oraz objętości treningowej w czasie rzeczywistym. System pozwala na archiwizację wyników i monitorowanie progresu.",
+    en: "An intuitive training platform that enables users to precisely track sets, repetitions, and training volume in real-time. The system allows for archiving results and monitoring progress.",
+  },
+  inProgress: { pl: "In Progress", en: "In Progress" },
+
+  // Achievements
+  firstPlace: { pl: "1. miejsce", en: "1st Place" },
+  secondPlace: { pl: "2. miejsce", en: "2nd Place" },
+
+  achievement1: {
+    pl: "Hackathon #ŁÓDŹ_HACK – Moduł MOJE OSIEDLE dla Karty Łodzianina",
+    en: "Hackathon #ŁÓDŹ_HACK – MOJE OSIEDLE Module for the Karta Łodzianina",
+  },
+  achievement2: {
+    pl: "Hackathon HackAndPlay – Aplikacja PharmaRadar",
+    en: "Hackathon HackAndPlay – PharmaRadar Application",
+  },
+  achievement3: {
+    pl: "Hackathon UBIHACK 2.0 – Aplikacja Synaptis",
+    en: "Hackathon UBIHACK 2.0 – Synaptis Application",
+  },
+
+  // Hobbies
+  hobbyFishing: { pl: "Wędkarstwo", en: "Fishing" },
+  hobbyGym: { pl: "Siłownia", en: "Gym" },
+
+  // Hackathons page
+  myProjects: { pl: "Moje Projekty", en: "My Projects" },
+  role: { pl: "Rola", en: "Role" },
+  technologies: { pl: "Technologie", en: "Technologies" },
+  links: { pl: "Linki", en: "Links" },
+  viewProject: { pl: "Zobacz projekt", en: "View Project" },
+  liveDemo: { pl: "Demo na żywo", en: "Live Demo" },
+  seeMore: { pl: "Zobacz więcej", en: "See More" },
+  viewApp: { pl: "Zobacz aplikację", en: "View App" },
+  projectGallery: { pl: "Galeria projektu", en: "Project Gallery" },
+  projectDetails: { pl: "Szczegóły projektu", en: "Project Details" },
+  gallery: { pl: "Galeria", en: "Gallery" },
+  noImages: { pl: "Brak zdjęć", en: "No images available" },
+  completed: { pl: "Ukończony", en: "Completed" },
+
+  // Roles
+  roleFrontend: { pl: "Frontend", en: "Frontend" },
+  roleBackend: { pl: "Backend", en: "Backend" },
+  roleBackendDevOps: { pl: "Backend/DevOps", en: "Backend/DevOps" },
+};
+</file>
+
+<file path="src/data/linki.txt">
+FINTECH
+https://fintechcentral.pl/2025/12/19/lodz_hack-podsumowanie/
+https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8
+
+
+HACKANGPLAY
+https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8
+
+UBIHACK
+https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8
+</file>
+
+<file path="src/main.tsx">
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+</file>
+
+<file path=".gitignore">
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Build and Dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+</file>
+
+<file path="eslint.config.js">
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+  },
+])
+</file>
+
+<file path="tsconfig.app.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+</file>
+
+<file path="tsconfig.node.json">
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+</file>
+
+<file path=".github/workflows/deploy.yml">
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+</file>
+
+<file path="src/contexts/LanguageContext.tsx">
+import { createContext, useContext, useState, type ReactNode } from "react";
+
+type Language = "pl" | "en";
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (translations: { pl: string; en: string }) => string;
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>("pl");
+
+  const t = (translations: { pl: string; en: string }) => {
+    return translations[language];
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useLanguage must be used within LanguageProvider");
+  }
+  return context;
+}
+</file>
+
+<file path="src/data/projects.ts">
+export interface Project {
+  id: string;
+  name: string;
+  role: { pl: string; en: string };
+  description: { pl: string; en: string };
+  images: string[];
+  links?: {
+    github?: string;
+    live?: string;
+    demo?: string;
+  };
+}
+
+export const PROJECTS: Project[] = [
+  {
+    id: "gymgate",
+    name: "GymGate",
+    role: {
+      pl: "Fullstack Developer",
+      en: "Fullstack Developer",
+    },
+    description: {
+      pl: "Intuicyjna platforma treningowa umożliwiająca użytkownikom precyzyjne śledzenie seri, powtórzeń oraz objętości treningowej w czasie rzeczywistym. System pozwala na archiwizację wyników i monitorowanie progresu. Aplikacja wspiera tworzenie spersonalizowanych planów treningowych oraz analizę statystyk. Użyte technologie: Node.js, React.js, PostgreSQL, Docker.",
+      en: "An intuitive training platform that enables users to precisely track sets, repetitions, and training volume in real-time. The system allows for archiving results and monitoring progress. The application supports creating personalized training plans and analyzing statistics. Technologies used: Node.js, React.js, PostgreSQL, Docker.",
+    },
+    images: [
+      // Tutaj dodasz zdjęcia w przyszłości
+      // new URL('../assets/images/gymgate/screenshot1.png', import.meta.url).href,
+    ],
+    links: {
+      github: "https://github.com/mateuszciolkowski/gymgate",
+      live: "https://gymgate.vercel.app/",
+    },
+  },
+];
+</file>
+
+<file path="src/App.css">
+#root {
+  padding: 5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+</file>
+
+<file path="index.html">
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mateusz Ciołkowski - CV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/devicon/2.16.0/devicon.min.css"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="package.json">
+{
+  "name": "cv",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "gh-pages": "^6.3.0",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.4",
+    "vite": "^7.2.4"
+  }
+}
+</file>
+
+<file path="README.md">
+# React + TypeScript + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+</file>
+
+<file path="src/components/init.ts">
+export * from "./HackathonsPage";
+export * from "./CvPage";
+</file>
+
+<file path="src/index.css">
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: #050816;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0ea5e9;
+}
+</file>
+
+<file path="vite.config.ts">
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+// https://vite.dev/config/
+export default defineConfig({
+  base: "/",
+  plugins: [react(), tailwindcss()],
+});
+</file>
+
+<file path="src/constants/hobbies.ts">
+export const HOBBIES = [
+  {
+    icon: "🎣",
+    label: { pl: "Wędkarstwo", en: "Fishing" },
+    images: [
+      new URL("../assets/images/hobbies/wedkarstwo.jpeg", import.meta.url).href,
+      new URL("../assets/images/hobbies/wedkarstwo2.jpeg", import.meta.url)
+        .href,
+    ],
+  },
+  {
+    icon: "🏋️",
+    label: { pl: "Siłownia", en: "Gym" },
+    images: [],
+  },
+] as const;
+
+export type Hobby = (typeof HOBBIES)[number];
+</file>
+
+<file path="src/constants/skills.ts">
+export const SKILLS = [
+  { pl: "Projektowanie API REST", en: "REST API Design" },
+  { pl: "Modelowanie baz danych SQL", en: "SQL Database Modeling" },
+  { pl: "Konteneryzacja Docker", en: "Docker Containerization" },
+  { pl: "Integracja frontend-backend", en: "Frontend-Backend Integration" },
+  { pl: "Testy jednostkowe", en: "Unit Testing" },
+  {
+    pl: "Deployment w chmurze (Coolify, Oracle Cloud)",
+    en: "Cloud Deployment (Coolify, Oracle Cloud)",
+  },
+] as const;
+
+export type Skill = (typeof SKILLS)[number];
+</file>
+
+<file path="src/data/hackathons.ts">
+export interface Hackathon {
+  id: string;
+  name: string;
+  role: { pl: string; en: string };
+  description: { pl: string; en: string };
+  images: string[];
+  links?: {
+    github?: string;
+    linkedin?: string;
+    live?: string;
+    demo?: string;
+    article?: string;
+  };
+}
+
+export const HACKATHONS: Hackathon[] = [
+  {
+    id: "fintech",
+    name: "Moje osiedle",
+    role: { pl: "Frontend", en: "Frontend" },
+    description: {
+      pl: `Moduł do aplikacji "Karta Łodzianina" gamifikujący życie miejskie poprzez punktowanie ekologicznych wyborów, udziału w wydarzeniach lokalnych i codziennych wyzwań generowanych przez AI. Wprowadza ranking osiedli oraz użytkowników, wzmacniając zaangażowanie mieszkańców. Projekt zdobył 1. miejsce podczas hackathonu ŁÓDŹ_HACK. Użyte technologie: React, Docker`,
+      en: `A module for the "Lodz Citizen Card" app that gamifies urban life by awarding points for eco-friendly choices, participation in local events, and daily AI-generated challenges. It introduces rankings for neighborhoods and users, strengthening community engagement. The project won 1st place at the ŁÓDŹ_HACK hackathon. Technologies used: React, Docker`,
+    },
+    images: [
+      new URL("../assets/images/fintech/kartalodz.png", import.meta.url).href,
+      new URL("../assets/images/fintech/stronaglowna.png", import.meta.url)
+        .href,
+      new URL("../assets/images/fintech/ranking.png", import.meta.url).href,
+      new URL("../assets/images/fintech/wydarzenia.png", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_1.jpeg", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_2.jpeg", import.meta.url).href,
+      new URL("../assets/images/fintech/fintech_3.jpeg", import.meta.url).href,
+    ],
+    links: {
+      // article: "https://fintechcentral.pl/2025/12/19/lodz_hack-podsumowanie/",
+      linkedin:
+        "https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8",
+      github: "https://github.com/mateuszciolkowski/HACKATHON_MOJE_OSIEDLE",
+    },
+  },
+  {
+    id: "pharmaradar",
+    name: "PharmaRadar",
+    role: { pl: "Backend", en: "Backend" },
+    description: {
+      pl: "Daily tracker dla branży farmaceutycznej, dostarcza farmaceutom powiadomienia o nowych i wycofanych lekach oraz zmianach prawnych, eliminując potrzebę ręcznego przeglądania wielu źródeł. Projekt zajął 2. miejsce na hackathonie HackAndPlay. Użyte technologie: Django, React, Docker, Postgresql",
+      en: "A daily tracker for the pharmaceutical industry that provides pharmacists with notifications about new and withdrawn medications, as well as legal changes, eliminating the need to manually browse multiple sources. The project won 2nd place at the HackAndPlay hackathon. Technologies used: Django, React, Docker, PostgreSQL",
+    },
+    images: [
+      new URL("../assets/images/pharmaradar/Landing.png", import.meta.url).href,
+      new URL("../assets/images/pharmaradar/News.png", import.meta.url).href,
+      new URL("../assets/images/pharmaradar/pharmaradar_1.jpg", import.meta.url)
+        .href,
+      new URL(
+        "../assets/images/pharmaradar/pharmaradar_2.jpeg",
+        import.meta.url
+      ).href,
+      new URL("../assets/images/pharmaradar/pharmaradar_3.jpg", import.meta.url)
+        .href,
+    ],
+    links: {
+      linkedin:
+        "https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8",
+      github: "https://github.com/mateuszciolkowski/HACKATHON_PHARMARADAR",
+    },
+  },
+  {
+    id: "wellness",
+    name: "Wellness",
+    role: { pl: "Backend/DevOps", en: "Backend/DevOps" },
+    description: {
+      pl: "Aplikacja webowa wykorzystująca AI do analizy wpisów dziennikowych, oceniająca samopoczucie użytkowników i identyfikująca trendy emocjonalne na podstawie regularnych notatek. Automatyzuje proces monitoringu zdrowia psychicznego. Użyte technologie: FastAPI, React, Docker.",
+      en: "A web application that uses AI to analyze journal entries, evaluating users' well-being and identifying emotional trends based on regular notes. It automates the mental health monitoring process. Technologies used: FastAPI, React, Docker.",
+    },
+    images: [
+      new URL("../assets/images/wellness/powitalna.png", import.meta.url).href,
+      new URL("../assets/images/wellness/pytania.png", import.meta.url).href,
+      new URL("../assets/images/wellness/chat.png", import.meta.url).href,
+      new URL("../assets/images/wellness/wykres.png", import.meta.url).href,
+      new URL("../assets/images/wellness/wellness_1.jpeg", import.meta.url)
+        .href,
+      new URL("../assets/images/wellness/wellness_2.jpeg", import.meta.url)
+        .href,
+    ],
+    links: {
+      github: "https://github.com/mateuszciolkowski/HACKATHON_WELLNESS",
+    },
+  },
+  {
+    id: "synaptis",
+    name: "Synaptis",
+    role: { pl: "Backend/DevOps", en: "Backend/DevOps" },
+    description: {
+      pl: "Aplikacja webowa do analizy emocji pacjentów na podstawie danych biometrycznych z opaski, wizualizująca poziom stresu oraz emocji w trakcje sesji terapeutycznej. Projekt zdobył 2. miejsce na hackathonie UBIHACK 2.0. Użyte technologie: Django, React, Postgresql, Docker.",
+      en: "A web application for analyzing patient emotions based on biometric data from a wristband, visualizing stress levels and emotions during therapeutic sessions. The project won 2nd place at the UBIHACK 2.0 hackathon. Technologies used: Django, React, PostgreSQL, Docker.",
+    },
+    images: [
+      new URL("../assets/images/synaptis/landing.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/1.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/2.png", import.meta.url).href,
+      new URL("../assets/images/synaptis/3.png", import.meta.url).href,
+    ],
+    links: {
+      linkedin:
+        "https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8",
+      github: "https://github.com/mateuszciolkowski/HACKATHON_SYNAPTIS",
+    },
+  },
+];
+</file>
+
+<file path="src/App.tsx">
+import { useState } from "react";
+import { CvPage } from "./components/CvPage";
+import { HackathonsPage } from "./components/HackathonsPage";
+import { ProjectDetailPage } from "./components/ProjectDetailPage";
+import { LanguageProvider } from "./contexts/LanguageContext";
+
+type View = "cv" | "hackathons" | "project-detail";
+
+export default function App() {
+  const [view, setView] = useState<View>("cv");
+  const [activeProjectId, setActiveProjectId] = useState<string>("gymgate");
+
+  const handleProjectClick = (projectId: string) => {
+    setActiveProjectId(projectId);
+    setView("project-detail");
+  };
+
+  return (
+    <LanguageProvider>
+      {view === "hackathons" ? (
+        <HackathonsPage onBackToCv={() => setView("cv")} />
+      ) : view === "project-detail" ? (
+        <ProjectDetailPage
+          projectId={activeProjectId}
+          onBackToCv={() => setView("cv")}
+        />
+      ) : (
+        <CvPage
+          onHackathonsClick={() => setView("hackathons")}
+          onProjectClick={handleProjectClick}
+        />
+      )}
+    </LanguageProvider>
+  );
+}
+</file>
+
+<file path="src/components/CvPage.tsx">
+import { type ReactElement, useState } from "react";
+import { TECHNOLOGIES } from "../constants/technologies";
+import { SKILLS } from "../constants/skills";
+import { HOBBIES } from "../constants/hobbies";
+import { PROJECTS } from "../data/projects";
+import { FaGithub, FaLinkedin, FaDownload, FaGlobe } from "react-icons/fa";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../constants/translations";
+import cvPdfPL from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_PL.pdf";
+import cvPdfEN from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_ENG.pdf";
+
+type CvPageProps = {
+  onHackathonsClick: () => void;
+  onProjectClick: (projectId: string) => void;
+};
+
+export function CvPage({
+  onHackathonsClick,
+  onProjectClick,
+}: CvPageProps): ReactElement {
+  const { language, setLanguage, t } = useLanguage();
+  const [selectedHobby, setSelectedHobby] = useState<
+    (typeof HOBBIES)[number] | null
+  >(null);
+  const [activeHobbySlide, setActiveHobbySlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || !selectedHobby) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      setActiveHobbySlide((prev) => (prev + 1) % selectedHobby.images.length);
+    } else if (isRightSwipe) {
+      setActiveHobbySlide(
+        (prev) =>
+          (prev - 1 + selectedHobby.images.length) %
+          selectedHobby.images.length,
+      );
+    }
+  };
+
+  return (
+    <>
+      <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden">
+        <div className="mx-auto flex flex-col gap-4 px-4 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-5">
+          {/* LEWA STRONA (SIDEBAR) - na mobile druga */}
+          <aside className="w-full lg:w-80 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1">
+            <div className="text-center pt-2">
+              <button
+                onClick={onHackathonsClick}
+                className="w-full rounded-xl bg-cyan-500 py-3 text-sm font-black text-slate-950 uppercase tracking-widest shadow-lg transition-all hover:scale-105 mb-7"
+              >
+                {t(translations.hackathons)}
+              </button>
+            </div>
+
+            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+              {t(translations.toolsAndTech)}
+            </h2>
+            <div className="grid grid-cols-4 gap-2 mb-8">
+              {TECHNOLOGIES.map((tech) => (
+                <div
+                  key={tech.name}
+                  className="flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-1.5 transition hover:bg-slate-700/60 aspect-square"
+                >
+                  <i
+                    className={`${tech.className} text-lg sm:text-xl ${
+                      tech.name === "Python" ? "text-[#3776AB]" : ""
+                    }`}
+                  />
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter truncate w-full text-center">
+                    {tech.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+              {t(translations.skills)}
+            </h2>
+            <div className="flex flex-col gap-3 px-2 mb-8">
+              {SKILLS.map((skill, idx) => (
+                <div key={idx} className="flex items-center gap-2 group">
+                  <span className="h-1 w-1 shrink-0 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
+                  <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                    {t(skill)}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+              {t(translations.hobbies)}
+            </h2>
+            <div className="flex flex-col gap-3 px-2">
+              {HOBBIES.map((hobby, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedHobby(hobby)}
+                  className="flex items-center gap-2 w-full text-left p-2 rounded-xl bg-slate-800/30 hover:bg-slate-700/60 transition-all group ring-1 ring-transparent hover:ring-cyan-500/50 hover:shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+                >
+                  <span className="text-xl group-hover:scale-110 transition-transform">
+                    {hobby.icon}
+                  </span>
+                  <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                    {t(hobby.label)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </aside>
+
+          {/* PRAWA STRONA (MAIN CONTENT) - na mobile pierwsza */}
+          <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2">
+            <div className="space-y-4">
+              <header className="space-y-1.5 text-center lg:text-left">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <div className="space-y-1">
+                    <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] text-cyan-400">
+                      {t(translations.jobTitle)}
+                    </p>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-none uppercase">
+                      Mateusz <br className="sm:hidden" />
+                      <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
+                        Ciołkowski
+                      </span>
+                    </h1>
+                  </div>
+
+                  <div className="flex flex-col items-center lg:items-end gap-2 lg:border-l lg:border-slate-700/50 lg:pl-6">
+                    <div className="flex gap-2">
+                      <a
+                        href={cvPdf}
+                        download={`CV_Mateusz_Ciolkowski_${
+                          language === "pl" ? "PL" : "EN"
+                        }.pdf`}
+                        className="flex items-center justify-center gap-2 rounded-lg bg-slate-800/50 px-4 py-2 text-xs font-bold text-slate-200 uppercase tracking-wider shadow-lg transition-all hover:bg-slate-700 hover:text-white ring-1 ring-slate-700/50"
+                      >
+                        <FaDownload className="text-xs" />
+                        {t(translations.downloadCv)}
+                      </a>
+                      <button
+                        onClick={() =>
+                          setLanguage(language === "pl" ? "en" : "pl")
+                        }
+                        className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+                      >
+                        {language === "pl" ? "EN" : "PL"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-slate-400 border-y border-slate-800/30 py-4">
+                  <a
+                    href="mailto:ciolkowski.m1@gmail.com"
+                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                  >
+                    <i className="devicon-google-plain text-xs group-hover:text-cyan-400" />
+                    {t(translations.email)}
+                  </a>
+                  <a
+                    href="https://github.com/mateuszciolkowski"
+                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                  >
+                    <i className="devicon-github-original text-xs group-hover:text-cyan-400" />
+                    {t(translations.github)}
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/mateuszciolkowski"
+                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                  >
+                    <i className="devicon-linkedin-plain text-xs group-hover:text-cyan-400" />
+                    {t(translations.linkedin)}
+                  </a>
+                </div>
+                <p className="mx-auto lg:mx-0 max-w-2xl text-xs md:text-sm text-slate-300 leading-relaxed">
+                  {t(translations.aboutIntro)}{" "}
+                  <span className="font-semibold text-white">
+                    Node.js, Django
+                  </span>{" "}
+                  {t(translations.aboutIntro2)}{" "}
+                  <span className="font-semibold text-white">React.js</span>.{" "}
+                  {t(translations.aboutIntro3)}
+                </p>
+              </header>
+
+              <section className="space-y-1.5 text-center lg:text-left">
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200">
+                  {t(translations.aboutMe)}
+                </h2>
+                <p className="max-w-4xl text-xs md:text-sm text-slate-400 leading-relaxed">
+                  {t(translations.aboutMe1)}{" "}
+                  <span className="font-semibold text-white">
+                    {t(translations.university)}
+                  </span>{" "}
+                  {t(translations.aboutMe2)}{" "}
+                  <span className="font-semibold text-white">
+                    {t(translations.hackathonsWord)}
+                  </span>
+                  {t(translations.aboutMe3)}
+                </p>
+              </section>
+
+              <section className="space-y-3">
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
+                  {t(translations.currentProjects)}
+                </h2>
+
+                {PROJECTS.map((project) => (
+                  <div
+                    key={project.id}
+                    className="group rounded-2xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-cyan-500/50"
+                  >
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-black italic text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight text-center lg:text-left mb-2">
+                            {project.name}
+                          </h3>
+
+                          {/* Technology badges */}
+                          <div className="flex gap-1.5 items-center flex-wrap justify-center lg:justify-start mb-2">
+                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
+                              <i className="devicon-nodejs-plain text-xs text-slate-300" />
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                Node.js
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
+                              <i className="devicon-react-original text-xs text-slate-300" />
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                React.js
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
+                              <i className="devicon-postgresql-plain text-xs text-slate-300" />
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                PostgreSQL
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
+                              <i className="devicon-docker-plain text-xs text-slate-300" />
+                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                Docker
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-xs md:text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors text-center lg:text-left">
+                            {t(project.description)}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2 justify-center lg:justify-end shrink-0">
+                          <a
+                            href={project.links?.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center w-8 h-8 bg-slate-800/50 hover:bg-slate-700 rounded-lg transition-all ring-1 ring-slate-700/50 hover:ring-slate-600"
+                            title="GitHub"
+                          >
+                            <FaGithub className="text-base text-slate-300 hover:text-white" />
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-2 justify-center lg:justify-start">
+                        <button
+                          onClick={() => onProjectClick(project.id)}
+                          className="flex items-center justify-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-slate-950 rounded-lg transition-all text-xs font-bold uppercase tracking-wider shadow-lg"
+                        >
+                          {t(translations.seeMore)}
+                        </button>
+                        {project.links?.live && (
+                          <a
+                            href={project.links.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-slate-950 rounded-lg transition-all text-xs font-bold uppercase tracking-wider shadow-lg"
+                          >
+                            <FaGlobe />
+                            {t(translations.viewApp)}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+              <section className="space-y-2.5">
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
+                  {t(translations.achievements)}
+                </h2>
+
+                <div className="space-y-2">
+                  <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-yellow-500/50 text-center lg:text-left">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
+                        <span className="inline-flex items-center justify-center h-6 px-3 bg-yellow-500/20 text-yellow-400 rounded-lg border border-yellow-500/30 text-[10px] font-black uppercase tracking-widest">
+                          🥇 {t(translations.firstPlace)}
+                        </span>
+                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                          {t(translations.achievement1)}
+                        </span>
+                      </div>
+                      <a
+                        href="https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-8 h-8 bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all ring-1 ring-slate-700/50 hover:ring-blue-500 mx-auto lg:mx-0"
+                        title="LinkedIn"
+                      >
+                        <FaLinkedin className="text-base text-slate-300 hover:text-white" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
+                        <span className="inline-flex items-center justify-center h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                          🥈 {t(translations.secondPlace)}
+                        </span>
+                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                          {t(translations.achievement2)}
+                        </span>
+                      </div>
+                      <a
+                        href="https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-8 h-8 bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all ring-1 ring-slate-700/50 hover:ring-blue-500 mx-auto lg:mx-0"
+                        title="LinkedIn"
+                      >
+                        <FaLinkedin className="text-base text-slate-300 hover:text-white" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
+                        <span className="inline-flex items-center justify-center h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                          🥈 {t(translations.secondPlace)}
+                        </span>
+                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                          {t(translations.achievement3)}
+                        </span>
+                      </div>
+                      <a
+                        href="https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-8 h-8 bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all ring-1 ring-slate-700/50 hover:ring-blue-500 mx-auto lg:mx-0"
+                        title="LinkedIn"
+                      >
+                        <FaLinkedin className="text-base text-slate-300 hover:text-white" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </div>
+
+      {/* HOBBY MODAL */}
+      {selectedHobby && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          onClick={() => {
+            setSelectedHobby(null);
+            setActiveHobbySlide(0);
+          }}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
+            <button
+              onClick={() => {
+                setSelectedHobby(null);
+                setActiveHobbySlide(0);
+              }}
+              className="absolute -top-12 right-0 text-white text-[14px] font-bold uppercase tracking-widest bg-cyan-500/90 hover:bg-cyan-600 px-4 py-2 rounded-xl transition-all shadow-lg z-10"
+            >
+              {language === "pl" ? "Zamknij" : "Close"}
+            </button>
+
+            <div
+              className="bg-slate-900/50 rounded-3xl p-8 border border-slate-700/50 backdrop-blur-xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col lg:flex-row gap-8 items-center">
+                {selectedHobby.images.length > 0 ? (
+                  <div
+                    className="relative w-80 h-80 lg:w-96 lg:h-96"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    <img
+                      src={selectedHobby.images[activeHobbySlide]}
+                      alt={t(selectedHobby.label)}
+                      className="w-full h-full object-cover rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 select-none"
+                    />
+                    {selectedHobby.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={() =>
+                            setActiveHobbySlide(
+                              (prev) =>
+                                (prev - 1 + selectedHobby.images.length) %
+                                selectedHobby.images.length,
+                            )
+                          }
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          onClick={() =>
+                            setActiveHobbySlide(
+                              (prev) =>
+                                (prev + 1) % selectedHobby.images.length,
+                            )
+                          }
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                          {selectedHobby.images.map((_, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setActiveHobbySlide(idx)}
+                              className={`w-2 h-2 rounded-full transition-all ${
+                                idx === activeHobbySlide
+                                  ? "bg-cyan-500 w-6"
+                                  : "bg-slate-500"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-80 h-80 lg:w-96 lg:h-96 flex items-center justify-center rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 bg-slate-800/50">
+                    <span className="text-8xl">{selectedHobby.icon}</span>
+                  </div>
+                )}
+                <div className="text-center lg:text-left">
+                  <div className="text-4xl lg:text-5xl mb-4">
+                    {selectedHobby.icon}
+                  </div>
+                  <h3 className="text-2xl font-black uppercase tracking-wider text-cyan-400 mb-4">
+                    {t(selectedHobby.label)}
+                  </h3>
+                  <p className="text-slate-300 leading-relaxed max-w-md">
+                    {language === "pl"
+                      ? "Moje największe pasje poza programowaniem. Tutaj znajduję równowagę i energię do tworzenia kolejnych projektów."
+                      : "My greatest passions outside of programming. This is where I find balance and energy to create new projects."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+</file>
+
+<file path="src/components/HackathonsPage.tsx">
+import { useState } from "react";
+import { HACKATHONS } from "../data/hackathons";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { useLanguage } from "../contexts/LanguageContext";
+import { translations } from "../constants/translations";
+
+type HackathonsPageProps = {
+  onBackToCv: () => void;
+};
+
+export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
+  const { language, setLanguage, t } = useLanguage();
+  const [activeHackathonId, setActiveHackathonId] = useState<string>("fintech");
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const activeHackathon = HACKATHONS.find((h) => h.id === activeHackathonId)!;
+  const totalSlides = activeHackathon.images.length;
+
+  const goPrevSlide = () =>
+    setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const goNextSlide = () =>
+    setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+
+  // Swipe handlers
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      goNextSlide();
+    } else if (isRightSwipe) {
+      goPrevSlide();
+    }
+  };
+
+  return (
+    <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
+      <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6">
+        {/* SIDEBAR */}
+        <aside className="w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65">
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={onBackToCv}
+              className="flex-1 group inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800/50 px-4 py-2 text-[15px] font-bold text-cyan-400 ring-1 ring-slate-700/50 transition hover:bg-slate-700 hover:text-white"
+            >
+              ← {t(translations.backToCv)}
+            </button>
+            <button
+              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              className="flex items-center justify-center rounded-lg bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 uppercase tracking-wider shadow-lg transition-all hover:bg-cyan-600"
+            >
+              {language === "pl" ? "EN" : "PL"}
+            </button>
+          </div>
+
+          <h2 className="mb-4 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500 border-l-2 border-slate-700 pl-4">
+            {t(translations.myProjects)}
+          </h2>
+
+          <div className="space-y-3">
+            {HACKATHONS.map((hack) => (
+              <button
+                key={hack.id}
+                onClick={() => {
+                  setActiveHackathonId(hack.id);
+                  setActiveSlideIndex(0);
+                }}
+                className={`w-full rounded-2xl p-3 text-left transition-all duration-300 ${
+                  activeHackathonId === hack.id
+                    ? "bg-cyan-500 text-slate-950 shadow-md scale-[1.02]"
+                    : "bg-slate-800/40 text-slate-200 hover:bg-slate-800 ring-1 ring-slate-700/30"
+                }`}
+              >
+                <p
+                  className={`text-[10px] uppercase tracking-widest font-black mb-2 ${
+                    activeHackathonId === hack.id
+                      ? "text-slate-950/60"
+                      : "text-cyan-500"
+                  }`}
+                >
+                  {t(hack.role)}
+                </p>
+                <p className="text-sm md:text-base font-black uppercase leading-tight">
+                  {hack.name}
+                </p>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        {/* MAIN CONTENT */}
+        <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md">
+          <div className="space-y-4">
+            {/* SEKCJA: Tytuł po lewej + Opis po prawej */}
+            <section className="bg-slate-800/10 p-3 md:p-4 rounded-2xl ring-1 ring-slate-800/50">
+              <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
+                {/* Lewa strona - Tytuł (auto-width) */}
+                <div className="shrink-0">
+                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
+                    {activeHackathon.name}
+                  </h1>
+                  <div className="mt-2 h-1 w-16 bg-cyan-500 rounded-full" />
+                </div>
+
+                {/* Prawa strona - Opis */}
+                <div className="flex-1 lg:border-l lg:border-slate-700/50 lg:pl-4">
+                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
+                    {t(activeHackathon.description)}
+                  </p>
+                </div>
+
+                {/* Ikony po prawej */}
+                <div className="flex flex-row lg:flex-col gap-2 shrink-0 lg:border-l lg:border-slate-700/50 lg:pl-4">
+                  {activeHackathon.links?.github && (
+                    <a
+                      href={activeHackathon.links.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-slate-700 rounded-xl transition-all ring-1 ring-slate-700/50 hover:ring-slate-600"
+                      title="GitHub"
+                    >
+                      <FaGithub className="text-lg text-slate-300 hover:text-white" />
+                    </a>
+                  )}
+                  {(activeHackathon.links?.linkedin ||
+                    activeHackathon.links?.article) && (
+                    <a
+                      href={
+                        activeHackathon.links.linkedin ||
+                        activeHackathon.links.article
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-blue-600 rounded-xl transition-all ring-1 ring-slate-700/50 hover:ring-blue-500"
+                      title="LinkedIn"
+                    >
+                      <FaLinkedin className="text-lg text-slate-300 hover:text-white" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* GALLERY */}
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 md:gap-3">
+                <button
+                  onClick={goPrevSlide}
+                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                >
+                  ‹
+                </button>
+
+                <div className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
+                >
+                  <div className="flex h-full w-full items-center justify-center p-3 sm:p-5">
+                    <img
+                      src={activeHackathon.images[activeSlideIndex]}
+                      alt="Preview"
+                      onClick={() =>
+                        setFullscreenSrc(
+                          activeHackathon.images[activeSlideIndex]
+                        )
+                      }
+                      className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
+                    />
+                  </div>
+
+                  <div className="absolute top-5 right-5 rounded-lg bg-black/60 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-white ring-1 ring-white/10">
+                    {activeSlideIndex + 1} / {totalSlides}
+                  </div>
+                </div>
+
+                <button
+                  onClick={goNextSlide}
+                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                >
+                  ›
+                </button>
+              </div>
+
+              <div className="flex justify-center gap-2">
+                {activeHackathon.images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveSlideIndex(index)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      index === activeSlideIndex
+                        ? "w-10 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                        : "w-2 bg-slate-700 hover:bg-slate-600"
+                    }`}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+
+      {/* FULLSCREEN MODAL */}
+      {fullscreenSrc && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          onClick={() => setFullscreenSrc(null)}
+        >
+          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all">
+            Zamknij ✕
+          </button>
+          <img
+            src={fullscreenSrc}
+            className="max-h-full max-w-full object-contain shadow-2xl"
+            alt="Fullscreen"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+</files>

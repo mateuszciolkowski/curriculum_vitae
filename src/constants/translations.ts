@@ -1,7 +1,7 @@
 export const translations = {
   // Navigation & Buttons
-  hackathons: { pl: "Hackathony", en: "Hackathons" },
-  backToCv: { pl: "Powrót do CV", en: "Back to CV" },
+  hackathons: { pl: "HACKATHONY", en: "HACKATHONS" },
+  backToCv: { pl: "POWRÓT DO CV", en: "BACK TO CV" },
   downloadCv: { pl: "Curriculum Vitae", en: "Curriculum Vitae" },
 
   // Sections
@@ -10,6 +10,10 @@ export const translations = {
   hobbies: { pl: "Hobby", en: "Hobbies" },
   aboutMe: { pl: "O mnie", en: "About Me" },
   currentProjects: { pl: "Aktualne projekty", en: "Current Projects" },
+  myPersonalProjects: {
+    pl: "Moje Projekty Osobiste",
+    en: "My Personal Projects",
+  },
   achievements: { pl: "Osiągnięcia", en: "Achievements" },
 
   // Job Title
@@ -88,6 +92,14 @@ export const translations = {
   links: { pl: "Linki", en: "Links" },
   viewProject: { pl: "Zobacz projekt", en: "View Project" },
   liveDemo: { pl: "Demo na żywo", en: "Live Demo" },
+  seeMore: { pl: "Zobacz więcej", en: "See More" },
+  viewApp: { pl: "Zobacz aplikację", en: "View App" },
+  projectGallery: { pl: "Galeria projektu", en: "Project Gallery" },
+  projectDetails: { pl: "Szczegóły projektu", en: "Project Details" },
+  gallery: { pl: "Galeria", en: "Gallery" },
+  noImages: { pl: "Brak zdjęć", en: "No images available" },
+  completed: { pl: "Ukończony", en: "Completed" },
+  keyFeatures: { pl: "Kluczowe Funkcje", en: "Key Features" },
 
   // Roles
   roleFrontend: { pl: "Frontend", en: "Frontend" },
