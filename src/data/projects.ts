@@ -1,3 +1,11 @@
+import gymgate1 from "../assets/images/gymgate/gymgate1.png";
+import gymgate2 from "../assets/images/gymgate/gymgate2.png";
+import gymgate3 from "../assets/images/gymgate/gymgate3.png";
+import gymgate4 from "../assets/images/gymgate/gymgate4.png";
+import gymgate5 from "../assets/images/gymgate/gymgate5.png";
+import gymgate6 from "../assets/images/gymgate/gymgate6.png";
+import gymgate7 from "../assets/images/gymgate/gymgate7.png";
+
 export interface Project {
   id: string;
   name: string;
@@ -43,13 +51,13 @@ export const PROJECTS: Project[] = [
       ],
     },
     images: [
-      new URL("../assets/images/gymgate/gymgate1.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate2.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate3.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate4.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate5.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate6.png", import.meta.url).href,
-      new URL("../assets/images/gymgate/gymgate7.png", import.meta.url).href,
+      gymgate1,
+      gymgate2,
+      gymgate3,
+      gymgate4,
+      gymgate5,
+      gymgate6,
+      gymgate7,
     ],
     links: {
       github: "https://github.com/mateuszciolkowski/gymgate",
