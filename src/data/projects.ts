@@ -29,8 +29,8 @@ export const PROJECTS: Project[] = [
       en: "Fullstack Developer",
     },
     description: {
-      pl: "Kompleksowa aplikacja do śledzenia treningów siłowych, która rewolucjonizuje sposób monitorowania postępów na siłowni. GymGate to inteligentny asystent treningowy, który pamięta każdy Twój trening, automatycznie zapisuje użyte ciężary i pomaga osiągać nowe rekordy osobiste. Dzięki zaawansowanemu systemowi statystyk możesz analizować swoje wyniki, obserwować progres i optymalizować plan treningowy.",
-      en: "A comprehensive strength training tracking application that revolutionizes the way you monitor your gym progress. GymGate is an intelligent training assistant that remembers every workout, automatically saves your weights, and helps you achieve new personal records. With an advanced statistics system, you can analyze your results, observe progress, and optimize your training plan.",
+      pl: "GymGate to inteligentny asystent treningowy, który pamięta każdy Twój trening, automatycznie zapisuje użyte ciężary i pomaga osiągać nowe rekordy osobiste. Dzięki zaawansowanemu systemowi statystyk możesz analizować swoje wyniki, obserwować progres i optymalizować plan treningowy.",
+      en: "GymGate is an intelligent training assistant that remembers every workout, automatically saves your weights, and helps you achieve new personal records. With an advanced statistics system, you can analyze your results, observe progress, and optimize your training plan.",
     },
     features: {
       pl: [
