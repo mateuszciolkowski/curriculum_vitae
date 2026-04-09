@@ -1,0 +1,44 @@
+PROJECT: curriculum_vitae
+PATH: /Users/mciolkowski/Documents/PROGRAMMING/projects/curriculum_vitae
+
+PURPOSE OF THIS FILE
+- A quick project map so I can work efficiently and always know where to make changes.
+
+STACK AND COMMANDS
+- React 19 + TypeScript + Vite + Tailwind
+- npm run dev
+- npm run build
+- npm run lint
+- npm run preview
+- npm run deploy
+
+ARCHITECTURE
+- src/main.tsx -> application entry point
+- src/App.tsx -> view navigation handled by local state:
+  - cv
+  - hackathons
+  - project-detail
+- src/contexts/LanguageContext.tsx -> PL/EN language handling + t() helper
+
+WHERE TO EDIT WHAT
+- UI text: src/constants/translations.ts
+- Project data: src/data/projects.ts
+- Hackathon data: src/data/hackathons.ts
+- CV view: src/components/CvPage.tsx
+- Hackathons view: src/components/HackathonsPage.tsx
+- Project details view: src/components/ProjectDetailPage.tsx
+- Constants: src/constants/{skills,hobbies,technologies}.ts
+- Assets:
+  - CV files: src/assets/cv/
+  - Images: src/assets/images/
+
+MOST COMMON CHANGES
+1. Adding a new project:
+   - add images to src/assets/images/<project-name>/
+   - add a new record in src/data/projects.ts (id, PL/EN descriptions, images, links)
+2. Updating PL/EN text:
+   - edit src/constants/translations.ts
+   - verify the component uses t(...)
+
+IMPORTANT
+- This repo does not use react-router; navigation is state-based in App.tsx.

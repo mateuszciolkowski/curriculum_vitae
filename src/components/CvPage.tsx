@@ -314,7 +314,7 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-yellow-500/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center h-6 px-3 bg-yellow-500/20 text-yellow-400 rounded-lg border border-yellow-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-yellow-500/20 text-yellow-400 rounded-lg border border-yellow-500/30 text-[10px] font-black uppercase tracking-widest">
                           🥇 {t(translations.firstPlace)}
                         </span>
                         <span className="text-xs md:text-sm text-slate-300 font-medium">
@@ -336,7 +336,7 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
                           🥈 {t(translations.secondPlace)}
                         </span>
                         <span className="text-xs md:text-sm text-slate-300 font-medium">
@@ -358,7 +358,7 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
                           🥈 {t(translations.secondPlace)}
                         </span>
                         <span className="text-xs md:text-sm text-slate-300 font-medium">
