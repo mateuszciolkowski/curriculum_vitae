@@ -28,6 +28,12 @@ export function CvPage({
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
+  const defaultProjectTechnologies = [
+    { name: "Node.js", icon: "devicon-nodejs-plain" },
+    { name: "React.js", icon: "devicon-react-original" },
+    { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+    { name: "Docker", icon: "devicon-docker-plain" },
+  ];
 
   // Swipe handlers
   const minSwipeDistance = 50;
@@ -232,36 +238,34 @@ export function CvPage({
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
                         <div className="flex-1">
-                          <h3 className="text-lg font-black italic text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight text-center lg:text-left mb-2">
-                            {project.name}
-                          </h3>
+                          <div className="mb-2 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                            <h3 className="text-lg font-black italic text-white group-hover:text-cyan-400 transition-colors uppercase tracking-tight text-center lg:text-left">
+                              {project.name}
+                            </h3>
+                            {project.status && (
+                              <span className="inline-flex items-center justify-center whitespace-nowrap h-5 px-2 bg-cyan-500/15 text-cyan-300 rounded border border-cyan-500/30 text-[9px] font-black uppercase tracking-widest">
+                                {project.status[language]}
+                              </span>
+                            )}
+                          </div>
 
                           {/* Technology badges */}
                           <div className="flex gap-1.5 items-center flex-wrap justify-center lg:justify-start mb-2">
-                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
-                              <i className="devicon-nodejs-plain text-xs text-slate-300" />
-                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                                Node.js
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
-                              <i className="devicon-react-original text-xs text-slate-300" />
-                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                                React.js
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
-                              <i className="devicon-postgresql-plain text-xs text-slate-300" />
-                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                                PostgreSQL
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30">
-                              <i className="devicon-docker-plain text-xs text-slate-300" />
-                              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                                Docker
-                              </span>
-                            </div>
+                            {(
+                              project.technologies ?? defaultProjectTechnologies
+                            ).map((tech) => (
+                              <div
+                                key={`${project.id}-${tech.name}`}
+                                className="flex items-center gap-1 h-5 px-2 bg-slate-800/40 rounded border border-slate-700/30"
+                              >
+                                <i
+                                  className={`${tech.icon} text-xs text-slate-300`}
+                                />
+                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                  {tech.name}
+                                </span>
+                              </div>
+                            ))}
                           </div>
                           <p className="text-xs md:text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors text-center lg:text-left">
                             {t(project.description)}

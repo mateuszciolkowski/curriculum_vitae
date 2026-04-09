@@ -30,12 +30,13 @@ export function ProjectDetailPage({
     );
   }
 
-  const technologies = [
+  const defaultTechnologies = [
     { name: "Node.js", icon: "devicon-nodejs-plain" },
     { name: "React.js", icon: "devicon-react-original" },
     { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
     { name: "Docker", icon: "devicon-docker-plain" },
   ];
+  const technologies = project.technologies ?? defaultTechnologies;
 
   const totalSlides = project.images.length;
   const hasImages = totalSlides > 0;
@@ -97,9 +98,16 @@ export function ProjectDetailPage({
             <section className="bg-slate-800/40 p-3 md:p-4 rounded-2xl ring-1 ring-slate-700/50">
               <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
                 <div className="shrink-0">
-                  <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
-                    {project.name}
-                  </h1>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
+                      {project.name}
+                    </h1>
+                    {project.status && (
+                      <span className="inline-flex items-center justify-center whitespace-nowrap h-5 px-2 bg-cyan-500/15 text-cyan-300 rounded border border-cyan-500/30 text-[9px] font-black uppercase tracking-widest">
+                        {project.status[language]}
+                      </span>
+                    )}
+                  </div>
                   <div className="mt-2 h-1 w-16 bg-cyan-500 rounded-full" />
                 </div>
                 <div className="flex-1 lg:border-l lg:border-slate-700/50 lg:pl-4">
