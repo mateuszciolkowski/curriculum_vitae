@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PROJECTS } from "../data/projects";
 import { FaGithub, FaGlobe } from "react-icons/fa";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -19,6 +19,12 @@ export function ProjectDetailPage({
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isChangingSlide, setIsChangingSlide] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const project = PROJECTS.find((p) => p.id === projectId);
 
@@ -41,10 +47,20 @@ export function ProjectDetailPage({
   const totalSlides = project.images.length;
   const hasImages = totalSlides > 0;
 
-  const goPrevSlide = () =>
-    setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  const goNextSlide = () =>
-    setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+  const goPrevSlide = () => {
+    setIsChangingSlide(true);
+    setTimeout(() => {
+      setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+      setIsChangingSlide(false);
+    }, 150);
+  };
+  const goNextSlide = () => {
+    setIsChangingSlide(true);
+    setTimeout(() => {
+      setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+      setIsChangingSlide(false);
+    }, 150);
+  };
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -62,7 +78,7 @@ export function ProjectDetailPage({
 
   return (
     <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
-      <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6">
+      <div className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
         {/* TOP BAR - Mobile only */}
         <div className="w-full flex gap-2 lg:hidden">
           <button
@@ -93,9 +109,9 @@ export function ProjectDetailPage({
         </div>
 
         {/* MAIN CONTENT */}
-        <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md lg:min-h-[calc(100vh-3rem)] order-1 lg:order-2">
+        <main className={`w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md lg:min-h-[calc(100vh-3rem)] order-1 lg:order-2 transition-all duration-700 delay-100 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="space-y-4">
-            <section className="bg-slate-800/40 p-3 md:p-4 rounded-2xl ring-1 ring-slate-700/50">
+            <section className="bg-slate-800/40 p-3 md:p-4 rounded-2xl ring-1 ring-slate-700/50 transition-all duration-500 hover:bg-slate-800/60">
               <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
                 <div className="shrink-0">
                   <div className="flex flex-wrap items-center gap-2">
@@ -121,7 +137,7 @@ export function ProjectDetailPage({
                       href={project.links.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-slate-700 rounded-xl transition-all ring-1 ring-slate-700/50"
+                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-slate-700 rounded-xl transition-all ring-1 ring-slate-700/50 hover:scale-110 active:scale-90"
                     >
                       <FaGithub className="text-lg text-slate-300 hover:text-white" />
                     </a>
@@ -135,7 +151,7 @@ export function ProjectDetailPage({
                 <div className="flex items-center gap-2 md:gap-3">
                   <button
                     onClick={goPrevSlide}
-                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg active:scale-90"
                   >
                     ‹
                   </button>
@@ -145,7 +161,7 @@ export function ProjectDetailPage({
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
                   >
-                    <div className="flex h-full w-full items-center justify-center p-3 sm:p-5">
+                    <div className={`flex h-full w-full items-center justify-center p-3 sm:p-5 transition-all duration-300 ease-[var(--ease-out)] ${isChangingSlide ? 'opacity-40 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}>
                       <img
                         src={project.images[activeSlideIndex]}
                         alt="Preview"
@@ -158,7 +174,7 @@ export function ProjectDetailPage({
                   </div>
                   <button
                     onClick={goNextSlide}
-                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                    className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg active:scale-90"
                   >
                     ›
                   </button>
@@ -169,7 +185,7 @@ export function ProjectDetailPage({
         </main>
 
         {/* SIDEBAR */}
-        <aside className="w-full shrink-0 rounded-3xl bg-slate-900/80 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65 lg:min-h-[calc(100vh-3rem)] flex flex-col order-2 lg:order-1">
+        <aside className={`w-full shrink-0 rounded-3xl bg-slate-900/80 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65 lg:min-h-[calc(100vh-3rem)] flex flex-col order-2 lg:order-1 transition-all duration-700 delay-200 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
           <div className="hidden lg:flex gap-2 mb-4">
             <button
               onClick={onBackToCv}
@@ -190,7 +206,7 @@ export function ProjectDetailPage({
               href={project.links.live}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-full mb-6 ${buttonStyles.cyan}`}
+              className={`w-full mb-6 ${buttonStyles.cyan} active:scale-95`}
             >
               <FaGlobe />
               {t(translations.viewApp)}
@@ -201,10 +217,11 @@ export function ProjectDetailPage({
             {t(translations.technologies)}
           </h2>
           <div className="grid grid-cols-4 gap-2 mb-6">
-            {technologies.map((tech) => (
+            {technologies.map((tech, idx) => (
               <div
                 key={tech.name}
-                className="flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-2.5 transition hover:bg-slate-700/60 ring-1 ring-slate-700/30 aspect-square"
+                style={{ transitionDelay: `${400 + idx * 50}ms` }}
+                className={`flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-2.5 transition-all duration-500 ease-[var(--ease-out)] hover:bg-slate-700/60 ring-1 ring-slate-700/30 aspect-square hover:scale-110 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 title={tech.name}
               >
                 <i className={`${tech.icon} text-2xl text-slate-300`} />
@@ -222,7 +239,8 @@ export function ProjectDetailPage({
                   (feature: string, index: number) => (
                     <div
                       key={index}
-                      className="flex items-start gap-2 rounded-lg bg-slate-800/30 p-2.5 ring-1 ring-slate-700/30"
+                      style={{ transitionDelay: `${600 + index * 50}ms` }}
+                      className={`flex items-start gap-2 rounded-lg bg-slate-800/30 p-2.5 ring-1 ring-slate-700/30 transition-all duration-500 ease-[var(--ease-out)] hover:bg-slate-800/50 ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}
                     >
                       <span className="text-cyan-400 text-xs mt-0.5">•</span>
                       <span className="text-[11px] text-slate-300 leading-relaxed">
@@ -241,15 +259,15 @@ export function ProjectDetailPage({
       {/* FULLSCREEN MODAL */}
       {fullscreenSrc && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setFullscreenSrc(null)}
         >
-          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all">
+          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all active:scale-95">
             {language === "pl" ? "Zamknij" : "Close"} ✕
           </button>
           <img
             src={fullscreenSrc}
-            className="max-h-full max-w-full object-contain shadow-2xl"
+            className="max-h-full max-w-full object-contain shadow-2xl animate-in fade-in zoom-in-95 duration-500 ease-[var(--ease-out)]"
             alt="Fullscreen"
           />
         </div>

@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from "react";
+import { type ReactElement, useState, useEffect } from "react";
 import { TECHNOLOGIES } from "../constants/technologies";
 import { SKILLS } from "../constants/skills";
 import { HOBBIES } from "../constants/hobbies";
@@ -26,6 +26,22 @@ export function CvPage({
   const [activeHobbySlide, setActiveHobbySlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedHobby) {
+      // Small delay to trigger the transition after mounting
+      const timer = setTimeout(() => setShowModal(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setShowModal(false);
+    }
+  }, [selectedHobby]);
 
   const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
   const defaultProjectTechnologies = [
@@ -66,9 +82,13 @@ export function CvPage({
   return (
     <>
       <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden">
-        <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6">
+        <div 
+          className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-1000 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        >
           {/* LEWA STRONA (SIDEBAR) - na mobile druga */}
-          <aside className="w-full lg:w-80 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1">
+          <aside 
+            className={`w-full lg:w-80 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1 transition-all duration-700 delay-300 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+          >
             <div className="text-center pt-2">
               <button
                 onClick={onHackathonsClick}
@@ -82,13 +102,14 @@ export function CvPage({
               {t(translations.toolsAndTech)}
             </h2>
             <div className="grid grid-cols-4 gap-2 mb-8">
-              {TECHNOLOGIES.map((tech) => (
+              {TECHNOLOGIES.map((tech, idx) => (
                 <div
                   key={tech.name}
-                  className="flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-1.5 transition hover:bg-slate-700/60 aspect-square"
+                  style={{ transitionDelay: `${400 + idx * 40}ms` }}
+                  className={`flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-1.5 transition-all duration-500 ease-[var(--ease-out)] hover:bg-slate-700/60 aspect-square hover:scale-105 active:scale-95 cursor-default group ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 >
                   <i
-                    className={`${tech.className} text-lg sm:text-xl ${
+                    className={`${tech.className} text-lg sm:text-xl transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110 ${
                       tech.name === "Python" ? "text-[#3776AB]" : ""
                     }`}
                   />
@@ -104,7 +125,11 @@ export function CvPage({
             </h2>
             <div className="flex flex-col gap-3 px-2 mb-8">
               {SKILLS.map((skill, idx) => (
-                <div key={idx} className="flex items-center gap-2 group">
+                <div 
+                  key={idx} 
+                  style={{ transitionDelay: `${600 + idx * 50}ms` }}
+                  className={`flex items-center gap-2 group transition-all duration-500 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+                >
                   <span className="h-1 w-1 shrink-0 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
                   <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
                     {t(skill)}
@@ -135,7 +160,9 @@ export function CvPage({
           </aside>
 
           {/* PRAWA STRONA (MAIN CONTENT) - na mobile pierwsza */}
-          <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2">
+          <main 
+            className={`w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2 transition-all duration-700 delay-150 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+          >
             <div className="space-y-4">
               <header className="space-y-1.5 text-center lg:text-left">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
@@ -230,10 +257,11 @@ export function CvPage({
                   {t(translations.currentProjects)}
                 </h2>
 
-                {PROJECTS.map((project) => (
+                {PROJECTS.map((project, idx) => (
                   <div
                     key={project.id}
-                    className="group rounded-2xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-cyan-500/50"
+                    style={{ transitionDelay: `${400 + idx * 100}ms` }}
+                    className={`group rounded-2xl border border-slate-800 bg-slate-800/20 p-3 transition-all duration-500 ease-[var(--ease-out)] hover:border-cyan-500/50 hover:bg-slate-800/30 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
@@ -390,26 +418,28 @@ export function CvPage({
       {/* HOBBY MODAL */}
       {selectedHobby && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${showModal ? 'opacity-100' : 'opacity-0'}`}
           onClick={() => {
             setSelectedHobby(null);
             setActiveHobbySlide(0);
           }}
         >
-          <div className="relative max-w-4xl max-h-[90vh] w-full">
+          <div 
+            className={`relative max-w-4xl max-h-[90vh] w-full transition-all duration-500 ease-[var(--ease-out)] ${showModal ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => {
                 setSelectedHobby(null);
                 setActiveHobbySlide(0);
               }}
-              className="absolute -top-12 right-0 text-white text-[14px] font-bold uppercase tracking-widest bg-cyan-500/90 hover:bg-cyan-600 px-4 py-2 rounded-xl transition-all shadow-lg z-10"
+              className="absolute -top-12 right-0 text-white text-[14px] font-bold uppercase tracking-widest bg-cyan-500/90 hover:bg-cyan-600 px-4 py-2 rounded-xl transition-all shadow-lg z-10 hover:scale-105 active:scale-95"
             >
               {language === "pl" ? "Zamknij" : "Close"}
             </button>
 
             <div
               className="bg-slate-900/50 rounded-3xl p-8 border border-slate-700/50 backdrop-blur-xl shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col lg:flex-row gap-8 items-center">
                 {selectedHobby.images.length > 0 ? (
@@ -422,7 +452,7 @@ export function CvPage({
                     <img
                       src={selectedHobby.images[activeHobbySlide]}
                       alt={t(selectedHobby.label)}
-                      className="w-full h-full object-cover rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 select-none"
+                      className="w-full h-full object-cover rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 select-none transition-all duration-500 ease-[var(--ease-out)]"
                     />
                     {selectedHobby.images.length > 1 && (
                       <>
@@ -434,7 +464,7 @@ export function CvPage({
                                 selectedHobby.images.length,
                             )
                           }
-                          className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg active:scale-90"
                         >
                           ‹
                         </button>
@@ -445,7 +475,7 @@ export function CvPage({
                                 (prev + 1) % selectedHobby.images.length,
                             )
                           }
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800/80 text-white text-2xl hover:bg-cyan-500 transition-all shadow-lg active:scale-90"
                         >
                           ›
                         </button>
@@ -454,10 +484,10 @@ export function CvPage({
                             <button
                               key={idx}
                               onClick={() => setActiveHobbySlide(idx)}
-                              className={`w-2 h-2 rounded-full transition-all ${
+                              className={`h-2 rounded-full transition-all duration-300 ease-[var(--ease-out)] active:scale-90 ${
                                 idx === activeHobbySlide
                                   ? "bg-cyan-500 w-6"
-                                  : "bg-slate-500"
+                                  : "bg-slate-500 w-2 hover:bg-slate-400"
                               }`}
                             />
                           ))}
@@ -467,7 +497,7 @@ export function CvPage({
                   </div>
                 ) : (
                   <div className="w-80 h-80 lg:w-96 lg:h-96 flex items-center justify-center rounded-2xl shadow-2xl ring-2 ring-cyan-500/30 bg-slate-800/50">
-                    <span className="text-8xl">{selectedHobby.icon}</span>
+                    <span className="text-8xl animate-pulse">{selectedHobby.icon}</span>
                   </div>
                 )}
                 <div className="text-center lg:text-left">

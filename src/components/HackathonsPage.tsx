@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HACKATHONS } from "../data/hackathons";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -16,14 +16,31 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isChangingSlide, setIsChangingSlide] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const activeHackathon = HACKATHONS.find((h) => h.id === activeHackathonId)!;
   const totalSlides = activeHackathon.images.length;
 
-  const goPrevSlide = () =>
-    setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
-  const goNextSlide = () =>
-    setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+  const goPrevSlide = () => {
+    setIsChangingSlide(true);
+    setTimeout(() => {
+      setActiveSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+      setIsChangingSlide(false);
+    }, 150);
+  };
+  const goNextSlide = () => {
+    setIsChangingSlide(true);
+    setTimeout(() => {
+      setActiveSlideIndex((prev) => (prev + 1) % totalSlides);
+      setIsChangingSlide(false);
+    }, 150);
+  };
+
 
   // Swipe handlers
   const minSwipeDistance = 50;
@@ -51,9 +68,9 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
   return (
     <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
-      <div className="mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6">
+      <div className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
         {/* SIDEBAR */}
-        <aside className="w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65">
+        <aside className={`w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65 transition-all duration-700 delay-100 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
           <div className="flex gap-2 mb-4">
             <button
               onClick={onBackToCv}
@@ -74,18 +91,19 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
           </h2>
 
           <div className="space-y-3">
-            {HACKATHONS.map((hack) => (
+            {HACKATHONS.map((hack, idx) => (
               <button
                 key={hack.id}
+                style={{ transitionDelay: `${200 + idx * 50}ms` }}
                 onClick={() => {
                   setActiveHackathonId(hack.id);
                   setActiveSlideIndex(0);
                 }}
-                className={`w-full rounded-2xl p-3 text-left transition-all duration-300 ${
+                className={`w-full rounded-2xl p-3 text-left transition-all duration-300 ease-[var(--ease-out)] active:scale-95 ${
                   activeHackathonId === hack.id
                     ? "bg-cyan-500 text-slate-950 shadow-md scale-[1.02]"
-                    : "bg-slate-800/40 text-slate-200 hover:bg-slate-800 ring-1 ring-slate-700/30"
-                }`}
+                    : "bg-slate-800/40 text-slate-200 hover:bg-slate-800 ring-1 ring-slate-700/30 hover:scale-[1.01]"
+                } ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               >
                 <p
                   className={`text-[10px] uppercase tracking-widest font-black mb-2 ${
@@ -105,7 +123,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
         </aside>
 
         {/* MAIN CONTENT */}
-        <main className="w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md">
+        <main className={`w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-3 md:p-5 lg:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md transition-all duration-700 delay-200 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
           <div className="space-y-4">
             {/* SEKCJA: Tytuł po lewej + Opis po prawej */}
             <section className="bg-slate-800/10 p-3 md:p-4 rounded-2xl ring-1 ring-slate-800/50">
@@ -173,7 +191,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                   onTouchMove={onTouchMove}
                   onTouchEnd={onTouchEnd}
                 >
-                  <div className="flex h-full w-full items-center justify-center p-3 sm:p-5">
+                  <div className={`flex h-full w-full items-center justify-center p-3 sm:p-5 transition-all duration-300 ease-[var(--ease-out)] ${isChangingSlide ? 'opacity-40 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}>
                     <img
                       src={activeHackathon.images[activeSlideIndex]}
                       alt="Preview"
@@ -220,15 +238,15 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
       {/* FULLSCREEN MODAL */}
       {fullscreenSrc && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setFullscreenSrc(null)}
         >
-          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all">
-            Zamknij ✕
+          <button className="absolute top-6 right-6 text-white text-[10px] font-bold uppercase tracking-widest bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all active:scale-95">
+            {language === "pl" ? "Zamknij" : "Close"} ✕
           </button>
           <img
             src={fullscreenSrc}
-            className="max-h-full max-w-full object-contain shadow-2xl"
+            className="max-h-full max-w-full object-contain shadow-2xl animate-in fade-in zoom-in-95 duration-500 ease-[var(--ease-out)]"
             alt="Fullscreen"
           />
         </div>

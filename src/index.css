@@ -14,6 +14,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Design Engineering: Strong ease-out for UI interactions */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 body {
@@ -30,4 +35,17 @@ a {
 
 a:hover {
   color: #0ea5e9;
+}
+
+/* Global button responsiveness */
+button, 
+.button,
+a[role="button"] {
+  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+
+button:active, 
+.button:active,
+a[role="button"]:active {
+  transform: scale(0.97);
 }
