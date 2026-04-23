@@ -26,16 +26,16 @@ export const translations = {
 
   // About section
   aboutIntro: {
-    pl: "Projektuję i tworzę aplikacje webowe od podstaw, rozwijając swoje umiejętności głównie w technologiach takich jak",
-    en: "I design and build web applications from scratch, developing my skills primarily in technologies such as",
+    pl: "Projektuję i tworzę aplikacje webowe od podstaw, pisząc kod głównie w językach takich jak",
+    en: "I design and build web applications from scratch, writing code primarily in languages such as",
   },
   aboutIntro2: {
-    pl: "oraz",
-    en: "and",
+    pl: ". W swoich projektach wykorzystuję frameworki, m.in.",
+    en: ". In my projects, I utilize frameworks including",
   },
   aboutIntro3: {
-    pl: "Pracuję z różnymi narzędziami, budując funkcjonalne rozwiązania i zdobywając praktyczne doświadczenie w każdym projekcie.",
-    en: "I work with various tools, building functional solutions and gaining practical experience with each project.",
+    pl: ", co pozwala mi budować skalowalne i funkcjonalne rozwiązania.",
+    en: ", allowing me to build scalable and functional solutions.",
   },
 
   aboutMe1: {
