@@ -227,7 +227,7 @@ export function CvPage({
                 <p className="mx-auto lg:mx-0 max-w-2xl text-xs md:text-sm text-slate-300 leading-relaxed">
                   {t(translations.aboutIntro)}{" "}
                   <span className="font-semibold text-white">
-                    Node.js, Django
+                    Java, Node.js, Django, FastAPI
                   </span>{" "}
                   {t(translations.aboutIntro2)}{" "}
                   <span className="font-semibold text-white">React.js</span>.{" "}
