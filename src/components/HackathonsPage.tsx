@@ -68,7 +68,7 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
   return (
     <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
-      <div className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:flex-row lg:px-8 lg:py-6 xl:px-12 xl:py-8 2xl:px-20 2xl:py-10 lg:gap-6 xl:gap-8 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
         {/* SIDEBAR */}
         <aside className={`w-full shrink-0 rounded-3xl bg-slate-900/60 p-3 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-xl lg:w-65 transition-all duration-700 delay-100 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
           <div className="flex gap-2 mb-4">
@@ -114,9 +114,16 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
                 >
                   {t(hack.role)}
                 </p>
-                <p className="text-xs md:text-sm font-black uppercase leading-tight">
-                  {hack.name}
-                </p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-xs md:text-sm font-black uppercase leading-tight">
+                    {hack.name}
+                  </p>
+                  {hack.inProgress && (
+                    <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md ${activeHackathonId === hack.id ? "bg-slate-950/20 text-slate-950/70" : "bg-cyan-500/20 text-cyan-400"}`}>
+                      {language === "pl" ? "W trakcie" : "In Progress"}
+                    </span>
+                  )}
+                </div>
               </button>
             ))}
           </div>
@@ -177,59 +184,70 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
             {/* GALLERY */}
             <section className="space-y-3">
-              <div className="flex items-center gap-2 md:gap-3">
-                <button
-                  onClick={goPrevSlide}
-                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
-                >
-                  ‹
-                </button>
-
-                <div
-                  className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
-                  onTouchStart={onTouchStart}
-                  onTouchMove={onTouchMove}
-                  onTouchEnd={onTouchEnd}
-                >
-                  <div className={`flex h-full w-full items-center justify-center p-3 sm:p-5 transition-all duration-300 ease-[var(--ease-out)] ${isChangingSlide ? 'opacity-40 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}>
-                    <img
-                      src={activeHackathon.images[activeSlideIndex]}
-                      alt="Preview"
-                      onClick={() =>
-                        setFullscreenSrc(
-                          activeHackathon.images[activeSlideIndex],
-                        )
-                      }
-                      className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
-                    />
-                  </div>
-
-                  <div className="absolute top-5 right-5 rounded-lg bg-black/60 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-white ring-1 ring-white/10">
-                    {activeSlideIndex + 1} / {totalSlides}
-                  </div>
+              {activeHackathon.images.length === 0 ? (
+                <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-700/50 bg-slate-900/30 py-20 gap-4">
+                  <span className="text-5xl">🚧</span>
+                  <p className="text-sm font-bold uppercase tracking-widest text-slate-500">
+                    {language === "pl" ? "Zdjęcia wkrótce – projekt w trakcie" : "Photos coming soon – project in progress"}
+                  </p>
                 </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <button
+                      onClick={goPrevSlide}
+                      className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                    >
+                      ‹
+                    </button>
 
-                <button
-                  onClick={goNextSlide}
-                  className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
-                >
-                  ›
-                </button>
-              </div>
+                    <div
+                      className="relative flex-1 overflow-hidden rounded-4xl border-4 border-slate-800/50 bg-slate-950/50 shadow-2xl"
+                      onTouchStart={onTouchStart}
+                      onTouchMove={onTouchMove}
+                      onTouchEnd={onTouchEnd}
+                    >
+                      <div className={`flex h-full w-full items-center justify-center p-3 sm:p-5 transition-all duration-300 ease-[var(--ease-out)] ${isChangingSlide ? 'opacity-40 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}>
+                        <img
+                          src={activeHackathon.images[activeSlideIndex]}
+                          alt="Preview"
+                          onClick={() =>
+                            setFullscreenSrc(
+                              activeHackathon.images[activeSlideIndex],
+                            )
+                          }
+                          className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
+                        />
+                      </div>
 
-              <div className="flex justify-center gap-2">
-                {activeHackathon.images.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveSlideIndex(index)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === activeSlideIndex
-                        ? "w-10 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
-                        : "w-2 bg-slate-700 hover:bg-slate-600"
-                    }`}
-                  />
-                ))}
-              </div>
+                      <div className="absolute top-5 right-5 rounded-lg bg-black/60 backdrop-blur-md px-3 py-1.5 text-[10px] font-bold text-white ring-1 ring-white/10">
+                        {activeSlideIndex + 1} / {totalSlides}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={goNextSlide}
+                      className="flex h-10 w-10 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800/50 text-xl text-slate-400 ring-1 ring-slate-700 hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-lg"
+                    >
+                      ›
+                    </button>
+                  </div>
+
+                  <div className="flex justify-center gap-2">
+                    {activeHackathon.images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveSlideIndex(index)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          index === activeSlideIndex
+                            ? "w-10 bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                            : "w-2 bg-slate-700 hover:bg-slate-600"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </section>
           </div>
         </main>

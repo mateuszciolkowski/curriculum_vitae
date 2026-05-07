@@ -16,6 +16,22 @@ export const translations = {
   },
   achievements: { pl: "Osiągnięcia", en: "Achievements" },
 
+  // Sections
+  languages: { pl: "Języki", en: "Languages" },
+  education: { pl: "Edukacja", en: "Education" },
+
+  // Languages
+  langPolish: { pl: "Polski", en: "Polish" },
+  langEnglish: { pl: "Angielski", en: "English" },
+  langNative: { pl: "Natywny", en: "Native" },
+
+  // Education
+  eduUniversity: { pl: "Politechnika Łódzka", en: "Lodz University of Technology" },
+  eduUniversityFaculty: { pl: "Wydział Fizyki Technicznej, Informatyki i Matematyki Stosowanej", en: "Faculty of Physics, Computer Science and Mathematics" },
+  eduUniversityField: { pl: "Informatyka Stosowana", en: "Applied Computer Science" },
+  eduSchool: { pl: "ZSP nr 1 im. rtm. Witolda Pileckiego w Piotrkowie Trybunalskim", en: "ZSP no. 1 rtm. Witold Pilecki in Piotrków Trybunalski" },
+  eduSchoolField: { pl: "Technik Informatyk", en: "IT Technician" },
+
   // Job Title
   jobTitle: { pl: "Fullstack Developer", en: "Fullstack Developer" },
 
@@ -80,6 +96,11 @@ export const translations = {
     pl: "Hackathon UBIHACK 2.0 – Aplikacja Synaptis",
     en: "Hackathon UBIHACK 2.0 – Synaptis Application",
   },
+  achievement4: {
+    pl: "Stypendium Rektora Politechniki Łódzkiej – semestr letni roku akademickiego 2025/2026",
+    en: "Rector's Scholarship at Lodz University of Technology – summer semester 2025/2026",
+  },
+  scholarship: { pl: "Stypendium", en: "Scholarship" },
 
   // Hobbies
   hobbyFishing: { pl: "Wędkarstwo", en: "Fishing" },

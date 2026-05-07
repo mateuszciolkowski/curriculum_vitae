@@ -82,12 +82,12 @@ export function CvPage({
   return (
     <>
       <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden">
-        <div 
-          className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-1000 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+        <div
+          className={`flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:flex-row lg:px-8 lg:py-6 xl:px-12 xl:py-8 2xl:px-20 2xl:py-10 lg:gap-6 xl:gap-8 transition-all duration-1000 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
           {/* LEWA STRONA (SIDEBAR) - na mobile druga */}
-          <aside 
-            className={`w-full lg:w-80 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1 transition-all duration-700 delay-300 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
+          <aside
+            className={`w-full lg:w-80 xl:w-96 lg:shrink-0 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 xl:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-2 lg:order-1 transition-all duration-700 delay-300 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}
           >
             <div className="text-center pt-2">
               <button
@@ -98,7 +98,7 @@ export function CvPage({
               </button>
             </div>
 
-            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+            <h2 className="mb-5 px-2 text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
               {t(translations.toolsAndTech)}
             </h2>
             <div className="grid grid-cols-4 gap-2 mb-8">
@@ -106,39 +106,85 @@ export function CvPage({
                 <div
                   key={tech.name}
                   style={{ transitionDelay: `${400 + idx * 40}ms` }}
-                  className={`flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-800/40 p-1.5 transition-all duration-500 ease-[var(--ease-out)] hover:bg-slate-700/60 aspect-square hover:scale-105 active:scale-95 cursor-default group ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                  className={`flex flex-col items-center justify-center gap-1.5 rounded-xl bg-slate-800/40 p-2 transition-all duration-500 ease-[var(--ease-out)] hover:bg-slate-700/60 aspect-square hover:scale-105 active:scale-95 cursor-default group ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 >
                   <i
-                    className={`${tech.className} text-lg sm:text-xl transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110 ${
+                    className={`${tech.className} text-xl xl:text-2xl transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110 ${
                       tech.name === "Python" ? "text-[#3776AB]" : ""
                     }`}
                   />
-                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter truncate w-full text-center">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter truncate w-full text-center">
                     {tech.name}
                   </span>
                 </div>
               ))}
             </div>
 
-            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+            <h2 className="mb-5 px-2 text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
               {t(translations.skills)}
             </h2>
             <div className="flex flex-col gap-3 px-2 mb-8">
               {SKILLS.map((skill, idx) => (
-                <div 
-                  key={idx} 
-                  style={{ transitionDelay: `${600 + idx * 50}ms` }}
-                  className={`flex items-center gap-2 group transition-all duration-500 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
-                >
-                  <span className="h-1 w-1 shrink-0 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
-                  <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
-                    {t(skill)}
-                  </span>
+                "category" in skill ? (
+                  <div
+                    key={idx}
+                    style={{ transitionDelay: `${600 + idx * 50}ms` }}
+                    className={`flex flex-col gap-1.5 transition-all duration-500 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="h-1 w-1 shrink-0 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
+                      <span className="text-xs md:text-sm font-medium text-slate-300">
+                        {t(skill.category)}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1 pl-5">
+                      {t(skill).split(", ").map((item) => (
+                        <div key={item} className="flex items-center gap-2">
+                          <span className="h-px w-2 shrink-0 bg-slate-600" />
+                          <span className="text-xs text-slate-400">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    key={idx}
+                    style={{ transitionDelay: `${600 + idx * 50}ms` }}
+                    className={`flex items-center gap-2 group transition-all duration-500 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+                  >
+                    <span className="h-1 w-1 shrink-0 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
+                    <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">
+                      {t(skill)}
+                    </span>
+                  </div>
+                )
+              ))}
+            </div>
+
+            <h2 className="mb-5 px-2 text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+              {t(translations.languages)}
+            </h2>
+            <div className="flex flex-col gap-3 px-2 mb-8">
+              {[
+                { labelKey: translations.langPolish, level: t(translations.langNative), percent: 100 },
+                { labelKey: translations.langEnglish, level: "B2", percent: 72 },
+              ].map(({ labelKey, level, percent }) => (
+                <div key={level} className="flex flex-col gap-1">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs md:text-sm font-medium text-slate-300">{t(labelKey)}</span>
+                    <span className="text-xs font-black uppercase tracking-widest text-cyan-400">{level}</span>
+                  </div>
+                  <div className="h-1 w-full rounded-full bg-slate-800">
+                    <div
+                      className="h-1 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 shadow-[0_0_6px_rgba(6,182,212,0.5)] transition-all duration-1000"
+                      style={{ width: mounted ? `${percent}%` : "0%" }}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
 
-            <h2 className="mb-5 px-2 text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
+            <h2 className="mb-5 px-2 text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 border-l-2 border-cyan-500 pl-4">
               {t(translations.hobbies)}
             </h2>
             <div className="flex flex-col gap-3 px-2">
@@ -160,17 +206,17 @@ export function CvPage({
           </aside>
 
           {/* PRAWA STRONA (MAIN CONTENT) - na mobile pierwsza */}
-          <main 
-            className={`w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2 transition-all duration-700 delay-150 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+          <main
+            className={`w-full flex-1 rounded-3xl bg-linear-to-br from-slate-900/90 via-slate-900/60 to-slate-900/90 p-4 md:p-6 xl:p-8 shadow-2xl ring-1 ring-slate-800/80 backdrop-blur-md order-1 lg:order-2 transition-all duration-700 delay-150 ease-[var(--ease-out)] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
           >
-            <div className="space-y-4">
-              <header className="space-y-1.5 text-center lg:text-left">
+            <div className="space-y-5 lg:space-y-6">
+              <header className="space-y-2 text-center lg:text-left">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <div className="space-y-1">
-                    <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.4em] text-cyan-400">
+                    <p className="text-xs font-bold uppercase tracking-[0.4em] text-cyan-400">
                       {t(translations.jobTitle)}
                     </p>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter leading-none uppercase">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-black tracking-tighter leading-none uppercase">
                       Mateusz <br className="sm:hidden" />
                       <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
                         Ciołkowski
@@ -201,30 +247,30 @@ export function CvPage({
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-slate-400 border-y border-slate-800/30 py-4">
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 text-slate-400 border-y border-slate-800/30 py-4">
                   <a
                     href="mailto:ciolkowski.m1@gmail.com"
-                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                    className="flex items-center gap-2 text-xs font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
                   >
-                    <i className="devicon-google-plain text-xs group-hover:text-cyan-400" />
+                    <i className="devicon-google-plain text-sm group-hover:text-cyan-400" />
                     {t(translations.email)}
                   </a>
                   <a
                     href="https://github.com/mateuszciolkowski"
-                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                    className="flex items-center gap-2 text-xs font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
                   >
-                    <i className="devicon-github-original text-xs group-hover:text-cyan-400" />
+                    <i className="devicon-github-original text-sm group-hover:text-cyan-400" />
                     {t(translations.github)}
                   </a>
                   <a
                     href="https://www.linkedin.com/in/mateuszciolkowski"
-                    className="flex items-center gap-2 text-[10px] font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
+                    className="flex items-center gap-2 text-xs font-bold hover:text-cyan-400 transition-all uppercase tracking-widest group"
                   >
-                    <i className="devicon-linkedin-plain text-xs group-hover:text-cyan-400" />
+                    <i className="devicon-linkedin-plain text-sm group-hover:text-cyan-400" />
                     {t(translations.linkedin)}
                   </a>
                 </div>
-                <p className="mx-auto lg:mx-0 max-w-2xl text-xs md:text-sm text-slate-300 leading-relaxed">
+                <p className="mx-auto lg:mx-0 max-w-2xl text-sm text-slate-300 leading-relaxed">
                   {t(translations.aboutIntro)}{" "}
                   <span className="font-semibold text-white">
                     Java, Python, JavaScript
@@ -235,11 +281,11 @@ export function CvPage({
                 </p>
               </header>
 
-              <section className="space-y-1.5 text-center lg:text-left">
-                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200">
+              <section className="space-y-2 text-center lg:text-left">
+                <h2 className="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] text-slate-200">
                   {t(translations.aboutMe)}
                 </h2>
-                <p className="max-w-4xl text-xs md:text-sm text-slate-400 leading-relaxed">
+                <p className="max-w-4xl text-sm text-slate-400 leading-relaxed">
                   {t(translations.aboutMe1)}{" "}
                   <span className="font-semibold text-white">
                     {t(translations.university)}
@@ -252,8 +298,44 @@ export function CvPage({
                 </p>
               </section>
 
+              <section className="space-y-2.5">
+                <h2 className="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
+                  {t(translations.education)}
+                </h2>
+                <div className="space-y-2">
+                  {[
+                    {
+                      school: translations.eduUniversity,
+                      faculty: translations.eduUniversityFaculty,
+                      field: translations.eduUniversityField,
+                      date: "10/2023 – 03/2027",
+                      icon: "🎓",
+                    },
+                    {
+                      school: translations.eduSchool,
+                      faculty: undefined,
+                      field: translations.eduSchoolField,
+                      date: "09/2019 – 06/2023",
+                      icon: "🏫",
+                    },
+                  ].map((edu) => (
+                    <div key={edu.date} className="rounded-xl border border-slate-800 bg-slate-800/20 p-3 flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4 text-center lg:text-left">
+                      <span className="text-2xl hidden lg:block">{edu.icon}</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-black text-white uppercase tracking-tight">{t(edu.school)}</p>
+                        {edu.faculty && (
+                          <p className="text-xs text-cyan-400/80 font-semibold mt-0.5">{t(edu.faculty)}</p>
+                        )}
+                        <p className="text-xs text-slate-400 font-medium mt-0.5">{t(edu.field)}</p>
+                      </div>
+                      <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest whitespace-nowrap">{edu.date}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
               <section className="space-y-3">
-                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
+                <h2 className="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
                   {t(translations.currentProjects)}
                 </h2>
 
@@ -295,7 +377,7 @@ export function CvPage({
                               </div>
                             ))}
                           </div>
-                          <p className="text-xs md:text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors text-center lg:text-left">
+                          <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors text-center lg:text-left">
                             {t(project.description)}
                           </p>
                         </div>
@@ -338,7 +420,7 @@ export function CvPage({
               </section>
 
               <section className="space-y-2.5">
-                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
+                <h2 className="text-xs lg:text-sm font-bold uppercase tracking-[0.2em] text-slate-200 text-center lg:text-left">
                   {t(translations.achievements)}
                 </h2>
 
@@ -346,10 +428,10 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-yellow-500/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-yellow-500/20 text-yellow-400 rounded-lg border border-yellow-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-yellow-500/20 text-yellow-400 rounded-lg border border-yellow-500/30 text-xs font-black uppercase tracking-widest">
                           🥇 {t(translations.firstPlace)}
                         </span>
-                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                        <span className="text-sm text-slate-300 font-medium">
                           {t(translations.achievement1)}
                         </span>
                       </div>
@@ -368,10 +450,10 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-xs font-black uppercase tracking-widest">
                           🥈 {t(translations.secondPlace)}
                         </span>
-                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                        <span className="text-sm text-slate-300 font-medium">
                           {t(translations.achievement2)}
                         </span>
                       </div>
@@ -390,10 +472,10 @@ export function CvPage({
                   <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-slate-400/50 text-center lg:text-left">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                       <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
-                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-[10px] font-black uppercase tracking-widest">
+                        <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-slate-500/20 text-slate-300 rounded-lg border border-slate-500/30 text-xs font-black uppercase tracking-widest">
                           🥈 {t(translations.secondPlace)}
                         </span>
-                        <span className="text-xs md:text-sm text-slate-300 font-medium">
+                        <span className="text-sm text-slate-300 font-medium">
                           {t(translations.achievement3)}
                         </span>
                       </div>
@@ -406,6 +488,17 @@ export function CvPage({
                       >
                         <FaLinkedin className="text-base text-slate-300 hover:text-white" />
                       </a>
+                    </div>
+                  </div>
+
+                  <div className="group rounded-xl border border-slate-800 bg-slate-800/20 p-3 transition-all hover:border-purple-400/50 text-center lg:text-left">
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
+                      <span className="inline-flex items-center justify-center whitespace-nowrap h-6 px-3 bg-purple-500/20 text-purple-300 rounded-lg border border-purple-500/30 text-xs font-black uppercase tracking-widest">
+                        🎓 {t(translations.scholarship)}
+                      </span>
+                      <span className="text-xs md:text-sm text-slate-300 font-medium">
+                        {t(translations.achievement4)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -509,8 +602,8 @@ export function CvPage({
                   </h3>
                   <p className="text-slate-300 leading-relaxed max-w-md">
                     {language === "pl"
-                      ? "Moje największe pasje poza programowaniem. Tutaj znajduję równowagę i energię do tworzenia kolejnych projektów."
-                      : "My greatest passions outside of programming. This is where I find balance and energy to create new projects."}
+                      ? selectedHobby.description.pl
+                      : selectedHobby.description.en}
                   </p>
                 </div>
               </div>

@@ -4,6 +4,7 @@ export interface Hackathon {
   role: { pl: string; en: string };
   description: { pl: string; en: string };
   images: string[];
+  inProgress?: boolean;
   links?: {
     github?: string;
     linkedin?: string;
@@ -54,7 +55,7 @@ export const HACKATHONS: Hackathon[] = [
         .href,
       new URL(
         "../assets/images/pharmaradar/pharmaradar_2.jpeg",
-        import.meta.url
+        import.meta.url,
       ).href,
       new URL("../assets/images/pharmaradar/pharmaradar_3.jpg", import.meta.url)
         .href,
@@ -86,6 +87,18 @@ export const HACKATHONS: Hackathon[] = [
     links: {
       github: "https://github.com/mateuszciolkowski/HACKATHON_WELLNESS",
     },
+  },
+  {
+    id: "hacknazdrowie",
+    name: "HackNaZdrowie",
+    role: { pl: "Fullstack", en: "Fullstack" },
+    description: {
+      pl: "Aplikacja dopasowująca posiłki do objawów pacjenta onkologicznego, wspierająca personalizację diety w trakcie leczenia nowotworu. Pełnię rolę lidera zespołu. Finał hackathonu odbędzie się 23 maja 2025. Użyte technologie: React, FastAPI, MongoDB.",
+      en: "An application matching meals to the symptoms of oncological patients, supporting diet personalization during cancer treatment. I am serving as team leader. The hackathon final takes place on May 23, 2025. Technologies used: React, FastAPI, MongoDB.",
+    },
+    images: [],
+    inProgress: true,
+    links: {},
   },
   {
     id: "synaptis",

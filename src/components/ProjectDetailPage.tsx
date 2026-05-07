@@ -78,7 +78,7 @@ export function ProjectDetailPage({
 
   return (
     <div className="min-h-screen text-slate-100 font-sans antialiased overflow-x-hidden bg-[#050816]">
-      <div className={`mx-auto flex flex-col gap-4 px-3 py-4 lg:flex-row max-w-[95%] lg:px-6 lg:py-6 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:flex-row lg:px-8 lg:py-6 xl:px-12 xl:py-8 2xl:px-20 2xl:py-10 lg:gap-6 xl:gap-8 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? 'opacity-100' : 'opacity-0'}`}>
         {/* TOP BAR - Mobile only */}
         <div className="w-full flex gap-2 lg:hidden">
           <button

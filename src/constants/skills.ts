@@ -8,12 +8,14 @@ export const SKILLS = [
   { pl: "Testowanie E2E (Postman)", en: "E2E Testing (Postman)" },
   { pl: "CI/CD (GitHub Actions)", en: "CI/CD (GitHub Actions)" },
   {
+    category: { pl: "Rozwiązania chmurowe", en: "Cloud Solutions" },
     pl: "Coolify, Oracle Cloud, Vercel, Railway, Supabase, Render",
     en: "Coolify, Oracle Cloud, Vercel, Railway, Supabase, Render",
   },
   {
-    pl: "Programowanie agentowe (GitHub Copilot, Gemini CLI)",
-    en: "Agentic Programming (GitHub Copilot, Gemini CLI)",
+    category: { pl: "Programowanie agentowe", en: "Agentic Programming" },
+    pl: "Claude Code, OpenCode, GitHub Copilot",
+    en: "Claude Code, OpenCode, GitHub Copilot",
   },
 ] as const;
 
