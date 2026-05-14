@@ -181,6 +181,17 @@ export function ProjectDetailPage({
                 </div>
               </section>
             )}
+
+            {project.techDescription && (
+              <section className="bg-slate-800/40 p-3 md:p-4 rounded-2xl ring-1 ring-slate-700/50 transition-all duration-500 hover:bg-slate-800/60">
+                <h2 className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500 border-l-2 border-cyan-500/60 pl-3">
+                  {t(translations.techStack)}
+                </h2>
+                <p className="text-xs md:text-sm text-slate-400 leading-relaxed">
+                  {t(project.techDescription)}
+                </p>
+              </section>
+            )}
           </div>
         </main>
 

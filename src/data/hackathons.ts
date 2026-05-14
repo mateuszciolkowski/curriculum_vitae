@@ -90,15 +90,18 @@ export const HACKATHONS: Hackathon[] = [
   },
   {
     id: "hacknazdrowie",
-    name: "HackNaZdrowie",
+    name: "PacjentWybiera",
     role: { pl: "Fullstack", en: "Fullstack" },
     description: {
-      pl: "Aplikacja dopasowująca posiłki do objawów pacjenta onkologicznego, wspierająca personalizację diety w trakcie leczenia nowotworu. Pełnię rolę lidera zespołu. Finał hackathonu odbędzie się 23 maja 2025. Użyte technologie: React, FastAPI, MongoDB.",
-      en: "An application matching meals to the symptoms of oncological patients, supporting diet personalization during cancer treatment. I am serving as team leader. The hackathon final takes place on May 23, 2025. Technologies used: React, FastAPI, MongoDB.",
+      pl: "PacjentWybiera to aplikacja mobilna wspierająca pacjentów onkologicznych w codziennym wyborze posiłków. Leczenie (chemioterapia, radioterapia, immunoterapia) zmienia tolerancję pokarmową z dnia na dzień — standardowe szpitalne menu tego nie uwzględnia. Aplikacja filtruje i rekomenduje posiłki na podstawie zgłaszanych objawów, umożliwia wybór posiłków przez swipe kart, prowadzenie tygodniowego planu żywieniowego oraz zarządzanie profilem pacjenta z historią zgłoszeń. AI analizuje historię objawów i przewiduje samopoczucie, dostosowując propozycje do indywidualnego przebiegu leczenia. Rola: lider zespołu. Użyte technologie: React 19 + TypeScript, Ionic React, Tailwind CSS, Supabase (PostgreSQL).",
+      en: "PacjentWybiera is a mobile application supporting oncological patients in their daily meal choices. Treatment (chemotherapy, radiotherapy, immunotherapy) changes food tolerance from day to day — standard hospital menus don't account for this. The app filters and recommends meals based on reported symptoms, allows choosing meals via card swiping, managing a weekly meal plan, and maintaining a patient profile with symptom history. AI analyzes symptom history and predicts future well-being to tailor suggestions to individual treatment progress. Role: team leader. Technologies used: React 19 + TypeScript, Ionic React, Tailwind CSS, Supabase (PostgreSQL).",
     },
     images: [],
     inProgress: true,
-    links: {},
+    links: {
+      github: "https://github.com/GitPushers67/pacjentwybiera",
+      live: "https://gitpushers67.github.io/pacjentwybiera/",
+    },
   },
   {
     id: "synaptis",

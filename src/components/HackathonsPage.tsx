@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { HACKATHONS } from "../data/hackathons";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaGlobe } from "react-icons/fa";
 import { useLanguage } from "../contexts/LanguageContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
@@ -152,6 +152,17 @@ export function HackathonsPage({ onBackToCv }: HackathonsPageProps) {
 
                 {/* Ikony po prawej */}
                 <div className="flex flex-row lg:flex-col gap-2 shrink-0 lg:border-l lg:border-slate-700/50 lg:pl-4">
+                  {activeHackathon.links?.live && (
+                    <a
+                      href={activeHackathon.links.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center w-9 h-9 bg-slate-800/50 hover:bg-cyan-500 hover:text-slate-950 rounded-xl transition-all ring-1 ring-slate-700/50 hover:ring-cyan-400"
+                      title="Live"
+                    >
+                      <FaGlobe className="text-lg text-slate-300 hover:text-white" />
+                    </a>
+                  )}
                   {activeHackathon.links?.github && (
                     <a
                       href={activeHackathon.links.github}

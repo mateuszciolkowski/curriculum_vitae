@@ -5,12 +5,14 @@ import gymgate4 from "../assets/images/gymgate/gymgate4.png";
 import gymgate5 from "../assets/images/gymgate/gymgate5.png";
 import gymgate6 from "../assets/images/gymgate/gymgate6.png";
 import gymgate7 from "../assets/images/gymgate/gymgate7.png";
+import gymgate11 from "../assets/images/gymgate/gymgate11.png";
 
 export interface Project {
   id: string;
   name: string;
   role: { pl: string; en: string };
   description: { pl: string; en: string };
+  techDescription?: { pl: string; en: string };
   status?: { pl: string; en: string };
   technologies?: { name: string; icon: string }[];
   features?: { pl: string[]; en: string[] };
@@ -58,25 +60,29 @@ export const PROJECTS: Project[] = [
       en: "Fullstack Developer",
     },
     description: {
-      pl: "GymGate to inteligentny asystent treningowy, który pamięta każdy Twój trening, automatycznie zapisuje użyte ciężary i pomaga osiągać nowe rekordy osobiste. Dzięki zaawansowanemu systemowi statystyk możesz analizować swoje wyniki, obserwować progres i optymalizować plan treningowy.",
-      en: "GymGate is an intelligent training assistant that remembers every workout, automatically saves your weights, and helps you achieve new personal records. With an advanced statistics system, you can analyze your results, observe progress, and optimize your training plan.",
+      pl: "GymGate to aplikacja do śledzenia treningów siłowych. Umożliwia szybkie rozpoczęcie sesji, logowanie ćwiczeń z seriami i ciężarami oraz automatyczną aktualizację statystyk po każdym ukończonym treningu. Interfejs reaguje natychmiast — aplikacja działa płynnie również offline.",
+      en: "GymGate is a strength training tracker. It enables quick session start, logging exercises with sets and weights, and automatic statistics updates after each completed workout. The interface responds instantly — the app works smoothly offline as well.",
+    },
+    techDescription: {
+      pl: "Backend to REST API oparte na Node.js + Express + TypeScript z Prisma ORM i PostgreSQL. Frontend zbudowano w React 19 + TypeScript + Tailwind CSS. Kluczowy wybór projektowy to architektura offline-first: UI i lokalny IndexedDB aktualizowane są natychmiast (optimistic update), a wywołanie API trafia do serwera w tle. Gdy połączenie jest niedostępne, operacje trafiają do kolejki i są odtwarzane przez syncManager po jego przywróceniu. Statystyki są przebudowywane w całości z ukończonych sesji po każdej zmianie. JWT w httpOnly cookie zapewnia ochronę przed XSS.",
+      en: "The backend is a REST API built with Node.js + Express + TypeScript, Prisma ORM, and PostgreSQL. The frontend is built with React 19 + TypeScript + Tailwind CSS. The key design decision is an offline-first architecture: the UI and local IndexedDB update immediately (optimistic update) while the API call happens in the background. When the connection is unavailable, writes are queued and replayed by syncManager on reconnect. Statistics are fully rebuilt from completed sessions on every change. JWT in an httpOnly cookie provides XSS protection.",
     },
     features: {
       pl: [
-        "Automatyczne zapamiętywanie ostatnio użytych ciężarów dla każdego ćwiczenia",
-        "Śledzenie rekordów osobistych (PR) i historii postępów",
-        "Tworzenie spersonalizowanych planów treningowych",
-        "Definiowanie własnych ćwiczeń i kategorii",
-        "Szczegółowe statystyki i wykresy postępów",
-        "Intuicyjny interfejs do szybkiego logowania treningów",
+        "Szybkie rozpoczęcie sesji treningowej i zamknięcie jej po skończeniu",
+        "Logowanie serii, ciężarów i powtórzeń dla każdego ćwiczenia",
+        "Statystyki per ćwiczenie: maksymalny ciężar, ostatnie wykonanie, liczba sesji",
+        "Notatki do ćwiczeń z automatycznym przeniesieniem do kolejnej sesji",
+        "Biblioteka ćwiczeń z kategoriami mięśniowymi i obsługą własnych pozycji",
+        "Tryb offline — zmiany zapisywane lokalnie i synchronizowane w tle",
       ],
       en: [
-        "Automatic memory of last used weights for each exercise",
-        "Personal records (PR) tracking and progress history",
-        "Creating personalized training plans",
-        "Defining custom exercises and categories",
-        "Detailed statistics and progress charts",
-        "Intuitive interface for quick workout logging",
+        "Quick session start and close on completion",
+        "Logging sets, weights, and reps for every exercise",
+        "Per-exercise stats: max weight, last performance, total sessions",
+        "Exercise notes with automatic carry-over to the next session",
+        "Exercise library organized by muscle group with custom exercise support",
+        "Offline mode — changes saved locally and synced in the background",
       ],
     },
     images: [
@@ -87,6 +93,7 @@ export const PROJECTS: Project[] = [
       gymgate5,
       gymgate6,
       gymgate7,
+      gymgate11,
     ],
     links: {
       github: "https://github.com/mateuszciolkowski/gymgate",

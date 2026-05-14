@@ -121,6 +121,7 @@ export const translations = {
   noImages: { pl: "Brak zdjęć", en: "No images available" },
   completed: { pl: "Ukończony", en: "Completed" },
   keyFeatures: { pl: "Kluczowe Funkcje", en: "Key Features" },
+  techStack: { pl: "Stack Technologiczny", en: "Tech Stack" },
 
   // Roles
   roleFrontend: { pl: "Frontend", en: "Frontend" },
