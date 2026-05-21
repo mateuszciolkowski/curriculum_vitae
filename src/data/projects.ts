@@ -60,8 +60,8 @@ export const PROJECTS: Project[] = [
       en: "Fullstack Developer",
     },
     description: {
-      pl: "GymGate to aplikacja do śledzenia treningów siłowych. Umożliwia szybkie rozpoczęcie sesji, logowanie ćwiczeń z seriami i ciężarami oraz automatyczną aktualizację statystyk po każdym ukończonym treningu. Interfejs reaguje natychmiast — aplikacja działa płynnie również offline.",
-      en: "GymGate is a strength training tracker. It enables quick session start, logging exercises with sets and weights, and automatic statistics updates after each completed workout. The interface responds instantly — the app works smoothly offline as well.",
+      pl: "GymGate to aplikacja do śledzenia treningów siłowych. Umożliwia szybkie rozpoczęcie sesji, logowanie ćwiczeń z seriami i ciężarami oraz automatyczną aktualizację statystyk po każdym ukończonym treningu. Możesz korzystać z gotowych planów treningowych, kopiować plany innych użytkowników lub tworzyć własne — aplikacja prowadzi przez trening krok po kroku i sugeruje ciężary na podstawie historii. Interfejs reaguje natychmiast — aplikacja działa płynnie również offline.",
+      en: "GymGate is a strength training tracker. It enables quick session start, logging exercises with sets and weights, and automatic statistics updates after each completed workout. You can use built-in workout plans, copy plans from other users, or create your own — the app guides you through each session step by step and suggests weights based on your history. The interface responds instantly — the app works smoothly offline as well.",
     },
     techDescription: {
       pl: "Backend to REST API oparte na Node.js + Express + TypeScript z Prisma ORM i PostgreSQL. Frontend zbudowano w React 19 + TypeScript + Tailwind CSS. Kluczowy wybór projektowy to architektura offline-first: UI i lokalny IndexedDB aktualizowane są natychmiast (optimistic update), a wywołanie API trafia do serwera w tle. Gdy połączenie jest niedostępne, operacje trafiają do kolejki i są odtwarzane przez syncManager po jego przywróceniu. Statystyki są przebudowywane w całości z ukończonych sesji po każdej zmianie. JWT w httpOnly cookie zapewnia ochronę przed XSS.",
@@ -71,6 +71,8 @@ export const PROJECTS: Project[] = [
       pl: [
         "Szybkie rozpoczęcie sesji treningowej i zamknięcie jej po skończeniu",
         "Logowanie serii, ciężarów i powtórzeń dla każdego ćwiczenia",
+        "Plany treningowe: gotowe (seed), własne z pełnym CRUD oraz kopiowanie planów innych użytkowników",
+        "Prowadzenie przez trening krok po kroku z sugestią ciężarów na podstawie historii",
         "Statystyki per ćwiczenie: maksymalny ciężar, ostatnie wykonanie, liczba sesji",
         "Notatki do ćwiczeń z automatycznym przeniesieniem do kolejnej sesji",
         "Biblioteka ćwiczeń z kategoriami mięśniowymi i obsługą własnych pozycji",
@@ -79,6 +81,8 @@ export const PROJECTS: Project[] = [
       en: [
         "Quick session start and close on completion",
         "Logging sets, weights, and reps for every exercise",
+        "Workout plans: built-in (seeded), custom with full CRUD, and copying plans from other users",
+        "Step-by-step guided workout with weight suggestions based on personal history",
         "Per-exercise stats: max weight, last performance, total sessions",
         "Exercise notes with automatic carry-over to the next session",
         "Exercise library organized by muscle group with custom exercise support",
