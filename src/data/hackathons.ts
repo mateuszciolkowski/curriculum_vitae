@@ -117,6 +117,7 @@ export const HACKATHONS: Hackathon[] = [
       { name: "React", icon: "devicon-react-original" },
       { name: "TypeScript", icon: "devicon-typescript-plain" },
       { name: "Tailwind", icon: "devicon-tailwindcss-original" },
+      { name: "Supabase", icon: "devicon-supabase-plain" },
       { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
     ],
     inProgress: true,
