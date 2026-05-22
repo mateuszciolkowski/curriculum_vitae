@@ -29,6 +29,15 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
+    }, { threshold: 0.05 });
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, [activeHackathonId]);
+
   const activeHackathon = HACKATHONS.find((h) => h.id === activeHackathonId)!;
   const totalSlides = activeHackathon.images.length;
 
@@ -112,8 +121,8 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
       </div>
 
       <div
-        className={`mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:gap-12 lg:px-8 lg:py-14 transition-opacity duration-700 ${
-          mounted ? "opacity-100" : "opacity-0"
+        className={`mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:gap-12 lg:px-8 lg:py-14 transition-all duration-800 ease-[var(--ease-out)] ${
+          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
         {/* ── SIDEBAR (Table of Contents) ── */}
@@ -233,7 +242,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
 
           {/* Stack */}
           {activeHackathon.technologies && (
-            <section id="hack-stack" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+            <section id="hack-stack" className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
               <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
                 Stack
               </h2>
@@ -256,7 +265,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
           <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
           {/* Description */}
-          <section id="hack-about" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+          <section id="hack-about" className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
             <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
               {language === "pl" ? "O projekcie" : "About"}
             </h2>
@@ -268,7 +277,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
           <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
           {/* Gallery */}
-          <section id="hack-gallery" className="py-10">
+          <section id="hack-gallery" className="reveal py-10">
             <div className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 mb-6">
               <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
                 {t(translations.gallery)}
