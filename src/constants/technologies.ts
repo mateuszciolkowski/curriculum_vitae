@@ -2,9 +2,12 @@
 // Klasy Tailwind muszą być pełnymi stringami (JIT nie skleja dynamicznych nazw),
 // więc trzymamy je jawnie.
 
+import anthropicIcon from "../assets/images/anthropic.png";
+
 export type TechItem = {
   name: string;
   className: string;
+  imageSrc?: string;
 };
 
 export type TechCategoryKey =
@@ -120,7 +123,7 @@ export const TECH_CATEGORIES: readonly TechCategory[] = [
       { name: "Unit Testing", className: "devicon-junit-plain colored" },
       { name: "Integration Testing", className: "devicon-postman-plain colored" },
       { name: "Postman", className: "devicon-postman-plain colored" },
-      { name: "Claude Code", className: "devicon-anthropic-plain" },
+      { name: "Claude Code", className: "", imageSrc: anthropicIcon },
       { name: "GitHub Copilot", className: "devicon-github-original" },
     ],
   },

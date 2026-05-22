@@ -257,7 +257,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                       style={{ transitionDelay: `${100 + gIdx * 70 + idx * 20}ms` }}
                       className={`group flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
                     >
-                      <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />
+                      {tech.imageSrc ? <img src={tech.imageSrc} alt={tech.name} className="h-3.5 w-3.5 transition-transform group-hover:scale-110" /> : <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />}
                       <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
                         {tech.name}
                       </span>
