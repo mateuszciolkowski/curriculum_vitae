@@ -3,6 +3,7 @@ import { CvPage } from "./components/CvPage";
 import { HackathonsPage } from "./components/HackathonsPage";
 import { ProjectsPage } from "./components/ProjectsPage";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 type View = "cv" | "hackathons" | "projects";
 
@@ -15,17 +16,19 @@ export default function App() {
   const goToHackathons = (id?: string) => { setInitialHackathonId(id); setView("hackathons"); window.scrollTo(0, 0); };
 
   return (
-    <LanguageProvider>
-      {view === "hackathons" ? (
-        <HackathonsPage onBackToCv={() => setView("cv")} initialHackathonId={initialHackathonId} />
-      ) : view === "projects" ? (
-        <ProjectsPage onBackToCv={() => setView("cv")} initialProjectId={initialProjectId} />
-      ) : (
-        <CvPage
-          onHackathonsClick={goToHackathons}
-          onProjectsClick={goToProjects}
-        />
-      )}
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        {view === "hackathons" ? (
+          <HackathonsPage onBackToCv={() => setView("cv")} initialHackathonId={initialHackathonId} />
+        ) : view === "projects" ? (
+          <ProjectsPage onBackToCv={() => setView("cv")} initialProjectId={initialProjectId} />
+        ) : (
+          <CvPage
+            onHackathonsClick={goToHackathons}
+            onProjectsClick={goToProjects}
+          />
+        )}
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

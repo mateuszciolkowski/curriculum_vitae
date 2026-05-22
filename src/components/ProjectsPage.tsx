@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { PROJECTS } from "../data/projects";
 import { FaGithub, FaGlobe, FaArrowLeft } from "react-icons/fa";
+import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
 
@@ -10,10 +12,11 @@ type ProjectsPageProps = {
   initialProjectId?: string;
 };
 
-const PAPER_BG = "bg-[#f4ecdc]";
+const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
 
 export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps) {
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [activeProjectId, setActiveProjectId] = useState<string>(
     initialProjectId ?? PROJECTS[0].id,
   );
@@ -70,11 +73,10 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
 
   return (
     <div
-      className={`${PAPER_BG} min-h-screen text-stone-900 antialiased overflow-x-hidden selection:bg-orange-700/20`}
-      style={{ colorScheme: "light" }}
+      className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased selection:bg-orange-700/20`}
     >
       {/* ── TOP BAR ── */}
-      <div className={`border-b border-stone-300/70 ${PAPER_BG}/85 sticky top-0 z-30 backdrop-blur-md`}>
+      <div className={`border-b border-stone-300/70 dark:border-stone-700/60 bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85 sticky top-0 z-30 backdrop-blur-md`}>
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <button onClick={onBackToCv} className={buttonStyles.paperGhostSmall}>
             <FaArrowLeft className="text-[10px]" />
@@ -90,19 +92,28 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
               <button
                 key={id}
                 onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                className="rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500 transition-all hover:text-stone-900"
+                className="rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400 transition-all hover:text-stone-900 dark:hover:text-stone-100"
               >
                 {label}
               </button>
             ))}
           </div>
 
-          <button
-            onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
-            className="rounded-md border border-stone-300 bg-stone-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 transition-all hover:bg-stone-200"
-          >
-            {language === "pl" ? "EN" : "PL"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "light" ? <HiMoon className="text-sm" /> : <HiSun className="text-sm" />}
+            </button>
+            <button
+              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
+            >
+              {language === "pl" ? "EN" : "PL"}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -127,9 +138,9 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                       setActiveProjectId(project.id);
                       setActiveSlideIndex(0);
                     }}
-                    className={`group relative w-full border-t border-stone-200 py-3 text-left transition-colors ${
+                    className={`group relative w-full border-t border-stone-200 dark:border-stone-700/50 py-3 text-left transition-colors ${
                       idx === PROJECTS.length - 1 ? "border-b" : ""
-                    } ${isActive ? "" : "hover:bg-stone-100/60"}`}
+                    } ${isActive ? "" : "hover:bg-stone-100/60 dark:hover:bg-[#2a2320]/60"}`}
                   >
                     <span
                       className={`absolute left-0 top-2 bottom-2 w-[2px] rounded-full transition-all ${
@@ -148,8 +159,8 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                         <span
                           className={`text-sm font-bold uppercase tracking-tight leading-tight ${
                             isActive
-                              ? "text-stone-900"
-                              : "text-stone-700 group-hover:text-stone-900"
+                              ? "text-stone-900 dark:text-stone-100"
+                              : "text-stone-700 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-100"
                           }`}
                         >
                           {project.name}
@@ -171,13 +182,13 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
         {/* ── MAIN CONTENT ── */}
         <main className="w-full flex-1 min-w-0">
           {/* Header */}
-          <header className="pb-8 border-b border-stone-300/70">
+          <header className="pb-8 border-b border-stone-300/70 dark:border-stone-700/50">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-orange-700">
                   {t(activeProject.role)}
                 </p>
-                <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900">
+                <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900 dark:text-stone-100">
                   {activeProject.name}
                 </h1>
               </div>
@@ -190,7 +201,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Live"
-                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 text-stone-600 ring-1 ring-stone-200 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
+                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
                   >
                     <FaGlobe className="text-base" />
                   </a>
@@ -201,7 +212,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
-                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 text-stone-600 ring-1 ring-stone-200 transition-all hover:bg-stone-900 hover:text-[#f4ecdc] hover:ring-stone-900"
+                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-stone-900 hover:text-[#f4ecdc] hover:ring-stone-900"
                   >
                     <FaGithub className="text-base" />
                   </a>
@@ -219,10 +230,10 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
               {(activeProject.technologies ?? defaultTech).map((tech) => (
                 <div
                   key={tech.name}
-                  className="flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 ring-1 ring-stone-200 shadow-sm"
+                  className="flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm"
                 >
                   <i className={`${tech.icon} text-sm`} />
-                  <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700">
+                  <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
                     {tech.name}
                   </span>
                 </div>
@@ -230,7 +241,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
             </div>
           </section>
 
-          <hr className="border-stone-300/70" />
+          <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
           {/* Description */}
           <section id="proj-about" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
@@ -238,13 +249,13 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
               {language === "pl" ? "O projekcie" : "About"}
             </h2>
             <div className="max-w-3xl">
-              <p className="text-base sm:text-lg leading-relaxed text-stone-700">
+              <p className="text-base sm:text-lg leading-relaxed text-stone-700 dark:text-stone-300">
                 {t(activeProject.description)}
               </p>
               {activeProject.features && (
                 <ul className="mt-6 flex flex-col gap-2">
                   {activeProject.features[language].map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5 text-sm text-stone-700">
+                    <li key={feature} className="flex items-start gap-2.5 text-sm text-stone-700 dark:text-stone-300">
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
                       <span className="leading-relaxed">{feature}</span>
                     </li>
@@ -256,13 +267,13 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
 
           {activeProject.techDescription && (
             <>
-              <hr className="border-stone-300/70" />
+              <hr className="border-stone-300/70 dark:border-stone-700/50" />
               <section className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
                 <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
                   {language === "pl" ? "Techniczny opis" : "Technical overview"}
                 </h2>
                 <div className="max-w-3xl">
-                  <p className="text-sm sm:text-base leading-relaxed text-stone-600">
+                  <p className="text-sm sm:text-base leading-relaxed text-stone-600 dark:text-stone-400">
                     {t(activeProject.techDescription)}
                   </p>
                 </div>
@@ -270,7 +281,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
             </>
           )}
 
-          <hr className="border-stone-300/70" />
+          <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
           {/* Gallery */}
           <section id="proj-gallery" className="py-10">
@@ -281,7 +292,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
             </div>
             <div className="flex flex-col items-center gap-4 w-full max-w-4xl mx-auto">
               {activeProject.images.length === 0 ? (
-                <div className="flex flex-col items-center justify-center gap-4 rounded-md border-2 border-dashed border-stone-300 bg-stone-50 py-20">
+                <div className="flex flex-col items-center justify-center gap-4 rounded-md border-2 border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-[#2a2320] py-20">
                   <span className="text-5xl">🚧</span>
                   <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-stone-500">
                     {language === "pl"

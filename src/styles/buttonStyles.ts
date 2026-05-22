@@ -18,5 +18,5 @@ export const buttonStyles = {
   paperPrimarySmall:
     "flex items-center justify-center gap-1.5 rounded-md bg-stone-900 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] transition-all hover:bg-orange-700",
   paperGhostSmall:
-    "flex items-center justify-center gap-1.5 rounded-md border border-stone-300 bg-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 transition-all hover:border-orange-700 hover:text-orange-700",
+    "flex items-center justify-center gap-1.5 rounded-md border border-stone-300 dark:border-stone-600 bg-transparent px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700",
 } as const;

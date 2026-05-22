@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { PROJECTS } from "../data/projects";
 import { FaGithub, FaGlobe } from "react-icons/fa";
+import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
 
@@ -15,6 +17,7 @@ export function ProjectDetailPage({
   onBackToCv,
 }: ProjectDetailPageProps) {
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -100,6 +103,12 @@ export function ProjectDetailPage({
             </a>
           )}
 
+          <button
+            onClick={toggleTheme}
+            className={buttonStyles.cyan}
+          >
+            {theme === "light" ? <HiMoon /> : <HiSun />}
+          </button>
           <button
             onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
             className={buttonStyles.cyan}
@@ -203,6 +212,12 @@ export function ProjectDetailPage({
               className={`flex-1 ${buttonStyles.dark}`}
             >
               ← {t(translations.backToCv)}
+            </button>
+            <button
+              onClick={toggleTheme}
+              className={buttonStyles.cyan}
+            >
+              {theme === "light" ? <HiMoon /> : <HiSun />}
             </button>
             <button
               onClick={() => setLanguage(language === "pl" ? "en" : "pl")}

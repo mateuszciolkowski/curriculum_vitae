@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.92);
-  background-color: #050816;
+  color-scheme: light;
+  color: #1c1917;
+  background-color: #f4ecdc;
 
   font-synthesis: weight;
   text-rendering: optimizeLegibility;
@@ -21,6 +23,12 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
+:root.dark {
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.92);
+  background-color: #1b1712;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -29,12 +37,20 @@ body {
 
 a {
   font-weight: 500;
-  color: #38bdf8;
+  color: #c2410c;
   text-decoration: none;
 }
 
 a:hover {
-  color: #0ea5e9;
+  color: #9a3412;
+}
+
+.dark a {
+  color: #ea580c;
+}
+
+.dark a:hover {
+  color: #c2410c;
 }
 
 /* Global button responsiveness */

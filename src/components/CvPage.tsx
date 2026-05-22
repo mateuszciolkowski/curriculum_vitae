@@ -4,7 +4,9 @@ import { HOBBIES } from "../constants/hobbies";
 import { PROJECTS } from "../data/projects";
 import { HACKATHONS } from "../data/hackathons";
 import { FaLinkedin, FaDownload, FaArrowRight } from "react-icons/fa";
+import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
 import cvPdfPL from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_PL.pdf";
 import cvPdfEN from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_ENG.pdf";
@@ -16,11 +18,12 @@ type CvPageProps = {
 
 // Kolory motywu editorial / warm paper. Trzymamy jako stałe, żeby utrzymać
 // spójność i ułatwić ewentualną podmianę palety.
-const PAPER_BG = "bg-[#f4ecdc]";
-const PAPER_BG_TRANSLUCENT = "bg-[#f4ecdc]/85";
+const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
+const PAPER_BG_TRANSLUCENT = "bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85";
 
 export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): ReactElement {
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [selectedHobby, setSelectedHobby] = useState<(typeof HOBBIES)[number] | null>(null);
   const [activeHobbySlide, setActiveHobbySlide] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -51,7 +54,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
   const sectionLabel = (id: string) =>
     `text-[10px] font-bold uppercase tracking-[0.35em] transition-colors duration-500 ${
-      highlightedSection === id ? "text-orange-700" : "text-stone-500"
+      highlightedSection === id ? "text-orange-700" : "text-stone-500 dark:text-stone-400"
     }`;
 
   const defaultTech = [
@@ -82,9 +85,9 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   ];
 
   return (
-    <div className={`${PAPER_BG} min-h-screen text-stone-900 antialiased selection:bg-orange-700/20`} style={{ colorScheme: "light" }}>
+    <div className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased selection:bg-orange-700/20`}>
       {/* ─── NAVBAR ─── */}
-      <nav className={`sticky top-0 z-40 w-full border-b border-stone-300/60 ${PAPER_BG_TRANSLUCENT} backdrop-blur-md`}>
+      <nav className={`sticky top-0 z-40 w-full border-b border-stone-300/60 dark:border-stone-700/60 ${PAPER_BG_TRANSLUCENT} backdrop-blur-md`}>
         <div className="mx-auto flex h-14 max-w-screen-lg items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           {/* Center: section anchor links */}
           <div className="hidden items-center gap-1 lg:flex">
@@ -95,7 +98,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                 className={`rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] transition-all ${
                   highlightedSection === id
                     ? "text-orange-700"
-                    : "text-stone-500 hover:text-stone-900"
+                    : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
                 }`}
               >
                 {label}
@@ -106,15 +109,22 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           {/* Right */}
           <div className="flex shrink-0 items-center gap-2">
             <button
+              onClick={toggleTheme}
+              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "light" ? <HiMoon className="text-sm" /> : <HiSun className="text-sm" />}
+            </button>
+            <button
               onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
-              className="rounded-md border border-stone-300 bg-stone-100 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 transition-all hover:bg-stone-200"
+              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
             >
               {language === "pl" ? "EN" : "PL"}
             </button>
             <a
               href={cvPdf}
               download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
-              className="flex items-center gap-1.5 rounded-md bg-orange-700 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] transition-all hover:bg-orange-800"
+              className="flex items-center gap-1.5 rounded-md bg-orange-700 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
             >
               <FaDownload className="text-[10px]" />
               <span className="hidden sm:inline">CV</span>
@@ -137,7 +147,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           <h1 className="mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
             Mateusz<br />Ciołkowski
           </h1>
-          <p className="mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700">
+          <p className="mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300">
             {language === "pl"
               ? "Projektuję i tworzę aplikacje od A do Z. Tworzę strony internetowe oraz aplikacje mobilne, w których estetyczny wygląd idzie w parze z niezawodnym działaniem. Dbając o każdy detal, łączę technologie frontendowe i backendowe z przemyślanym designem, tworząc rozwiązania, z których korzysta się z przyjemnością."
               : "I design and build applications from A to Z. I create websites and mobile apps where aesthetic design goes hand in hand with reliable performance. Paying attention to every detail, I combine frontend and backend technologies with thoughtful design, creating solutions that are a pleasure to use."}
@@ -147,33 +157,32 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
             <a
               href="mailto:ciolkowski.m1@gmail.com"
-              className="group inline-flex items-center gap-2 rounded-md bg-orange-700 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] shadow-sm transition-all hover:bg-orange-800 hover:scale-[1.02] active:scale-[0.98]"
+              className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700"
             >
-              <i className="devicon-google-plain text-sm" />
-              {language === "pl" ? "Napisz do mnie" : "Write to me"}
-              <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
+              <i className="devicon-google-plain text-base" />
+              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">ciolkowski.m1@gmail.com</span>
             </a>
-            <a href="https://github.com/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 transition-colors hover:text-orange-700">
+            <a href="https://github.com/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
               <i className="devicon-github-original text-base" />
-              <span className="border-b border-stone-300 pb-0.5 group-hover:border-orange-700">GitHub</span>
+              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">GitHub</span>
             </a>
-            <a href="https://www.linkedin.com/in/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 transition-colors hover:text-orange-700">
+            <a href="https://www.linkedin.com/in/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
               <FaLinkedin className="text-sm" />
-              <span className="border-b border-stone-300 pb-0.5 group-hover:border-orange-700">LinkedIn</span>
+              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">LinkedIn</span>
             </a>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={() => onProjectsClick()}
-              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 bg-stone-100 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 transition-all hover:border-orange-700 hover:text-orange-700"
+              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
             >
               {language === "pl" ? "Projekty" : "Projects"}
               <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
               onClick={() => onHackathonsClick()}
-              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 bg-stone-100 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 transition-all hover:border-orange-700 hover:text-orange-700"
+              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
             >
               {t(translations.hackathons)}
               <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
@@ -181,7 +190,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </header>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── ABOUT ── */}
         <section id="about" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -189,7 +198,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             {t(translations.aboutMe)}
           </h2>
           <div className="lg:col-span-9">
-            <p className="text-base sm:text-lg leading-relaxed text-stone-700 max-w-3xl">
+            <p className="text-base sm:text-lg leading-relaxed text-stone-700 dark:text-stone-300 max-w-3xl">
               {language === "pl"
                 ? "Na co dzień studiuję informatykę stosowaną na Politechnice Łódzkiej i rozwijam się w kierunku technologii webowych. Poza uczelnią tworzę własne strony i aplikacje. Zależy mi na tym, żeby moje projekty były po prostu użyteczne, dlatego projektuję narzędzia, z których sam chętnie korzystam. To właśnie praktyczne zastosowanie kodu daje mi największego kopa do nauki i stałego podnoszenia poprzeczki."
                 : "I study Applied Computer Science at Łódź University of Technology and focus on web technologies. Outside of university, I build my own websites and applications. I care about making my projects genuinely useful, so I design tools that I myself enjoy using. It's the practical application of code that gives me the biggest drive to learn and constantly raise the bar."}
@@ -197,7 +206,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── EDUCATION ── */}
         <section id="education" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -211,15 +220,15 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             ].map((edu) => (
               <div key={edu.date} className="flex flex-col gap-1">
                 <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{edu.date}</p>
-                <p className="mt-1 text-base font-semibold leading-snug text-stone-900">{t(edu.school)}</p>
-                {edu.faculty && <p className="text-sm text-stone-600">{t(edu.faculty)}</p>}
-                <p className="text-sm text-stone-700">{t(edu.field)}</p>
+                <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100">{t(edu.school)}</p>
+                {edu.faculty && <p className="text-sm text-stone-600 dark:text-stone-400">{t(edu.faculty)}</p>}
+                <p className="text-sm text-stone-700 dark:text-stone-300">{t(edu.field)}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── STACK / TECHNOLOGIES ── */}
         <section id="technologies" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -246,10 +255,10 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                     <div
                       key={tech.name}
                       style={{ transitionDelay: `${100 + gIdx * 70 + idx * 20}ms` }}
-                      className={`group flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 ring-1 ring-stone-200 shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+                      className={`group flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
                     >
                       <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />
-                      <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700">
+                      <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
                         {tech.name}
                       </span>
                     </div>
@@ -260,7 +269,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── LANGUAGES ── */}
         <section id="skills" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -275,10 +284,10 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               ].map(({ labelKey, level, percent }) => (
                 <div key={level} className="flex flex-col gap-1.5">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-semibold text-stone-900">{t(labelKey)}</span>
+                    <span className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t(labelKey)}</span>
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-700">{level}</span>
                   </div>
-                  <div className="h-[3px] w-full rounded-full bg-stone-200">
+                  <div className="h-[3px] w-full rounded-full bg-stone-200 dark:bg-stone-700">
                     <div
                       className="h-[3px] rounded-full bg-orange-700 transition-all duration-1000"
                       style={{ width: mounted ? `${percent}%` : "0%" }}
@@ -290,7 +299,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── ACHIEVEMENTS ── */}
         <section id="achievements" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -307,15 +316,15 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <div
                 key={text}
                 onClick={() => hackathonId && onHackathonsClick(hackathonId)}
-                className={`flex items-start gap-4 py-4 ${idx < arr.length - 1 ? "border-b border-stone-200" : ""} ${hackathonId ? "cursor-pointer transition-colors hover:bg-stone-50 -mx-3 px-3 rounded-md" : ""}`}
+                className={`flex items-start gap-4 py-4 ${idx < arr.length - 1 ? "border-b border-stone-200 dark:border-stone-700/50" : ""} ${hackathonId ? "cursor-pointer transition-colors hover:bg-stone-50 dark:hover:bg-[#2a2320] -mx-3 px-3 rounded-md" : ""}`}
               >
                 <span className="shrink-0 text-2xl leading-none">{emoji}</span>
                 <div className="min-w-0 flex-1">
                   <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{label}</p>
-                  <p className="text-sm leading-relaxed text-stone-800">{text}</p>
+                  <p className="text-sm leading-relaxed text-stone-800 dark:text-stone-300">{text}</p>
                 </div>
                 {href && (
-                  <a href={href} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-stone-100 text-stone-500 transition-all hover:bg-stone-900 hover:text-[#f4ecdc]">
+                  <a href={href} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-500 dark:text-stone-400 transition-all hover:bg-stone-900 hover:text-[#f4ecdc]">
                     <FaLinkedin className="text-xs" />
                   </a>
                 )}
@@ -324,7 +333,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── PROJECTS ── */}
         <section id="projects" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -336,18 +345,18 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <button
                 key={project.id}
                 onClick={() => onProjectsClick(project.id)}
-                className="group flex items-center gap-4 border-b border-stone-200 py-4 text-left transition-colors hover:border-orange-700"
+                className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-baseline gap-2">
-                    <span className="text-base font-bold uppercase tracking-tight text-stone-900">{project.name}</span>
+                    <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
                     {project.status && (
                       <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
                         · {project.status[language]}
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 text-xs text-stone-500">{t(project.role)}</p>
+                  <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(project.role)}</p>
                 </div>
                 <div className="hidden sm:flex shrink-0 gap-1">
                   {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
@@ -360,7 +369,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── HACKATHONS ── */}
         <section id="hackathons" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -372,18 +381,18 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <button
                 key={hack.id}
                 onClick={() => onHackathonsClick(hack.id)}
-                className="group flex items-center gap-4 border-b border-stone-200 py-4 text-left transition-colors hover:border-orange-700"
+                className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-baseline gap-2">
-                    <span className="text-base font-bold uppercase tracking-tight text-stone-900">{hack.name}</span>
+                    <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
                     {hack.inProgress && (
                       <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
                         · {language === "pl" ? "W trakcie" : "In Progress"}
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 text-xs text-stone-500">{t(hack.role)}</p>
+                  <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(hack.role)}</p>
                 </div>
                 <div className="hidden sm:flex shrink-0 gap-1">
                   {(hack.technologies ?? []).slice(0, 4).map((tech) => (
@@ -396,7 +405,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70" />
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── HOBBIES ── */}
         <section id="hobbies" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -408,16 +417,16 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <button
                 key={idx}
                 onClick={() => setSelectedHobby(hobby)}
-                className="group flex items-center gap-3 rounded-md bg-white px-4 py-3 ring-1 ring-stone-200 shadow-sm transition-all hover:ring-orange-700/50 hover:scale-[1.02]"
+                className="group flex items-center gap-3 rounded-md bg-white dark:bg-[#2a2320] px-4 py-3 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all hover:ring-orange-700/50 hover:scale-[1.02]"
               >
-                <span className="text-sm font-medium text-stone-800 transition-colors group-hover:text-orange-700">{t(hobby.label)}</span>
+                <span className="text-sm font-medium text-stone-800 dark:text-stone-200 transition-colors group-hover:text-orange-700">{t(hobby.label)}</span>
               </button>
             ))}
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-stone-300/70 py-10 text-center">
+        <footer className="border-t border-stone-300/70 dark:border-stone-700/50 py-10 text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-500">
             © Mateusz Ciołkowski
           </p>

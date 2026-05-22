@@ -25,8 +25,8 @@ export interface Project {
 }
 
 const zzpjDescription = {
-  pl: "Fin-Insight to projekt grupowy realizowany na studiach w ramach przedmiotu Zaawansowane Zagadnienia Projektowania w Javie. Aplikacja wspiera inwestora w analizie portfela oraz agregacji danych rynkowych (akcje, krypto, FX), a backend działa jako zestaw mikroserwisów opartych o Java + Spring Boot/Spring Cloud, z centralną konfiguracją przez Config Server, odkrywaniem usług przez Eureka Server, zabezpieczeniami opartymi o Keycloak oraz kontraktami API tworzonymi w standardzie OpenAPI.",
-  en: "Fin-Insight is a group university project delivered as part of the Advanced Java Design Topics course. The platform supports portfolio analysis and market data aggregation (stocks, crypto, FX), while the backend runs as a Java + Spring Boot/Spring Cloud microservices ecosystem with centralized configuration via Config Server, service discovery through Eureka Server, security powered by Keycloak, and API contracts documented with OpenAPI.",
+  pl: "Fin-Insight to projekt realizowany na studiach w ramach przedmiotu Zaawansowane Zagadnienia Projektowania w Javie. Aplikacja wspiera inwestora w analizie portfela oraz agregacji danych rynkowych (akcje, krypto, FX), a backend działa jako zestaw mikroserwisów opartych o Java + Spring Boot/Spring Cloud, z centralną konfiguracją przez Config Server, odkrywaniem usług przez Eureka Server, zabezpieczeniami opartymi o Keycloak oraz kontraktami API tworzonymi w standardzie OpenAPI.",
+  en: "Fin-Insight is a university project delivered as part of the Advanced Java Design Topics course. The platform supports portfolio analysis and market data aggregation (stocks, crypto, FX), while the backend runs as a Java + Spring Boot/Spring Cloud microservices ecosystem with centralized configuration via Config Server, service discovery through Eureka Server, security powered by Keycloak, and API contracts documented with OpenAPI.",
 };
 
 const zzpjStatus = {
@@ -108,8 +108,8 @@ export const PROJECTS: Project[] = [
     id: "fin-insight-zzpj",
     name: "Fin-Insight",
     role: {
-      pl: "Fullstack Developer (projekt zespołowy)",
-      en: "Fullstack Developer (team project)",
+      pl: "Fullstack Developer",
+      en: "Fullstack Developer",
     },
     description: zzpjDescription,
     status: zzpjStatus,
