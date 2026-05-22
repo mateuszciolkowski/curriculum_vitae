@@ -1,33 +1,29 @@
 import { useState } from "react";
 import { CvPage } from "./components/CvPage";
 import { HackathonsPage } from "./components/HackathonsPage";
-import { ProjectDetailPage } from "./components/ProjectDetailPage";
+import { ProjectsPage } from "./components/ProjectsPage";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
-type View = "cv" | "hackathons" | "project-detail";
+type View = "cv" | "hackathons" | "projects";
 
 export default function App() {
   const [view, setView] = useState<View>("cv");
-  const [activeProjectId, setActiveProjectId] = useState<string>("gymgate");
+  const [initialProjectId, setInitialProjectId] = useState<string | undefined>();
+  const [initialHackathonId, setInitialHackathonId] = useState<string | undefined>();
 
-  const handleProjectClick = (projectId: string) => {
-    setActiveProjectId(projectId);
-    setView("project-detail");
-  };
+  const goToProjects = (id?: string) => { setInitialProjectId(id); setView("projects"); window.scrollTo(0, 0); };
+  const goToHackathons = (id?: string) => { setInitialHackathonId(id); setView("hackathons"); window.scrollTo(0, 0); };
 
   return (
     <LanguageProvider>
       {view === "hackathons" ? (
-        <HackathonsPage onBackToCv={() => setView("cv")} />
-      ) : view === "project-detail" ? (
-        <ProjectDetailPage
-          projectId={activeProjectId}
-          onBackToCv={() => setView("cv")}
-        />
+        <HackathonsPage onBackToCv={() => setView("cv")} initialHackathonId={initialHackathonId} />
+      ) : view === "projects" ? (
+        <ProjectsPage onBackToCv={() => setView("cv")} initialProjectId={initialProjectId} />
       ) : (
         <CvPage
-          onHackathonsClick={() => setView("hackathons")}
-          onProjectClick={handleProjectClick}
+          onHackathonsClick={goToHackathons}
+          onProjectsClick={goToProjects}
         />
       )}
     </LanguageProvider>

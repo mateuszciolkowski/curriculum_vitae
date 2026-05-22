@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
-import { HACKATHONS } from "../data/hackathons";
-import { FaLinkedin, FaGithub, FaGlobe, FaArrowLeft } from "react-icons/fa";
+import { PROJECTS } from "../data/projects";
+import { FaGithub, FaGlobe, FaArrowLeft } from "react-icons/fa";
 import { useLanguage } from "../contexts/LanguageContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
 
-type HackathonsPageProps = {
+type ProjectsPageProps = {
   onBackToCv: () => void;
-  initialHackathonId?: string;
+  initialProjectId?: string;
 };
 
 const PAPER_BG = "bg-[#f4ecdc]";
 
-export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPageProps) {
+export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps) {
   const { language, setLanguage, t } = useLanguage();
-  const [activeHackathonId, setActiveHackathonId] = useState<string>(initialHackathonId ?? "fintech");
+  const [activeProjectId, setActiveProjectId] = useState<string>(
+    initialProjectId ?? PROJECTS[0].id,
+  );
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -26,8 +28,8 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
     setMounted(true);
   }, []);
 
-  const activeHackathon = HACKATHONS.find((h) => h.id === activeHackathonId)!;
-  const totalSlides = activeHackathon.images.length;
+  const activeProject = PROJECTS.find((p) => p.id === activeProjectId)!;
+  const totalSlides = activeProject.images.length;
 
   const goPrevSlide = () => {
     setIsChangingSlide(true);
@@ -59,6 +61,13 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
     else if (d < -minSwipeDistance) goPrevSlide();
   };
 
+  const defaultTech = [
+    { name: "Node.js", icon: "devicon-nodejs-plain" },
+    { name: "React.js", icon: "devicon-react-original" },
+    { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+    { name: "Docker", icon: "devicon-docker-plain" },
+  ];
+
   return (
     <div
       className={`${PAPER_BG} min-h-screen text-stone-900 antialiased overflow-x-hidden selection:bg-orange-700/20`}
@@ -67,19 +76,16 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
       {/* ── TOP BAR ── */}
       <div className={`border-b border-stone-300/70 ${PAPER_BG}/85 sticky top-0 z-30 backdrop-blur-md`}>
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={onBackToCv}
-            className={buttonStyles.paperGhostSmall}
-          >
+          <button onClick={onBackToCv} className={buttonStyles.paperGhostSmall}>
             <FaArrowLeft className="text-[10px]" />
             {t(translations.backToCv)}
           </button>
 
           <div className="hidden items-center gap-1 sm:flex">
             {[
-              { label: "Stack", id: "hack-stack" },
-              { label: language === "pl" ? "O projekcie" : "About", id: "hack-about" },
-              { label: t(translations.gallery), id: "hack-gallery" },
+              { label: "Stack", id: "proj-stack" },
+              { label: language === "pl" ? "O projekcie" : "About", id: "proj-about" },
+              { label: t(translations.gallery), id: "proj-gallery" },
             ].map(({ label, id }) => (
               <button
                 key={id}
@@ -108,24 +114,23 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
         {/* ── SIDEBAR (Table of Contents) ── */}
         <aside className="w-full shrink-0 lg:w-64 lg:sticky lg:top-20 lg:self-start">
           <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
-            {t(translations.myProjects)}
+            {language === "pl" ? "Projekty" : "Projects"}
           </p>
 
           <ol className="flex flex-col">
-            {HACKATHONS.map((hack, idx) => {
-              const isActive = activeHackathonId === hack.id;
+            {PROJECTS.map((project, idx) => {
+              const isActive = activeProjectId === project.id;
               return (
-                <li key={hack.id}>
+                <li key={project.id}>
                   <button
                     onClick={() => {
-                      setActiveHackathonId(hack.id);
+                      setActiveProjectId(project.id);
                       setActiveSlideIndex(0);
                     }}
                     className={`group relative w-full border-t border-stone-200 py-3 text-left transition-colors ${
-                      idx === HACKATHONS.length - 1 ? "border-b" : ""
+                      idx === PROJECTS.length - 1 ? "border-b" : ""
                     } ${isActive ? "" : "hover:bg-stone-100/60"}`}
                   >
-                    {/* lewa pionowa kreska na aktywnym */}
                     <span
                       className={`absolute left-0 top-2 bottom-2 w-[2px] rounded-full transition-all ${
                         isActive ? "bg-orange-700" : "bg-transparent"
@@ -137,7 +142,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                           isActive ? "text-orange-700" : "text-stone-500"
                         }`}
                       >
-                        {String(idx + 1).padStart(2, "0")} · {t(hack.role)}
+                        {String(idx + 1).padStart(2, "0")} · {t(project.role)}
                       </p>
                       <div className="flex flex-wrap items-baseline gap-2">
                         <span
@@ -147,11 +152,11 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                               : "text-stone-700 group-hover:text-stone-900"
                           }`}
                         >
-                          {hack.name}
+                          {project.name}
                         </span>
-                        {hack.inProgress && (
+                        {project.status && (
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
-                            · {language === "pl" ? "W trakcie" : "In Progress"}
+                            · {project.status[language]}
                           </span>
                         )}
                       </div>
@@ -170,18 +175,18 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-orange-700">
-                  {t(activeHackathon.role)}
+                  {t(activeProject.role)}
                 </p>
                 <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900">
-                  {activeHackathon.name}
+                  {activeProject.name}
                 </h1>
               </div>
 
               {/* Links */}
               <div className="flex shrink-0 gap-2">
-                {activeHackathon.links?.live && (
+                {activeProject.links?.live && (
                   <a
-                    href={activeHackathon.links.live}
+                    href={activeProject.links.live}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Live"
@@ -190,9 +195,9 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     <FaGlobe className="text-base" />
                   </a>
                 )}
-                {activeHackathon.links?.github && (
+                {activeProject.links?.github && (
                   <a
-                    href={activeHackathon.links.github}
+                    href={activeProject.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
@@ -201,70 +206,81 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     <FaGithub className="text-base" />
                   </a>
                 )}
-                {(activeHackathon.links?.linkedin ||
-                  activeHackathon.links?.article) && (
-                  <a
-                    href={
-                      activeHackathon.links.linkedin ||
-                      activeHackathon.links.article
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="LinkedIn"
-                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 text-stone-600 ring-1 ring-stone-200 transition-all hover:bg-blue-700 hover:text-white hover:ring-blue-700"
-                  >
-                    <FaLinkedin className="text-base" />
-                  </a>
-                )}
               </div>
             </div>
           </header>
 
           {/* Stack */}
-          {activeHackathon.technologies && (
-            <section id="hack-stack" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
-              <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
-                Stack
-              </h2>
-              <div className="flex flex-wrap gap-1.5">
-                {activeHackathon.technologies.map((tech) => (
-                  <div
-                    key={tech.name}
-                    className="flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 ring-1 ring-stone-200 shadow-sm"
-                  >
-                    <i className={`${tech.icon} text-sm`} />
-                    <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700">
-                      {tech.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <hr className="border-stone-300/70" />
-
-          {/* Description */}
-          <section id="hack-about" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+          <section id="proj-stack" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
             <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
-              {language === "pl" ? "O projekcie" : "About"}
+              {language === "pl" ? "Stack" : "Stack"}
             </h2>
-            <p className="text-base sm:text-lg leading-relaxed text-stone-700 max-w-3xl">
-              {t(activeHackathon.description)}
-            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {(activeProject.technologies ?? defaultTech).map((tech) => (
+                <div
+                  key={tech.name}
+                  className="flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 ring-1 ring-stone-200 shadow-sm"
+                >
+                  <i className={`${tech.icon} text-sm`} />
+                  <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700">
+                    {tech.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </section>
 
           <hr className="border-stone-300/70" />
 
+          {/* Description */}
+          <section id="proj-about" className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+            <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
+              {language === "pl" ? "O projekcie" : "About"}
+            </h2>
+            <div className="max-w-3xl">
+              <p className="text-base sm:text-lg leading-relaxed text-stone-700">
+                {t(activeProject.description)}
+              </p>
+              {activeProject.features && (
+                <ul className="mt-6 flex flex-col gap-2">
+                  {activeProject.features[language].map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5 text-sm text-stone-700">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
+                      <span className="leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </section>
+
+          {activeProject.techDescription && (
+            <>
+              <hr className="border-stone-300/70" />
+              <section className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+                <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
+                  {language === "pl" ? "Techniczny opis" : "Technical overview"}
+                </h2>
+                <div className="max-w-3xl">
+                  <p className="text-sm sm:text-base leading-relaxed text-stone-600">
+                    {t(activeProject.techDescription)}
+                  </p>
+                </div>
+              </section>
+            </>
+          )}
+
+          <hr className="border-stone-300/70" />
+
           {/* Gallery */}
-          <section id="hack-gallery" className="py-10">
+          <section id="proj-gallery" className="py-10">
             <div className="flex items-baseline gap-4 sm:gap-8 lg:gap-12 mb-6">
               <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
                 {t(translations.gallery)}
               </h2>
             </div>
             <div className="flex flex-col items-center gap-4 w-full max-w-4xl mx-auto">
-              {activeHackathon.images.length === 0 ? (
+              {activeProject.images.length === 0 ? (
                 <div className="flex flex-col items-center justify-center gap-4 rounded-md border-2 border-dashed border-stone-300 bg-stone-50 py-20">
                   <span className="text-5xl">🚧</span>
                   <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-stone-500">
@@ -297,11 +313,11 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                         }`}
                       >
                         <img
-                          src={activeHackathon.images[activeSlideIndex]}
+                          src={activeProject.images[activeSlideIndex]}
                           alt="Preview"
                           onClick={() =>
                             setFullscreenSrc(
-                              activeHackathon.images[activeSlideIndex],
+                              activeProject.images[activeSlideIndex],
                             )
                           }
                           className="max-h-130 w-full cursor-zoom-in object-contain rounded-lg transition-transform hover:scale-[1.01] duration-500 select-none"
@@ -322,7 +338,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                   </div>
 
                   <div className="flex justify-center gap-2 pt-2">
-                    {activeHackathon.images.map((_, index) => (
+                    {activeProject.images.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setActiveSlideIndex(index)}
@@ -341,7 +357,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
         </main>
       </div>
 
-      {/* FULLSCREEN MODAL */}
+      {/* Fullscreen modal */}
       {fullscreenSrc && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/90 p-4 backdrop-blur-sm"

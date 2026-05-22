@@ -3,6 +3,7 @@ export interface Hackathon {
   name: string;
   role: { pl: string; en: string };
   description: { pl: string; en: string };
+  technologies?: { name: string; icon: string }[];
   images: string[];
   inProgress?: boolean;
   links?: {
@@ -33,6 +34,10 @@ export const HACKATHONS: Hackathon[] = [
       new URL("../assets/images/fintech/fintech_2.jpeg", import.meta.url).href,
       new URL("../assets/images/fintech/fintech_3.jpeg", import.meta.url).href,
     ],
+    technologies: [
+      { name: "React", icon: "devicon-react-original" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
     links: {
       // article: "https://fintechcentral.pl/2025/12/19/lodz_hack-podsumowanie/",
       linkedin:
@@ -60,6 +65,12 @@ export const HACKATHONS: Hackathon[] = [
       new URL("../assets/images/pharmaradar/pharmaradar_3.jpg", import.meta.url)
         .href,
     ],
+    technologies: [
+      { name: "Django", icon: "devicon-django-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+    ],
     links: {
       linkedin:
         "https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFlnawQBqCw9Q6vwOQL1mDH2epMRoqNzHp8",
@@ -84,6 +95,11 @@ export const HACKATHONS: Hackathon[] = [
       new URL("../assets/images/wellness/wellness_2.jpeg", import.meta.url)
         .href,
     ],
+    technologies: [
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
     links: {
       github: "https://github.com/mateuszciolkowski/HACKATHON_WELLNESS",
     },
@@ -97,6 +113,12 @@ export const HACKATHONS: Hackathon[] = [
       en: "PacjentWybiera is a mobile application supporting oncological patients in their daily meal choices. Treatment (chemotherapy, radiotherapy, immunotherapy) changes food tolerance from day to day — standard hospital menus don't account for this. The app filters and recommends meals based on reported symptoms, allows choosing meals via card swiping, managing a weekly meal plan, and maintaining a patient profile with symptom history. AI analyzes symptom history and predicts future well-being to tailor suggestions to individual treatment progress. Role: team leader. Technologies used: React 19 + TypeScript, Ionic React, Tailwind CSS, Supabase (PostgreSQL).",
     },
     images: [],
+    technologies: [
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "Tailwind", icon: "devicon-tailwindcss-original" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+    ],
     inProgress: true,
     links: {
       github: "https://github.com/GitPushers67/pacjentwybiera",
@@ -116,6 +138,12 @@ export const HACKATHONS: Hackathon[] = [
       new URL("../assets/images/synaptis/1.png", import.meta.url).href,
       new URL("../assets/images/synaptis/2.png", import.meta.url).href,
       new URL("../assets/images/synaptis/3.png", import.meta.url).href,
+    ],
+    technologies: [
+      { name: "Django", icon: "devicon-django-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
     ],
     links: {
       linkedin:
