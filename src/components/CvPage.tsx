@@ -38,7 +38,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
     const els = document.querySelectorAll(".reveal");
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
-    }, { threshold: 0.1, rootMargin: "-40px" });
+    }, { threshold: 0.05, rootMargin: "0px" });
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
@@ -151,20 +151,20 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
       >
         {/* ── HERO ── */}
         <header className="pt-16 pb-12 lg:pt-24 lg:pb-16">
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-orange-700">
+          <p className={`text-[10px] font-bold uppercase tracking-[0.4em] text-orange-700 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             {t(translations.jobTitle)}
           </p>
-          <h1 className="mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+          <h1 className={`mt-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight transition-all duration-1000 delay-150 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             Mateusz<br />Ciołkowski
           </h1>
-          <p className="mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300">
+          <p className={`mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300 transition-all duration-1000 delay-300 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             {language === "pl"
               ? "Projektuję i tworzę aplikacje od A do Z. Tworzę strony internetowe oraz aplikacje mobilne, w których estetyczny wygląd idzie w parze z niezawodnym działaniem. Dbając o każdy detal, łączę technologie frontendowe i backendowe z przemyślanym designem, tworząc rozwiązania, z których korzysta się z przyjemnością."
               : "I design and build applications from A to Z. I create websites and mobile apps where aesthetic design goes hand in hand with reliable performance. Paying attention to every detail, I combine frontend and backend technologies with thoughtful design, creating solutions that are a pleasure to use."}
           </p>
 
           {/* Contact links — inline, hairline-separated */}
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <div className={`mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm transition-all duration-1000 delay-500 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <a
               href="mailto:ciolkowski.m1@gmail.com"
               className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700"
@@ -427,7 +427,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <button
                 key={idx}
                 onClick={() => setSelectedHobby(hobby)}
-                className="group flex items-center gap-3 rounded-md bg-white dark:bg-[#2a2320] px-4 py-3 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all hover:ring-orange-700/50 hover:scale-[1.02]"
+                className="group flex items-center gap-3 rounded-md bg-white dark:bg-[#2a2320] px-4 py-3 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all hover:ring-orange-700/50 hover:scale-[1.02] hover-lift"
               >
                 <span className="text-sm font-medium text-stone-800 dark:text-stone-200 transition-colors group-hover:text-orange-700">{t(hobby.label)}</span>
               </button>
