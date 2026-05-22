@@ -33,6 +33,16 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: "-40px" });
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   useEffect(() => {
     if (selectedHobby) {
       const timer = setTimeout(() => setShowModal(true), 10);
@@ -193,7 +203,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── ABOUT ── */}
-        <section id="about" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="about" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("about")}`}>
             {t(translations.aboutMe)}
           </h2>
@@ -209,7 +219,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── EDUCATION ── */}
-        <section id="education" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="education" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("education")}`}>
             {t(translations.education)}
           </h2>
@@ -231,7 +241,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── STACK / TECHNOLOGIES ── */}
-        <section id="technologies" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="technologies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("technologies")}`}>
             Stack
           </h2>
@@ -272,7 +282,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── LANGUAGES ── */}
-        <section id="skills" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="skills" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("skills")}`}>
             {t(translations.languages)}
           </h2>
@@ -302,7 +312,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── ACHIEVEMENTS ── */}
-        <section id="achievements" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="achievements" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("achievements")}`}>
             {t(translations.achievements)}
           </h2>
@@ -336,7 +346,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── PROJECTS ── */}
-        <section id="projects" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="projects" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("projects")}`}>
             {language === "pl" ? "Projekty" : "Projects"}
           </h2>
@@ -372,7 +382,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── HACKATHONS ── */}
-        <section id="hackathons" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="hackathons" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("hackathons")}`}>
             {t(translations.hackathons)}
           </h2>
@@ -408,7 +418,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── HOBBIES ── */}
-        <section id="hobbies" className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+        <section id="hobbies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("hobbies")}`}>
             {t(translations.hobbies)}
           </h2>
