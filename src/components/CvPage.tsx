@@ -154,7 +154,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           <p className={`text-[10px] font-bold uppercase tracking-[0.4em] text-orange-700 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             {t(translations.jobTitle)}
           </p>
-          <h1 className={`mt-4 font-['Instrument_Serif'] italic text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal leading-[0.95] tracking-tight transition-all duration-1000 delay-150 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <h1 className={`mt-4 font-['Instrument_Serif'] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal leading-[0.95] tracking-tight transition-all duration-1000 delay-150 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             Mateusz<br />Ciołkowski
           </h1>
           <p className={`mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300 transition-all duration-1000 delay-300 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
