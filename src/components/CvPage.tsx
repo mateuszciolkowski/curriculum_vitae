@@ -8,6 +8,7 @@ import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
+import { trackEvent } from "../utils/analytics";
 import cvPdfPL from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_PL.pdf";
 import cvPdfEN from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_ENG.pdf";
 
@@ -119,14 +120,14 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           {/* Right */}
           <div className="flex shrink-0 items-center gap-2">
             <button
-              onClick={toggleTheme}
+              onClick={() => { toggleTheme(); trackEvent("theme_toggle", { to: theme === "light" ? "dark" : "light" }); }}
               className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
               aria-label="Toggle dark mode"
             >
               {theme === "light" ? <HiMoon className="text-sm" /> : <HiSun className="text-sm" />}
             </button>
             <button
-              onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
+              onClick={() => { const next = language === "pl" ? "en" : "pl"; setLanguage(next); trackEvent("language_switch", { to: next }); }}
               className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
             >
               {language === "pl" ? "EN" : "PL"}
@@ -134,6 +135,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             <a
               href={cvPdf}
               download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
+              onClick={() => trackEvent("cv_download", { language })}
               className="flex items-center gap-1.5 rounded-md bg-orange-700 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
             >
               <FaDownload className="text-[10px]" />
@@ -167,16 +169,17 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           <div className={`mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm transition-all duration-1000 delay-500 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
             <a
               href="mailto:ciolkowski.m1@gmail.com"
+              onClick={() => trackEvent("contact_link_click", { type: "email" })}
               className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700"
             >
               <i className="devicon-google-plain text-base" />
               <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">ciolkowski.m1@gmail.com</span>
             </a>
-            <a href="https://github.com/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
+            <a href="https://github.com/mateuszciolkowski" onClick={() => trackEvent("contact_link_click", { type: "github" })} className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
               <i className="devicon-github-original text-base" />
               <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">GitHub</span>
             </a>
-            <a href="https://www.linkedin.com/in/mateuszciolkowski" className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
+            <a href="https://www.linkedin.com/in/mateuszciolkowski" onClick={() => trackEvent("contact_link_click", { type: "linkedin" })} className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
               <FaLinkedin className="text-sm" />
               <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">LinkedIn</span>
             </a>
@@ -184,14 +187,14 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
-              onClick={() => onProjectsClick()}
+              onClick={() => { onProjectsClick(); trackEvent("navigate_projects"); }}
               className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
             >
               {language === "pl" ? "Projekty" : "Projects"}
               <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
             </button>
             <button
-              onClick={() => onHackathonsClick()}
+              onClick={() => { onHackathonsClick(); trackEvent("navigate_hackathons"); }}
               className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
             >
               {t(translations.hackathons)}

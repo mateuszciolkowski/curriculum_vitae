@@ -6,6 +6,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
+import { trackEvent } from "../utils/analytics";
 
 type ProjectsPageProps = {
   onBackToCv: () => void;
@@ -146,6 +147,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     onClick={() => {
                       setActiveProjectId(project.id);
                       setActiveSlideIndex(0);
+                      trackEvent("project_view", { project_id: project.id });
                     }}
                     className={`group relative w-full border-t border-stone-200 dark:border-stone-700/50 py-3 text-left transition-colors ${
                       idx === PROJECTS.length - 1 ? "border-b" : ""
@@ -210,6 +212,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Live"
+                    onClick={() => trackEvent("project_live_click", { project_id: activeProject.id })}
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
                   >
                     <FaGlobe className="text-base" />
@@ -221,6 +224,7 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
+                    onClick={() => trackEvent("project_github_click", { project_id: activeProject.id })}
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-stone-900 hover:text-[#f4ecdc] hover:ring-stone-900"
                   >
                     <FaGithub className="text-base" />

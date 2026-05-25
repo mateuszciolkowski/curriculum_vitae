@@ -6,6 +6,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
 import { buttonStyles } from "../styles/buttonStyles";
+import { trackEvent } from "../utils/analytics";
 
 type HackathonsPageProps = {
   onBackToCv: () => void;
@@ -140,6 +141,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     onClick={() => {
                       setActiveHackathonId(hack.id);
                       setActiveSlideIndex(0);
+                      trackEvent("hackathon_view", { hackathon_id: hack.id });
                     }}
                     className={`group relative w-full border-t border-stone-200 dark:border-stone-700/50 py-3 text-left transition-colors ${
                       idx === HACKATHONS.length - 1 ? "border-b" : ""
@@ -205,6 +207,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Live"
+                    onClick={() => trackEvent("hackathon_live_click", { hackathon_id: activeHackathon.id })}
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
                   >
                     <FaGlobe className="text-base" />
@@ -216,6 +219,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
+                    onClick={() => trackEvent("hackathon_github_click", { hackathon_id: activeHackathon.id })}
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-stone-900 hover:text-[#f4ecdc] hover:ring-stone-900"
                   >
                     <FaGithub className="text-base" />
@@ -231,6 +235,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                     target="_blank"
                     rel="noopener noreferrer"
                     title="LinkedIn"
+                    onClick={() => trackEvent("hackathon_linkedin_click", { hackathon_id: activeHackathon.id })}
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-blue-700 hover:text-white hover:ring-blue-700"
                   >
                     <FaLinkedin className="text-base" />
