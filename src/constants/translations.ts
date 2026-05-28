@@ -16,6 +16,8 @@ export const translations = {
   },
   achievements: { pl: "Osiągnięcia", en: "Achievements" },
 
+  certificates: { pl: "Certyfikaty", en: "Certificates" },
+
   // Sections
   languages: { pl: "Języki", en: "Languages" },
   education: { pl: "Edukacja", en: "Education" },

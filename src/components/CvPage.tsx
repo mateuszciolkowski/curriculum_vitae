@@ -1,8 +1,9 @@
-import { type ReactElement, useState, useEffect } from "react";
+import { type ReactElement, useState, useEffect, useRef } from "react";
 import { TECH_CATEGORIES } from "../constants/technologies";
 import { HOBBIES } from "../constants/hobbies";
 import { PROJECTS } from "../data/projects";
 import { HACKATHONS } from "../data/hackathons";
+import { CERTIFICATES } from "../data/certificates";
 import { FaLinkedin, FaDownload, FaArrowRight } from "react-icons/fa";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -32,6 +33,9 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   const [mounted, setMounted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
+  const [selectedCert, setSelectedCert] = useState<(typeof CERTIFICATES)[number] | null>(null);
+  const [showCertModal, setShowCertModal] = useState(false);
+  const certModalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -52,6 +56,16 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
       setShowModal(false);
     }
   }, [selectedHobby]);
+
+  useEffect(() => {
+    if (selectedCert) {
+      certModalRef.current?.scrollTo(0, 0);
+      const timer = setTimeout(() => setShowCertModal(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setShowCertModal(false);
+    }
+  }, [selectedCert]);
 
   const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
 
@@ -88,6 +102,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   const navSections = [
     { label: t(translations.aboutMe), id: "about" },
     { label: t(translations.education), id: "education" },
+    { label: t(translations.certificates), id: "certificates" },
     { label: "Stack", id: "technologies" },
     { label: t(translations.achievements), id: "achievements" },
     { label: language === "pl" ? "Projekty" : "Projects", id: "projects" },
@@ -101,12 +116,12 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
       <nav className={`sticky top-0 z-40 w-full border-b border-stone-300/60 dark:border-stone-700/60 ${PAPER_BG_TRANSLUCENT} backdrop-blur-md`}>
         <div className="mx-auto flex h-14 max-w-screen-lg items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           {/* Center: section anchor links */}
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-center gap-3 lg:flex">
             {navSections.map(({ label, id }) => (
               <button
                 key={id}
                 onClick={() => scrollToSection(id)}
-                className={`rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] transition-all ${
+                className={`rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] whitespace-nowrap transition-all ${
                   highlightedSection === id
                     ? "text-orange-700"
                     : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
@@ -132,15 +147,6 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             >
               {language === "pl" ? "EN" : "PL"}
             </button>
-            <a
-              href={cvPdf}
-              download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
-              onClick={() => trackEvent("cv_download", { language })}
-              className="flex items-center gap-1.5 rounded-md bg-orange-700 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
-            >
-              <FaDownload className="text-[10px]" />
-              <span className="hidden sm:inline">CV</span>
-            </a>
           </div>
         </div>
       </nav>
@@ -200,6 +206,15 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               {t(translations.hackathons)}
               <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
             </button>
+            <a
+              href={cvPdf}
+              download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
+              onClick={() => trackEvent("cv_download", { language })}
+              className="inline-flex items-center gap-2 rounded-md bg-orange-700 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
+            >
+              <FaDownload className="text-[10px]" />
+              {language === "pl" ? "Pobierz CV" : "Download CV"}
+            </a>
           </div>
         </header>
 
@@ -242,6 +257,47 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         </section>
 
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
+
+        {/* ── CERTIFICATES ── */}
+        {CERTIFICATES.length > 0 && (
+          <>
+            <section id="certificates" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+              <h2 className={`lg:col-span-3 ${sectionLabel("certificates")}`}>
+                {t(translations.certificates)}
+              </h2>
+              <div className="lg:col-span-9 grid grid-cols-1 gap-8">
+                {CERTIFICATES.map((cert) => (
+                  <div
+                    key={cert.id}
+                    className={`flex flex-col sm:flex-row gap-5 ${cert.details ? "cursor-pointer group/cert rounded-lg p-3 -m-3 transition-colors hover:bg-stone-200/50 dark:hover:bg-stone-800/30" : ""}`}
+                    onClick={() => cert.details && setSelectedCert(cert)}
+                  >
+                    {cert.image && (
+                      <div className="shrink-0">
+                        <img src={cert.image} alt={language === "pl" ? cert.name.pl : cert.name.en} className="w-full sm:w-44 rounded-md ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm group-hover/cert:scale-[1.02] transition-transform" />
+                      </div>
+                    )}
+                    <div className="flex flex-col gap-1">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{cert.date} · {cert.issuer}</p>
+                      <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                        {language === "pl" ? cert.name.pl : cert.name.en}
+                      </p>
+                      <p className="mt-1 text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+                        {language === "pl" ? cert.description.pl : cert.description.en}
+                      </p>
+                      {cert.url && (
+                        <a href={cert.url} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs font-medium text-orange-700 hover:underline">
+                          {language === "pl" ? "Zweryfikuj" : "Verify"}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+            <hr className="border-stone-300/70 dark:border-stone-700/50" />
+          </>
+        )}
 
         {/* ── STACK / TECHNOLOGIES ── */}
         <section id="technologies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
@@ -447,6 +503,46 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
       </main>
 
       {/* ─── HOBBY MODAL ─── */}
+      {selectedCert && selectedCert.details && (
+        <div
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-900/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${showCertModal ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setSelectedCert(null)}
+        >
+          <div
+            className={`relative max-w-2xl w-full transition-all duration-500 ease-[var(--ease-out)] ${showCertModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedCert(null)}
+              className="absolute -top-12 right-0 z-10 rounded-md bg-orange-700 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] shadow-lg transition-all hover:bg-orange-800 hover:scale-105 active:scale-95"
+            >
+              {language === "pl" ? "Zamknij" : "Close"}
+            </button>
+            <div ref={certModalRef} className="rounded-2xl border border-stone-300 dark:border-stone-700 bg-[#f4ecdc] dark:bg-[#1b1712] shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
+              {selectedCert.image && (
+                <div className="px-4 pt-4">
+                  <img src={selectedCert.image} alt={language === "pl" ? selectedCert.name.pl : selectedCert.name.en} className="w-full rounded-lg object-cover" />
+                </div>
+              )}
+              <div className="p-7">
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{selectedCert.date} · {selectedCert.issuer}</p>
+                <h3 className="mt-2 text-xl font-bold leading-snug text-stone-900 dark:text-stone-100">
+                  {language === "pl" ? selectedCert.name.pl : selectedCert.name.en}
+                </h3>
+                <ul className="mt-5 space-y-3">
+                  {(language === "pl" ? selectedCert.details.pl.bullets : selectedCert.details.en.bullets).map((bullet, i) => (
+                    <li key={i} className="flex gap-3 text-sm leading-relaxed text-stone-700 dark:text-stone-300">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {selectedHobby && (
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-900/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${showModal ? "opacity-100" : "opacity-0"}`}
