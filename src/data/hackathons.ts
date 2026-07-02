@@ -36,6 +36,7 @@ export const HACKATHONS: Hackathon[] = [
       { name: "TypeScript", icon: "devicon-typescript-plain" },
       { name: "React", icon: "devicon-react-original" },
       { name: "Python", icon: "devicon-python-plain" },
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
     ],
     links: {
       github: "https://github.com/kacperous/blazity-hackaton-team1",
