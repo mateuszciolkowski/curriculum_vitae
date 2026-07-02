@@ -18,7 +18,7 @@ const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
 export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPageProps) {
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
-  const [activeHackathonId, setActiveHackathonId] = useState<string>(initialHackathonId ?? "fintech");
+  const [activeHackathonId, setActiveHackathonId] = useState<string>(initialHackathonId ?? "blazity");
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [fullscreenSrc, setFullscreenSrc] = useState<string | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);

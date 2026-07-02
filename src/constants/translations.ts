@@ -102,6 +102,10 @@ export const translations = {
     pl: "Stypendium Rektora Politechniki Łódzkiej – semestr letni roku akademickiego 2025/2026",
     en: "Rector's Scholarship at Lodz University of Technology – summer semester 2025/2026",
   },
+  achievement5: {
+    pl: "AI Hackathon z Blazity – 1. miejsce",
+    en: "AI Hackathon with Blazity – 1st Place",
+  },
   scholarship: { pl: "Stypendium", en: "Scholarship" },
 
   // Hobbies

@@ -377,6 +377,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </h2>
           <div className="lg:col-span-9 flex flex-col">
             {[
+              { emoji: "🥇", label: t(translations.firstPlace), text: t(translations.achievement5), href: "https://www.linkedin.com/feed/update/urn:li:activity:7478060736074797056/", hackathonId: "blazity" },
               { emoji: "🥇", label: t(translations.firstPlace), text: t(translations.achievement1), href: "https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh", hackathonId: "fintech" },
               { emoji: "🥈", label: t(translations.secondPlace), text: t(translations.achievement2), href: "https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH", hackathonId: "pharmaradar" },
               { emoji: "🥈", label: t(translations.secondPlace), text: t(translations.achievement3), href: "https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m", hackathonId: "synaptis" },

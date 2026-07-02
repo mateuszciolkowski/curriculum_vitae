@@ -17,6 +17,32 @@ export interface Hackathon {
 
 export const HACKATHONS: Hackathon[] = [
   {
+    id: "blazity",
+    name: "AI Hackathon",
+    role: { pl: "Fullstack / AI Developer", en: "Fullstack / AI Developer" },
+    description: {
+      pl: `W pełni zautomatyzowany pipeline AI opracowany w zaledwie 3 godziny podczas studenckiego hackathonu "AI Hackathon", zorganizowanego przez firmę Blazity we współpracy z Centrum Innowacji i Przedsiębiorczości Politechniki Łódzkiej. Narzędzie usprawnia proces tworzenia treści social media: na podstawie lakonicznego opisu użytkownika system generuje angażujący tekst posta na Facebooka, renderuje spersonalizowany materiał wideo w chmurze, przetwarza go za pomocą Creatomate, a następnie automatycznie publikuje gotowy wpis na profilu społecznościowym. Rozwiązanie to wygrało cały konkurs, zdobywając 1. miejsce. Użyte technologie: TypeScript, React, Python.`,
+      en: `A fully automated AI content pipeline developed in just 3 hours during the student "AI Hackathon", organized by Blazity in cooperation with the Center for Innovation and Entrepreneurship of the Lodz University of Technology. The tool optimizes social media workflows: based on a brief user prompt, the system generates engaging copy for a Facebook post, renders custom video elements, programmatically processes them using Creatomate, and automatically publishes the final post to Facebook. This innovative end-to-end automation won 1st place at the competition. Technologies used: TypeScript, React, Python.`,
+    },
+    images: [
+      new URL("../assets/images/blazity/blazity1.JPG", import.meta.url).href,
+      new URL("../assets/images/blazity/blazity2.PNG", import.meta.url).href,
+      new URL("../assets/images/blazity/blazity3.png", import.meta.url).href,
+      new URL("../assets/images/blazity/blazity4.png", import.meta.url).href,
+      new URL("../assets/images/blazity/blazity5.png", import.meta.url).href,
+      new URL("../assets/images/blazity/blazity6.png", import.meta.url).href,
+    ],
+    technologies: [
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "Python", icon: "devicon-python-plain" },
+    ],
+    links: {
+      linkedin:
+        "https://www.linkedin.com/feed/update/urn:li:activity:7478060736074797056/",
+    },
+  },
+  {
     id: "fintech",
     name: "Moje osiedle",
     role: { pl: "Frontend", en: "Frontend" },
@@ -112,7 +138,12 @@ export const HACKATHONS: Hackathon[] = [
       pl: "PacjentWybiera to aplikacja mobilna wspierająca pacjentów onkologicznych w codziennym wyborze posiłków. Leczenie (chemioterapia, radioterapia, immunoterapia) zmienia tolerancję pokarmową z dnia na dzień — standardowe szpitalne menu tego nie uwzględnia. Aplikacja filtruje i rekomenduje posiłki na podstawie zgłaszanych objawów, umożliwia wybór posiłków przez swipe kart, prowadzenie tygodniowego planu żywieniowego oraz zarządzanie profilem pacjenta z historią zgłoszeń. AI analizuje historię objawów i przewiduje samopoczucie, dostosowując propozycje do indywidualnego przebiegu leczenia. Rola: lider zespołu. Użyte technologie: React 19 + TypeScript, Ionic React, Tailwind CSS, Supabase (PostgreSQL).",
       en: "PacjentWybiera is a mobile application supporting oncological patients in their daily meal choices. Treatment (chemotherapy, radiotherapy, immunotherapy) changes food tolerance from day to day — standard hospital menus don't account for this. The app filters and recommends meals based on reported symptoms, allows choosing meals via card swiping, managing a weekly meal plan, and maintaining a patient profile with symptom history. AI analyzes symptom history and predicts future well-being to tailor suggestions to individual treatment progress. Role: team leader. Technologies used: React 19 + TypeScript, Ionic React, Tailwind CSS, Supabase (PostgreSQL).",
     },
-    images: [],
+    images: [
+      new URL("../assets/images/pacjentwybiera/pacjentwybiera1.PNG", import.meta.url).href,
+      new URL("../assets/images/pacjentwybiera/pacjentwybiera2.PNG", import.meta.url).href,
+      new URL("../assets/images/pacjentwybiera/pacjentwybiera3.PNG", import.meta.url).href,
+      new URL("../assets/images/pacjentwybiera/pacjentwybiera4.PNG", import.meta.url).href,
+    ],
     technologies: [
       { name: "React", icon: "devicon-react-original" },
       { name: "TypeScript", icon: "devicon-typescript-plain" },
@@ -120,7 +151,6 @@ export const HACKATHONS: Hackathon[] = [
       { name: "Supabase", icon: "devicon-supabase-plain" },
       { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
     ],
-    inProgress: true,
     links: {
       github: "https://github.com/GitPushers67/pacjentwybiera",
       live: "https://gitpushers67.github.io/pacjentwybiera/",
