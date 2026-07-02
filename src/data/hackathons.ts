@@ -38,6 +38,7 @@ export const HACKATHONS: Hackathon[] = [
       { name: "Python", icon: "devicon-python-plain" },
     ],
     links: {
+      github: "https://github.com/kacperous/blazity-hackaton-team1",
       linkedin:
         "https://www.linkedin.com/feed/update/urn:li:activity:7478060736074797056/",
     },
