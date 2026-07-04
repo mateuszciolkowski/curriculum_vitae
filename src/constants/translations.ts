@@ -17,6 +17,9 @@ export const translations = {
   achievements: { pl: "Osiągnięcia", en: "Achievements" },
 
   certificates: { pl: "Certyfikaty", en: "Certificates" },
+  experience: { pl: "Doświadczenie", en: "Experience" },
+  projectsAndHackathons: { pl: "Projekty & Hackathony", en: "Projects & Hackathons" },
+  educationAndCertificates: { pl: "Edukacja & Certyfikaty", en: "Education & Certificates" },
 
   // Sections
   languages: { pl: "Języki", en: "Languages" },
@@ -35,7 +38,7 @@ export const translations = {
   eduSchoolField: { pl: "Technik Informatyk", en: "IT Technician" },
 
   // Job Title
-  jobTitle: { pl: "Fullstack Developer", en: "Fullstack Developer" },
+  jobTitle: { pl: "Full-Stack Developer", en: "Full-Stack Developer" },
 
   // Contact
   email: { pl: "Email", en: "Email" },
@@ -103,8 +106,8 @@ export const translations = {
     en: "Rector's Scholarship at Lodz University of Technology – summer semester 2025/2026",
   },
   achievement5: {
-    pl: "AI Hackathon z Blazity – 1. miejsce",
-    en: "AI Hackathon with Blazity – 1st Place",
+    pl: "Hackathon AI Hackathon – Blazity",
+    en: "Hackathon AI Hackathon with Blazity",
   },
   scholarship: { pl: "Stypendium", en: "Scholarship" },
 

@@ -4,6 +4,7 @@ import { HOBBIES } from "../constants/hobbies";
 import { PROJECTS } from "../data/projects";
 import { HACKATHONS } from "../data/hackathons";
 import { CERTIFICATES } from "../data/certificates";
+import { EXPERIENCE } from "../data/experience";
 import { FaLinkedin, FaDownload, FaArrowRight } from "react-icons/fa";
 import { HiSun, HiMoon } from "react-icons/hi";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -101,12 +102,11 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
   const navSections = [
     { label: t(translations.aboutMe), id: "about" },
+    { label: t(translations.experience), id: "experience" },
     { label: t(translations.education), id: "education" },
-    { label: t(translations.certificates), id: "certificates" },
-    { label: "Stack", id: "technologies" },
+    { label: t(translations.skills), id: "skills" },
     { label: t(translations.achievements), id: "achievements" },
     { label: language === "pl" ? "Projekty" : "Projects", id: "projects" },
-    { label: t(translations.hackathons), id: "hackathons" },
     { label: t(translations.hobbies), id: "hobbies" },
   ];
 
@@ -236,134 +236,194 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
-        {/* ── EDUCATION ── */}
+        {/* ── EXPERIENCE ── */}
+        <section id="experience" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
+          <h2 className={`lg:col-span-3 ${sectionLabel("experience")}`}>
+            {t(translations.experience)}
+          </h2>
+          <div className="lg:col-span-9 flex flex-col gap-8">
+            {EXPERIENCE.map((exp) => (
+              <div key={exp.id} className="flex flex-col gap-2">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
+                    {language === "pl" ? exp.role.pl : exp.role.en}
+                  </h3>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">
+                    {language === "pl" ? exp.date.pl : exp.date.en}
+                  </span>
+                </div>
+                <p className="text-sm font-semibold text-stone-700 dark:text-stone-300">
+                  {exp.company}
+                </p>
+                <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+                  {language === "pl" ? exp.description.pl : exp.description.en}
+                </p>
+                {exp.details && (
+                  <ul className="mt-2 space-y-1.5 pl-2">
+                    {(language === "pl" ? exp.details.pl.bullets : exp.details.en.bullets).map((bullet, i) => (
+                      <li key={i} className="flex gap-3 items-start leading-relaxed text-sm text-stone-600 dark:text-stone-400">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {exp.technologies && exp.technologies.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {exp.technologies.map((tech) => (
+                      <div key={tech.name} className="flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm">
+                        {tech.icon && <i className={`${tech.icon} text-xs text-stone-500`} />}
+                        <span className="text-[9px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
+                          {tech.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+
+        {/* ── EDUCATION & CERTIFICATES ── */}
         <section id="education" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("education")}`}>
             {t(translations.education)}
           </h2>
-          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
-            {[
-              { school: translations.eduUniversity, faculty: translations.eduUniversityFaculty, field: translations.eduUniversityField, date: "10/2023 – 03/2027" },
-              { school: translations.eduSchool, faculty: undefined, field: translations.eduSchoolField, date: "09/2019 – 06/2023" },
-            ].map((edu) => (
-              <div key={edu.date} className="flex flex-col gap-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{edu.date}</p>
-                <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100">{t(edu.school)}</p>
-                {edu.faculty && <p className="text-sm text-stone-600 dark:text-stone-400">{t(edu.faculty)}</p>}
-                <p className="text-sm text-stone-700 dark:text-stone-300">{t(edu.field)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
-
-        {/* ── CERTIFICATES ── */}
-        {CERTIFICATES.length > 0 && (
-          <>
-            <section id="certificates" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-              <h2 className={`lg:col-span-3 ${sectionLabel("certificates")}`}>
-                {t(translations.certificates)}
-              </h2>
-              <div className="lg:col-span-9 grid grid-cols-1 gap-8">
-                {CERTIFICATES.map((cert) => (
-                  <div
-                    key={cert.id}
-                    className={`flex flex-col sm:flex-row gap-5 ${cert.details ? "cursor-pointer group/cert rounded-lg p-3 -m-3 transition-colors hover:bg-stone-200/50 dark:hover:bg-stone-800/30" : ""}`}
-                    onClick={() => cert.details && setSelectedCert(cert)}
-                  >
-                    {cert.image && (
-                      <div className="shrink-0">
-                        <img src={cert.image} alt={language === "pl" ? cert.name.pl : cert.name.en} className="w-full sm:w-44 rounded-md ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm group-hover/cert:scale-[1.02] transition-transform" />
-                      </div>
-                    )}
-                    <div className="flex flex-col gap-1">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{cert.date} · {cert.issuer}</p>
-                      <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                        {language === "pl" ? cert.name.pl : cert.name.en}
-                      </p>
-                      <p className="mt-1 text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
-                        {language === "pl" ? cert.description.pl : cert.description.en}
-                      </p>
-                      {cert.url && (
-                        <a href={cert.url} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs font-medium text-orange-700 hover:underline">
-                          {language === "pl" ? "Zweryfikuj" : "Verify"}
-                        </a>
-                      )}
-                    </div>
+          <div className="lg:col-span-9 flex flex-col gap-10">
+            {/* Sub-section: Edukacja */}
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                {language === "pl" ? "Edukacja" : "Education"}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+                {[
+                  { school: translations.eduUniversity, faculty: translations.eduUniversityFaculty, field: translations.eduUniversityField, date: "10/2023 – 03/2027" },
+                  { school: translations.eduSchool, faculty: undefined, field: translations.eduSchoolField, date: "09/2019 – 06/2023" },
+                ].map((edu) => (
+                  <div key={edu.date} className="flex flex-col gap-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{edu.date}</p>
+                    <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100">{t(edu.school)}</p>
+                    {edu.faculty && <p className="text-sm text-stone-600 dark:text-stone-400">{t(edu.faculty)}</p>}
+                    <p className="text-sm text-stone-700 dark:text-stone-300">{t(edu.field)}</p>
                   </div>
                 ))}
               </div>
-            </section>
-            <hr className="border-stone-300/70 dark:border-stone-700/50" />
-          </>
-        )}
+            </div>
 
-        {/* ── STACK / TECHNOLOGIES ── */}
-        <section id="technologies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("technologies")}`}>
-            Stack
-          </h2>
-          <div className="lg:col-span-9 flex flex-col gap-6">
-            {TECH_CATEGORIES.map((group, gIdx) => (
-              <div key={group.key} className="relative grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 pl-3">
-                {/* pionowy pasek-akcent po lewej */}
-                <span className={`absolute left-0 top-1 bottom-1 w-[2px] rounded-full ${group.color.bar}`} />
-
-                {/* etykieta kategorii */}
-                <div className="sm:col-span-3 flex items-center gap-2">
-                  <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${group.color.dot}`} />
-                  <span className={`text-[10px] font-bold uppercase tracking-[0.3em] ${group.color.text}`}>
-                    {language === "pl" ? group.label.pl : group.label.en}
-                  </span>
-                </div>
-
-                {/* chipy */}
-                <div className="sm:col-span-9 flex flex-wrap gap-1.5">
-                  {group.items.map((tech, idx) => (
+            {/* Sub-section: Certyfikaty */}
+            {CERTIFICATES.length > 0 && (
+              <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
+                <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                  {t(translations.certificates)}
+                </h3>
+                <div className="grid grid-cols-1 gap-8">
+                  {CERTIFICATES.map((cert) => (
                     <div
-                      key={tech.name}
-                      style={{ transitionDelay: `${100 + gIdx * 70 + idx * 20}ms` }}
-                      className={`group flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+                      key={cert.id}
+                      className={`flex flex-col sm:flex-row gap-5 ${cert.details ? "cursor-pointer group/cert rounded-lg p-3 -m-3 transition-colors hover:bg-stone-200/50 dark:hover:bg-stone-800/30" : ""}`}
+                      onClick={() => cert.details && setSelectedCert(cert)}
                     >
-                      {tech.imageSrc ? <img src={tech.imageSrc} alt={tech.name} className="h-3.5 w-3.5 transition-transform group-hover:scale-110" /> : <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />}
-                      <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
-                        {tech.name}
-                      </span>
+                      {cert.image && (
+                        <div className="shrink-0">
+                          <img src={cert.image} alt={language === "pl" ? cert.name.pl : cert.name.en} className="w-full sm:w-44 rounded-md ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm group-hover/cert:scale-[1.02] transition-transform" />
+                        </div>
+                      )}
+                      <div className="flex flex-col gap-1">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{cert.date} · {cert.issuer}</p>
+                        <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                          {language === "pl" ? cert.name.pl : cert.name.en}
+                        </p>
+                        <p className="mt-1 text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+                          {language === "pl" ? cert.description.pl : cert.description.en}
+                        </p>
+                        {cert.url && (
+                          <a href={cert.url} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs font-medium text-orange-700 hover:underline">
+                            {language === "pl" ? "Zweryfikuj" : "Verify"}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </section>
 
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
-        {/* ── LANGUAGES ── */}
+        {/* ── SKILLS / STACK & LANGUAGES ── */}
         <section id="skills" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("skills")}`}>
-            {t(translations.languages)}
+            {t(translations.skills)}
           </h2>
-          <div className="lg:col-span-9">
-            <div className="flex flex-col gap-5 max-w-sm">
-              {[
-                { labelKey: translations.langPolish, level: t(translations.langNative), percent: 100 },
-                { labelKey: translations.langEnglish, level: "B2", percent: 72 },
-              ].map(({ labelKey, level, percent }) => (
-                <div key={level} className="flex flex-col gap-1.5">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t(labelKey)}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-700">{level}</span>
+          <div className="lg:col-span-9 flex flex-col gap-10">
+            {/* Sub-section: Stack */}
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                Stack
+              </h3>
+              <div className="flex flex-col gap-6">
+                {TECH_CATEGORIES.map((group, gIdx) => (
+                  <div key={group.key} className="relative grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 pl-3">
+                    {/* pionowy pasek-akcent po lewej */}
+                    <span className={`absolute left-0 top-1 bottom-1 w-[2px] rounded-full ${group.color.bar}`} />
+
+                    {/* etykieta kategorii */}
+                    <div className="sm:col-span-3 flex items-center gap-2">
+                      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${group.color.dot}`} />
+                      <span className={`text-[10px] font-bold uppercase tracking-[0.3em] ${group.color.text}`}>
+                        {language === "pl" ? group.label.pl : group.label.en}
+                      </span>
+                    </div>
+
+                    {/* chipy */}
+                    <div className="sm:col-span-9 flex flex-wrap gap-1.5">
+                      {group.items.map((tech, idx) => (
+                        <div
+                          key={tech.name}
+                          style={{ transitionDelay: `${100 + gIdx * 70 + idx * 20}ms` }}
+                          className={`group flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+                        >
+                          {tech.imageSrc ? <img src={tech.imageSrc} alt={tech.name} className="h-3.5 w-3.5 transition-transform group-hover:scale-110" /> : <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />}
+                          <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
+                            {tech.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="h-[3px] w-full rounded-full bg-stone-200 dark:bg-stone-700">
-                    <div
-                      className="h-[3px] rounded-full bg-orange-700 transition-all duration-1000"
-                      style={{ width: mounted ? `${percent}%` : "0%" }}
-                    />
+                ))}
+              </div>
+            </div>
+
+            {/* Sub-section: Języki */}
+            <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                {t(translations.languages)}
+              </h3>
+              <div className="flex flex-col gap-5 max-w-sm">
+                {[
+                  { labelKey: translations.langPolish, level: t(translations.langNative), percent: 100 },
+                  { labelKey: translations.langEnglish, level: "B2", percent: 72 },
+                ].map(({ labelKey, level, percent }) => (
+                  <div key={level} className="flex flex-col gap-1.5">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t(labelKey)}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-700">{level}</span>
+                    </div>
+                    <div className="h-[3px] w-full rounded-full bg-stone-200 dark:bg-stone-700">
+                      <div
+                        className="h-[3px] rounded-full bg-orange-700 transition-all duration-1000"
+                        style={{ width: mounted ? `${percent}%` : "0%" }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -405,77 +465,83 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
         <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
-        {/* ── PROJECTS ── */}
+        {/* ── PROJECTS & HACKATHONS ── */}
         <section id="projects" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
           <h2 className={`lg:col-span-3 ${sectionLabel("projects")}`}>
             {language === "pl" ? "Projekty" : "Projects"}
           </h2>
-          <div className="lg:col-span-9 flex flex-col gap-3">
-            {PROJECTS.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => onProjectsClick(project.id)}
-                className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-2">
-                    <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
-                    {project.status && (
-                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
-                        · {project.status[language]}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(project.role)}</p>
-                </div>
-                <div className="hidden sm:flex shrink-0 gap-1">
-                  {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
-                    <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
+          <div className="lg:col-span-9 flex flex-col gap-10">
+            {/* Sub-section: Projekty Osobiste */}
+            <div>
+              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                {language === "pl" ? "Projekty Osobiste" : "Personal Projects"}
+              </h3>
+              <div className="flex flex-col gap-3">
+                {PROJECTS.map((project) => (
+                  <button
+                    key={project.id}
+                    onClick={() => onProjectsClick(project.id)}
+                    className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-baseline gap-2">
+                        <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
+                        {project.status && (
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
+                            · {project.status[language]}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(project.role)}</p>
+                    </div>
+                    <div className="hidden sm:flex shrink-0 gap-1">
+                      {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
+                        <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
+                      ))}
+                    </div>
+                    <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Sub-section: Hackathony */}
+            {HACKATHONS.length > 0 && (
+              <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
+                <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                  {t(translations.hackathons)}
+                </h3>
+                <div className="flex flex-col gap-3">
+                  {HACKATHONS.map((hack) => (
+                    <button
+                      key={hack.id}
+                      onClick={() => onHackathonsClick(hack.id)}
+                      className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-baseline gap-2">
+                          <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
+                          {hack.inProgress && (
+                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
+                              · {language === "pl" ? "W trakcie" : "In Progress"}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(hack.role)}</p>
+                      </div>
+                      <div className="hidden sm:flex shrink-0 gap-1">
+                        {(hack.technologies ?? []).slice(0, 4).map((tech) => (
+                          <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
+                        ))}
+                      </div>
+                      <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
+                    </button>
                   ))}
                 </div>
-                <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
-              </button>
-            ))}
+              </div>
+            )}
           </div>
         </section>
-
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
-
-        {/* ── HACKATHONS ── */}
-        <section id="hackathons" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("hackathons")}`}>
-            {t(translations.hackathons)}
-          </h2>
-          <div className="lg:col-span-9 flex flex-col gap-3">
-            {HACKATHONS.map((hack) => (
-              <button
-                key={hack.id}
-                onClick={() => onHackathonsClick(hack.id)}
-                className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-2">
-                    <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
-                    {hack.inProgress && (
-                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
-                        · {language === "pl" ? "W trakcie" : "In Progress"}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(hack.role)}</p>
-                </div>
-                <div className="hidden sm:flex shrink-0 gap-1">
-                  {(hack.technologies ?? []).slice(0, 4).map((tech) => (
-                    <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
-                  ))}
-                </div>
-                <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
         {/* ── HOBBIES ── */}
         <section id="hobbies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">

@@ -120,6 +120,7 @@ export const TECH_CATEGORIES: readonly TechCategory[] = [
     },
     items: [
       { name: "pytest", className: "devicon-pytest-plain colored" },
+      { name: "Vitest", className: "devicon-vitest-plain colored" },
       { name: "Unit Testing", className: "devicon-junit-plain colored" },
       { name: "Integration Testing", className: "devicon-postman-plain colored" },
       { name: "Postman", className: "devicon-postman-plain colored" },

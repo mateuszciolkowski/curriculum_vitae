@@ -6,6 +6,18 @@ import gymgate5 from "../assets/images/gymgate/gymgate5.png";
 import gymgate6 from "../assets/images/gymgate/gymgate6.png";
 import gymgate7 from "../assets/images/gymgate/gymgate7.png";
 import gymgate11 from "../assets/images/gymgate/gymgate11.png";
+import fininsight1 from "../assets/images/fininsight/fininsight1.png";
+import fininsight2 from "../assets/images/fininsight/fininsight2.png";
+import fininsight3 from "../assets/images/fininsight/fininsight3.png";
+import fininsight4 from "../assets/images/fininsight/fininsight4.png";
+import fininsight5 from "../assets/images/fininsight/fininsight5.png";
+import fininsight6 from "../assets/images/fininsight/fininsight6.png";
+import hrk1 from "../assets/images/hrk/hrk1.png";
+import hrk2 from "../assets/images/hrk/hrk2.png";
+import hrk3 from "../assets/images/hrk/hrk3.png";
+import hrk4 from "../assets/images/hrk/hrk4.png";
+import hrk5 from "../assets/images/hrk/hrk5.png";
+import hrkCert from "../assets/images/hrk/hrk.png";
 
 export interface Project {
   id: string;
@@ -24,31 +36,96 @@ export interface Project {
   };
 }
 
-const zzpjDescription = {
-  pl: "Fin-Insight to projekt realizowany na studiach w ramach przedmiotu Zaawansowane Zagadnienia Projektowania w Javie. Aplikacja wspiera inwestora w analizie portfela oraz agregacji danych rynkowych (akcje, krypto, FX), a backend działa jako zestaw mikroserwisów opartych o Java + Spring Boot/Spring Cloud, z centralną konfiguracją przez Config Server, odkrywaniem usług przez Eureka Server, zabezpieczeniami opartymi o Keycloak oraz kontraktami API tworzonymi w standardzie OpenAPI.",
-  en: "Fin-Insight is a university project delivered as part of the Advanced Java Design Topics course. The platform supports portfolio analysis and market data aggregation (stocks, crypto, FX), while the backend runs as a Java + Spring Boot/Spring Cloud microservices ecosystem with centralized configuration via Config Server, service discovery through Eureka Server, security powered by Keycloak, and API contracts documented with OpenAPI.",
+const finInsightDescription = {
+  pl: "Fin-Insight to webowy asystent inwestora do zarządzania portfelami, śledzenia aktywów oraz analizy danych rynkowych. Aplikacja łączy mikroserwisowy backend w Spring Boot/Spring Cloud z panelem React, a moduł AI Advisor wykorzystuje LLM do generowania rekomendacji na podstawie składu portfela i historii cen. Bezpieczeństwo oparto o OAuth2/OIDC w Keycloak, JWT oraz separację usług za API Gateway.",
+  en: "Fin-Insight is a web-based investor assistant for portfolio management, asset tracking, and market data analysis. The application combines a Spring Boot/Spring Cloud microservices backend with a React dashboard, while the AI Advisor module uses LLMs to generate recommendations based on portfolio composition and price history. Security is built around OAuth2/OIDC with Keycloak, JWT, and service isolation behind an API Gateway.",
 };
 
-const zzpjStatus = {
-  pl: "W trakcie",
-  en: "In Progress",
+const finInsightTechDescription = {
+  pl: "System został zaprojektowany jako zestaw usług: Portfolio Manager, Market Data, AI Advisor, API Gateway, Config Server oraz Eureka. Każdy obszar ma własną bazę PostgreSQL, migracje Flyway i kontrakty REST. Frontend korzysta z React, TypeScript, React Query i Redux Toolkit, a środowisko developerskie działa w Docker Compose z Keycloakiem, Redisem i bazami per service.",
+  en: "The system is designed as a set of services: Portfolio Manager, Market Data, AI Advisor, API Gateway, Config Server, and Eureka. Each domain has its own PostgreSQL database, Flyway migrations, and REST contracts. The frontend uses React, TypeScript, React Query, and Redux Toolkit, while the development environment runs on Docker Compose with Keycloak, Redis, and database-per-service setup.",
 };
 
-const zzpjFeatures = {
+const finInsightFeatures = {
   pl: [
-    "Analiza portfela inwestycyjnego oraz monitorowanie zmian wartości aktywów",
-    "Agregacja danych rynkowych dla akcji, krypto i FX",
-    "Architektura mikroserwisowa ze Spring Boot i Spring Cloud",
-    "Bezpieczeństwo oparte o Keycloak oraz dokumentacja API w OpenAPI",
-    "Centralna konfiguracja i discovery usług przez Config Server oraz Eureka Server",
+    "Tworzenie portfeli inwestycyjnych oraz zarządzanie aktywami i transakcjami",
+    "Agregacja danych rynkowych dla akcji, kryptowalut i innych symboli",
+    "AI Advisor generujący rekomendacje na podstawie zawartości portfela",
+    "Logowanie i autoryzacja przez Keycloak w standardzie OAuth2/OIDC",
+    "Mikroserwisy ze Spring Cloud, service discovery, gatewayem i centralną konfiguracją",
+    "Docker Compose z osobnymi bazami PostgreSQL oraz cache Redis",
   ],
   en: [
-    "Portfolio analysis and investment asset value monitoring",
-    "Market data aggregation for stocks, crypto, and FX",
-    "Microservices architecture with Spring Boot and Spring Cloud",
-    "Security powered by Keycloak and API documentation with OpenAPI",
-    "Centralized configuration and service discovery via Config Server and Eureka Server",
+    "Creating investment portfolios and managing assets and transactions",
+    "Market data aggregation for stocks, cryptocurrencies, and other symbols",
+    "AI Advisor generating recommendations based on portfolio contents",
+    "Authentication and authorization through Keycloak using OAuth2/OIDC",
+    "Spring Cloud microservices with service discovery, gateway, and centralized configuration",
+    "Docker Compose setup with separate PostgreSQL databases and Redis cache",
   ],
+};
+
+const hrkDescription = {
+  pl: "HRK CRM to system tworzony dla HRK Payroll Consulting, który porządkuje obsługę klientów, kontraktów i procesów waloryzacji stawek. Aplikacja centralizuje kartę klienta, historię współpracy, dokumenty oraz zadania operacyjne, a warstwa AI/RAG pomaga szybko analizować treść umów i odnajdywać kontekst w dokumentach. W projekcie odpowiadałem za architekturę rozwiązania AI opartą o Bielik 4.5B v3.0, pgvector i lokalne uruchamianie modeli przez Ollama.",
+  en: "HRK CRM is a system built for HRK Payroll Consulting to organize customer handling, contract workflows, and rate valorization processes. The application centralizes customer profiles, collaboration history, documents, and operational tasks, while the AI/RAG layer helps analyze contract content and retrieve document context quickly. In the project, I was responsible for the AI architecture based on Bielik 4.5B v3.0, pgvector, and local model execution through Ollama.",
+};
+
+const hrkTechDescription = {
+  pl: "Backend powstaje w Pythonie i FastAPI, z PostgreSQL jako bazą relacyjną oraz pgvector do wyszukiwania semantycznego. Dokumenty są dzielone na chunki, osadzane embeddingami i przeszukiwane w modelu RAG, a tryb AI syntetyzuje odpowiedzi z wykorzystaniem polskiego modelu Bielik uruchamianego lokalnie przez Ollama. Projekt zakłada integrację z Active Directory, audyt zmian i bezpieczne przechowywanie dokumentów.",
+  en: "The backend is built with Python and FastAPI, using PostgreSQL as the relational database and pgvector for semantic search. Documents are split into chunks, embedded, and searched through a RAG pipeline, while the AI mode synthesizes answers with the Polish Bielik model running locally via Ollama. The project assumes Active Directory integration, change auditing, and secure document storage.",
+};
+
+const hrkFeatures = {
+  pl: [
+    "Karta klienta z opiekunami, historią działań, dokumentami i szybkim podsumowaniem",
+    "Obsługa umów, stawek, usług oraz procesu waloryzacji",
+    "Alerty 90/60/30 dni przed końcem umowy i przypomnienia o zaległych działaniach",
+    "Raporty KPI oraz dashboard operacyjny dla pracy zespołu HRK",
+    "RAG po dokumentach z wyszukiwaniem semantycznym w PostgreSQL + pgvector",
+    "Tryb AI z Bielik 4.5B v3.0 uruchamianym lokalnie przez Ollama",
+  ],
+  en: [
+    "Customer profile with owners, activity history, documents, and quick summaries",
+    "Contract, rate, service, and valorization workflow management",
+    "90/60/30-day contract expiration alerts and reminders for overdue actions",
+    "KPI reports and an operational dashboard for the HRK team",
+    "Document RAG with semantic search in PostgreSQL + pgvector",
+    "AI mode powered by Bielik 4.5B v3.0 running locally through Ollama",
+  ],
+};
+
+const holicatchDescription = {
+  pl: "Holicatch to aplikacja webowa tworzona w ramach pracy inżynierskiej, która automatyzuje wyszukiwanie ofert wakacyjnych i Last Minute. System agreguje oferty z różnych źródeł, porównuje je z alertami użytkownika i pokazuje dopasowanie w czytelnej skali X/6. Główną ideą projektu jest model „set & forget” — użytkownik raz definiuje preferencje, a aplikacja monitoruje rynek w tle i wysyła powiadomienie, gdy pojawi się trafna oferta.",
+  en: "Holicatch is a web application developed as part of my engineering thesis, focused on automating holiday and Last Minute offer discovery. The system aggregates travel deals from multiple sources, compares them with user alerts, and presents the match score in a clear X/6 format. The core idea is a set-and-forget model: the user defines preferences once, while the application monitors the market in the background and sends a notification when a relevant offer appears.",
+};
+
+const holicatchTechDescription = {
+  pl: "Architektura opiera się na kilku modułach: ETL/scheduler pobiera oferty cyklicznie, backend FastAPI normalizuje dane i liczy dopasowania alertów, PostgreSQL przechowuje oferty oraz historię cen, a Redis Streams obsługuje zdarzenia dla serwisu powiadomień e-mail. Frontend w React + TypeScript jest responsywny i wspiera discovery-first onboarding — użytkownik może najpierw przeglądać oferty, a dopiero później założyć konto i tworzyć alerty.",
+  en: "The architecture is split into several modules: an ETL/scheduler periodically collects offers, the FastAPI backend normalizes data and calculates alert matches, PostgreSQL stores offers and price history, and Redis Streams handles events for the email notification service. The React + TypeScript frontend is responsive and supports discovery-first onboarding — users can browse offers first, then create an account and configure alerts later.",
+};
+
+const holicatchFeatures = {
+  pl: [
+    "Agregacja ofert turystycznych z wielu źródeł w ujednoliconym modelu danych",
+    "Alerty użytkownika oparte o 6 kryteriów: destynacja, wylot, daty, budżet, długość pobytu i liczba osób",
+    "Tryby dopasowania STRICT, FLEXIBLE i RELAXED z wynikiem X/6 widocznym przy ofertach",
+    "Ważony ranking ofert rozstrzygający kolejność przy takim samym poziomie dopasowania",
+    "Historia cen ofert pomagająca ocenić, czy promocja jest realnie atrakcyjna",
+    "Powiadomienia e-mail przez Resend, obsługiwane zdarzeniowo z użyciem Redis Streams",
+  ],
+  en: [
+    "Aggregating travel offers from multiple sources into a unified data model",
+    "User alerts based on 6 criteria: destination, departure city, dates, budget, stay duration, and number of people",
+    "STRICT, FLEXIBLE, and RELAXED matching modes with an X/6 score displayed next to offers",
+    "Weighted offer ranking used to resolve ordering within the same match level",
+    "Offer price history to help verify whether a deal is genuinely attractive",
+    "Email notifications through Resend, handled event-driven with Redis Streams",
+  ],
+};
+
+const holicatchStatus = {
+  pl: "W trakcie",
+  en: "In Progress",
 };
 
 export const PROJECTS: Project[] = [
@@ -56,8 +133,8 @@ export const PROJECTS: Project[] = [
     id: "gymgate",
     name: "GymGate",
     role: {
-      pl: "Fullstack Developer",
-      en: "Fullstack Developer",
+      pl: "Full-Stack Developer",
+      en: "Full-Stack Developer",
     },
     description: {
       pl: "GymGate to aplikacja do śledzenia treningów siłowych. Umożliwia szybkie rozpoczęcie sesji, logowanie ćwiczeń z seriami i ciężarami oraz automatyczną aktualizację statystyk po każdym ukończonym treningu. Możesz korzystać z gotowych planów treningowych, kopiować plany innych użytkowników lub tworzyć własne — aplikacja prowadzi przez trening krok po kroku i sugeruje ciężary na podstawie historii. Interfejs reaguje natychmiast — aplikacja działa płynnie również offline.",
@@ -105,25 +182,80 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    id: "fin-insight-zzpj",
+    id: "fin-insight",
     name: "Fin-Insight",
     role: {
-      pl: "Fullstack Developer",
-      en: "Fullstack Developer",
+      pl: "Full-Stack Developer",
+      en: "Full-Stack Developer",
     },
-    description: zzpjDescription,
-    status: zzpjStatus,
+    description: finInsightDescription,
+    techDescription: finInsightTechDescription,
+
     technologies: [
       { name: "Java", icon: "devicon-java-plain" },
       { name: "Spring", icon: "devicon-spring-original" },
       { name: "React", icon: "devicon-react-original" },
-      { name: "Docker", icon: "devicon-docker-plain" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
       { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
     ],
-    features: zzpjFeatures,
-    images: [],
+    features: finInsightFeatures,
+    images: [
+      fininsight1,
+      fininsight2,
+      fininsight3,
+      fininsight4,
+      fininsight5,
+      fininsight6,
+    ],
     links: {
       github: "https://github.com/AlfaTeam67/ZZPJ",
     },
+  },
+  {
+    id: "hrk-crm",
+    name: "HRK CRM",
+    role: {
+      pl: "Full-Stack Developer",
+      en: "Full-Stack Developer",
+    },
+    description: hrkDescription,
+    techDescription: hrkTechDescription,
+
+    technologies: [
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "Python", icon: "devicon-python-plain" },
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
+    features: hrkFeatures,
+    images: [hrk1, hrk2, hrk3, hrk4, hrk5, hrkCert],
+    links: {
+      github: "https://github.com/AlfaTeam67/HRK",
+    },
+  },
+  {
+    id: "holicatch",
+    name: "Holicatch",
+    role: {
+      pl: "Full-Stack Developer",
+      en: "Full-Stack Developer",
+    },
+    description: holicatchDescription,
+    techDescription: holicatchTechDescription,
+    status: holicatchStatus,
+    technologies: [
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "Python", icon: "devicon-python-plain" },
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "Redis", icon: "devicon-redis-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
+    features: holicatchFeatures,
+    images: [],
   },
 ];

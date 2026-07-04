@@ -15,7 +15,10 @@ type ProjectsPageProps = {
 
 const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
 
-export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps) {
+export function ProjectsPage({
+  onBackToCv,
+  initialProjectId,
+}: ProjectsPageProps) {
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [activeProjectId, setActiveProjectId] = useState<string>(
@@ -34,9 +37,17 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
 
   useEffect(() => {
     const els = document.querySelectorAll(".reveal");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
-    }, { threshold: 0.05 });
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.05 },
+    );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, [activeProjectId]);
@@ -86,7 +97,9 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
       className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased selection:bg-orange-700/20`}
     >
       {/* ── TOP BAR ── */}
-      <div className={`border-b border-stone-300/70 dark:border-stone-700/60 bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85 sticky top-0 z-30 backdrop-blur-md`}>
+      <div
+        className={`border-b border-stone-300/70 dark:border-stone-700/60 bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85 sticky top-0 z-30 backdrop-blur-md`}
+      >
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <button onClick={onBackToCv} className={buttonStyles.paperGhostSmall}>
             <FaArrowLeft className="text-[10px]" />
@@ -96,12 +109,19 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
           <div className="hidden items-center gap-1 sm:flex">
             {[
               { label: "Stack", id: "proj-stack" },
-              { label: language === "pl" ? "O projekcie" : "About", id: "proj-about" },
+              {
+                label: language === "pl" ? "O projekcie" : "About",
+                id: "proj-about",
+              },
               { label: t(translations.gallery), id: "proj-gallery" },
             ].map(({ label, id }) => (
               <button
                 key={id}
-                onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                onClick={() =>
+                  document
+                    .getElementById(id)
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
                 className="rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500 dark:text-stone-400 transition-all hover:text-stone-900 dark:hover:text-stone-100"
               >
                 {label}
@@ -115,7 +135,11 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
               className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
               aria-label="Toggle dark mode"
             >
-              {theme === "light" ? <HiMoon className="text-sm" /> : <HiSun className="text-sm" />}
+              {theme === "light" ? (
+                <HiMoon className="text-sm" />
+              ) : (
+                <HiSun className="text-sm" />
+              )}
             </button>
             <button
               onClick={() => setLanguage(language === "pl" ? "en" : "pl")}
@@ -212,7 +236,11 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Live"
-                    onClick={() => trackEvent("project_live_click", { project_id: activeProject.id })}
+                    onClick={() =>
+                      trackEvent("project_live_click", {
+                        project_id: activeProject.id,
+                      })
+                    }
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
                   >
                     <FaGlobe className="text-base" />
@@ -224,7 +252,11 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
-                    onClick={() => trackEvent("project_github_click", { project_id: activeProject.id })}
+                    onClick={() =>
+                      trackEvent("project_github_click", {
+                        project_id: activeProject.id,
+                      })
+                    }
                     className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-stone-900 hover:text-[#f4ecdc] hover:ring-stone-900"
                   >
                     <FaGithub className="text-base" />
@@ -235,7 +267,10 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
           </header>
 
           {/* Stack */}
-          <section id="proj-stack" className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+          <section
+            id="proj-stack"
+            className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10"
+          >
             <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
               {language === "pl" ? "Stack" : "Stack"}
             </h2>
@@ -257,7 +292,10 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
           <hr className="border-stone-300/70 dark:border-stone-700/50" />
 
           {/* Description */}
-          <section id="proj-about" className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10">
+          <section
+            id="proj-about"
+            className="reveal flex items-baseline gap-4 sm:gap-8 lg:gap-12 py-10"
+          >
             <h2 className="shrink-0 text-[10px] font-bold uppercase tracking-[0.35em] text-stone-500">
               {language === "pl" ? "O projekcie" : "About"}
             </h2>
@@ -268,7 +306,10 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
               {activeProject.features && (
                 <ul className="mt-6 flex flex-col gap-2">
                   {activeProject.features[language].map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5 text-sm text-stone-700 dark:text-stone-300">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2.5 text-sm text-stone-700 dark:text-stone-300"
+                    >
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
                       <span className="leading-relaxed">{feature}</span>
                     </li>
@@ -309,8 +350,8 @@ export function ProjectsPage({ onBackToCv, initialProjectId }: ProjectsPageProps
                   <span className="text-5xl">🚧</span>
                   <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-stone-500">
                     {language === "pl"
-                      ? "Zdjęcia wkrótce – projekt w trakcie"
-                      : "Photos coming soon – project in progress"}
+                      ? "Zdjęcia wkrótce"
+                      : "Photos coming soon"}
                   </p>
                 </div>
               ) : (
