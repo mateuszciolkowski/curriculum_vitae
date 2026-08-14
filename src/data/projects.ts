@@ -18,6 +18,12 @@ import hrk3 from "../assets/images/hrk/hrk3.png";
 import hrk4 from "../assets/images/hrk/hrk4.png";
 import hrk5 from "../assets/images/hrk/hrk5.png";
 import hrkCert from "../assets/images/hrk/hrk.png";
+import holicatch1 from "../assets/images/holicatch/holicatch1.png";
+import holicatch2 from "../assets/images/holicatch/holicatch2.png";
+import holicatch3 from "../assets/images/holicatch/holicatch3.png";
+import holicatch4 from "../assets/images/holicatch/holicatch4.png";
+import holicatch5 from "../assets/images/holicatch/holicatch5.png";
+import holicatch6 from "../assets/images/holicatch/holicatch6.png";
 
 export interface Project {
   id: string;
@@ -123,11 +129,6 @@ const holicatchFeatures = {
   ],
 };
 
-const holicatchStatus = {
-  pl: "W trakcie",
-  en: "In Progress",
-};
-
 export const PROJECTS: Project[] = [
   {
     id: "gymgate",
@@ -179,6 +180,37 @@ export const PROJECTS: Project[] = [
     links: {
       github: "https://github.com/mateuszciolkowski/gymgate",
       live: "https://gymgate.vercel.app/",
+    },
+  },
+  {
+    id: "holicatch",
+    name: "Holicatch",
+    role: {
+      pl: "Full-Stack Developer",
+      en: "Full-Stack Developer",
+    },
+    description: holicatchDescription,
+    techDescription: holicatchTechDescription,
+    technologies: [
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "Python", icon: "devicon-python-plain" },
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "Redis", icon: "devicon-redis-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
+    features: holicatchFeatures,
+    images: [
+      holicatch1,
+      holicatch2,
+      holicatch3,
+      holicatch4,
+      holicatch5,
+      holicatch6,
+    ],
+    links: {
+      live: "https://holicatch.pl/",
     },
   },
   {
@@ -235,27 +267,5 @@ export const PROJECTS: Project[] = [
     links: {
       github: "https://github.com/AlfaTeam67/HRK",
     },
-  },
-  {
-    id: "holicatch",
-    name: "Holicatch",
-    role: {
-      pl: "Full-Stack Developer",
-      en: "Full-Stack Developer",
-    },
-    description: holicatchDescription,
-    techDescription: holicatchTechDescription,
-    status: holicatchStatus,
-    technologies: [
-      { name: "React", icon: "devicon-react-original" },
-      { name: "TypeScript", icon: "devicon-typescript-plain" },
-      { name: "Python", icon: "devicon-python-plain" },
-      { name: "FastAPI", icon: "devicon-fastapi-plain" },
-      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
-      { name: "Redis", icon: "devicon-redis-plain" },
-      { name: "Docker", icon: "devicon-docker-plain" },
-    ],
-    features: holicatchFeatures,
-    images: [],
   },
 ];

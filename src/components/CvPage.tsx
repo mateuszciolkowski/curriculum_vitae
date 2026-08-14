@@ -476,7 +476,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
                 {language === "pl" ? "Projekty Osobiste" : "Personal Projects"}
               </h3>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 pl-8">
                 {PROJECTS.map((project) => (
                   <button
                     key={project.id}
@@ -485,14 +485,13 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-baseline gap-2">
-                        <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
+                        <span className="text-base font-semibold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
                         {project.status && (
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
                             · {project.status[language]}
                           </span>
                         )}
                       </div>
-                      <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(project.role)}</p>
                     </div>
                     <div className="hidden sm:flex shrink-0 gap-1">
                       {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
@@ -511,7 +510,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                 <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
                   {t(translations.hackathons)}
                 </h3>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 pl-8">
                   {HACKATHONS.map((hack) => (
                     <button
                       key={hack.id}
@@ -520,14 +519,13 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                     >
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-baseline gap-2">
-                          <span className="text-base font-bold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
+                          <span className="text-base font-semibold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
                           {hack.inProgress && (
                             <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
                               · {language === "pl" ? "W trakcie" : "In Progress"}
                             </span>
                           )}
                         </div>
-                        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{t(hack.role)}</p>
                       </div>
                       <div className="hidden sm:flex shrink-0 gap-1">
                         {(hack.technologies ?? []).slice(0, 4).map((tech) => (

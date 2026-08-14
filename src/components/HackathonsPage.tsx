@@ -159,7 +159,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
                           isActive ? "text-orange-700" : "text-stone-500"
                         }`}
                       >
-                        {String(idx + 1).padStart(2, "0")} · {t(hack.role)}
+                        {String(idx + 1).padStart(2, "0")}
                       </p>
                       <div className="flex flex-wrap items-baseline gap-2">
                         <span
@@ -191,10 +191,7 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
           <header className="pb-8 border-b border-stone-300/70 dark:border-stone-700/50">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-orange-700">
-                  {t(activeHackathon.role)}
-                </p>
-                <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900 dark:text-stone-100">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900 dark:text-stone-100">
                   {activeHackathon.name}
                 </h1>
               </div>

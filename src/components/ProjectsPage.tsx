@@ -188,7 +188,7 @@ export function ProjectsPage({
                           isActive ? "text-orange-700" : "text-stone-500"
                         }`}
                       >
-                        {String(idx + 1).padStart(2, "0")} · {t(project.role)}
+                        {String(idx + 1).padStart(2, "0")}
                       </p>
                       <div className="flex flex-wrap items-baseline gap-2">
                         <span
@@ -218,34 +218,31 @@ export function ProjectsPage({
         <main className="w-full flex-1 min-w-0">
           {/* Header */}
           <header className="pb-8 border-b border-stone-300/70 dark:border-stone-700/50">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-orange-700">
-                  {t(activeProject.role)}
-                </p>
-                <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900 dark:text-stone-100">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[0.95] tracking-tight text-stone-900 dark:text-stone-100">
                   {activeProject.name}
                 </h1>
-              </div>
-
-              {/* Links */}
-              <div className="flex shrink-0 gap-2">
                 {activeProject.links?.live && (
                   <a
                     href={activeProject.links.live}
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Live"
                     onClick={() =>
                       trackEvent("project_live_click", {
                         project_id: activeProject.id,
                       })
                     }
-                    className="flex h-10 w-10 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-600 dark:text-stone-300 ring-1 ring-stone-200 dark:ring-stone-600 transition-all hover:bg-orange-700 hover:text-[#f4ecdc] hover:ring-orange-700"
+                    className="mt-5 inline-flex items-center gap-2 rounded-md bg-orange-700 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
                   >
                     <FaGlobe className="text-base" />
+                    {t(translations.viewApp)}
                   </a>
                 )}
+              </div>
+
+              {/* Links */}
+              <div className="flex shrink-0 gap-2">
                 {activeProject.links?.github && (
                   <a
                     href={activeProject.links.github}
