@@ -1,11 +1,8 @@
-import gymgate1 from "../assets/images/gymgate/gymgate1.png";
-import gymgate2 from "../assets/images/gymgate/gymgate2.png";
-import gymgate3 from "../assets/images/gymgate/gymgate3.png";
-import gymgate4 from "../assets/images/gymgate/gymgate4.png";
-import gymgate5 from "../assets/images/gymgate/gymgate5.png";
-import gymgate6 from "../assets/images/gymgate/gymgate6.png";
-import gymgate7 from "../assets/images/gymgate/gymgate7.png";
-import gymgate11 from "../assets/images/gymgate/gymgate11.png";
+import gymgate83 from "../assets/images/gymgate/gymgate83.jpg";
+import gymgate79 from "../assets/images/gymgate/gymgate79.jpg";
+import gymgate80 from "../assets/images/gymgate/gymgate80.jpg";
+import gymgate81 from "../assets/images/gymgate/gymgate81.jpg";
+import gymgate82 from "../assets/images/gymgate/gymgate82.jpg";
 import fininsight1 from "../assets/images/fininsight/fininsight1.png";
 import fininsight2 from "../assets/images/fininsight/fininsight2.png";
 import fininsight3 from "../assets/images/fininsight/fininsight3.png";
@@ -167,16 +164,7 @@ export const PROJECTS: Project[] = [
         "Offline mode — changes saved locally and synced in the background",
       ],
     },
-    images: [
-      gymgate1,
-      gymgate2,
-      gymgate3,
-      gymgate4,
-      gymgate5,
-      gymgate6,
-      gymgate7,
-      gymgate11,
-    ],
+    images: [gymgate83, gymgate79, gymgate80, gymgate81, gymgate82],
     links: {
       github: "https://github.com/mateuszciolkowski/gymgate",
       live: "https://gymgate.vercel.app/",
