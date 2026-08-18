@@ -1,7 +1,4 @@
-// Stack pogrupowany kategoriami — paleta editorial/jewel-tones na ciepłym tle.
-// Klasy Tailwind muszą być pełnymi stringami (JIT nie skleja dynamicznych nazw),
-// więc trzymamy je jawnie.
-
+// Stack pogrupowany kategoriami — harmonijna, czytelna paleta editorial.
 import anthropicIcon from "../assets/images/anthropic.png";
 
 export type TechItem = {
@@ -17,88 +14,67 @@ export type TechCategoryKey =
   | "devops"
   | "testing";
 
-export type TechCategoryColor = {
-  /** kropka */
-  dot: string;
-  /** pionowy pasek-akcent po lewej grupy */
-  bar: string;
-  /** tekst nagłówka kategorii */
-  text: string;
-  /** ring chipa po hoverze */
-  chipHoverRing: string;
-};
-
 export type TechCategory = {
   key: TechCategoryKey;
   label: { pl: string; en: string };
-  color: TechCategoryColor;
+  badgeBg: string;
+  badgeText: string;
+  dotColor: string;
   items: readonly TechItem[];
 };
 
 export const TECH_CATEGORIES: readonly TechCategory[] = [
   {
-    key: "frontend",
-    label: { pl: "Frontend", en: "Frontend" },
-    color: {
-      dot: "bg-orange-700",
-      bar: "bg-gradient-to-b from-orange-700 via-orange-700/40 to-transparent",
-      text: "text-orange-800",
-      chipHoverRing: "hover:ring-orange-700/50",
-    },
-    items: [
-      { name: "React", className: "devicon-react-original colored" },
-      { name: "TypeScript", className: "devicon-typescript-plain colored" },
-      { name: "Tailwind", className: "devicon-tailwindcss-original colored" },
-      { name: "HTML", className: "devicon-html5-plain colored" },
-      { name: "CSS", className: "devicon-css3-plain colored" },
-      { name: "PWA", className: "devicon-chrome-plain colored" },
-    ],
-  },
-  {
     key: "backend",
-    label: { pl: "Backend", en: "Backend" },
-    color: {
-      dot: "bg-emerald-700",
-      bar: "bg-gradient-to-b from-emerald-700 via-emerald-700/40 to-transparent",
-      text: "text-emerald-800",
-      chipHoverRing: "hover:ring-emerald-700/50",
-    },
+    label: { pl: "Backend & Architektura", en: "Backend & Architecture" },
+    badgeBg: "bg-emerald-950/10 dark:bg-emerald-400/10",
+    badgeText: "text-emerald-900 dark:text-emerald-300",
+    dotColor: "bg-emerald-600 dark:bg-emerald-400",
     items: [
-      { name: "Node.js", className: "devicon-nodejs-plain colored" },
       { name: "Python", className: "devicon-python-plain" },
       { name: "FastAPI", className: "devicon-fastapi-plain colored" },
+      { name: "Node.js", className: "devicon-nodejs-plain colored" },
       { name: "Django", className: "devicon-django-plain colored" },
       { name: "Java", className: "devicon-java-plain colored" },
       { name: "Spring", className: "devicon-spring-original colored" },
     ],
   },
   {
-    key: "databases",
-    label: { pl: "Bazy danych", en: "Databases" },
-    color: {
-      dot: "bg-rose-800",
-      bar: "bg-gradient-to-b from-rose-800 via-rose-800/40 to-transparent",
-      text: "text-rose-900",
-      chipHoverRing: "hover:ring-rose-800/50",
-    },
+    key: "frontend",
+    label: { pl: "Frontend & UI", en: "Frontend & UI" },
+    badgeBg: "bg-orange-950/10 dark:bg-orange-400/10",
+    badgeText: "text-orange-900 dark:text-orange-300",
+    dotColor: "bg-orange-600 dark:bg-orange-400",
     items: [
-      { name: "Postgres", className: "devicon-postgresql-plain colored" },
+      { name: "React 19", className: "devicon-react-original colored" },
+      { name: "TypeScript", className: "devicon-typescript-plain colored" },
+      { name: "Tailwind CSS", className: "devicon-tailwindcss-original colored" },
+      { name: "HTML5", className: "devicon-html5-plain colored" },
+      { name: "CSS3", className: "devicon-css3-plain colored" },
+      { name: "PWA", className: "devicon-chrome-plain colored" },
+    ],
+  },
+  {
+    key: "databases",
+    label: { pl: "Bazy danych & Storage", en: "Databases & Storage" },
+    badgeBg: "bg-rose-950/10 dark:bg-rose-400/10",
+    badgeText: "text-rose-900 dark:text-rose-300",
+    dotColor: "bg-rose-600 dark:bg-rose-400",
+    items: [
+      { name: "PostgreSQL", className: "devicon-postgresql-plain colored" },
       { name: "SQL Server", className: "devicon-microsoftsqlserver-plain colored" },
       { name: "MongoDB", className: "devicon-mongodb-plain colored" },
       { name: "Redis", className: "devicon-redis-plain colored" },
-      { name: "Hibernate", className: "devicon-hibernate-plain colored" },
       { name: "Alembic", className: "devicon-sqlalchemy-plain" },
+      { name: "SQLAlchemy", className: "devicon-sqlalchemy-plain" },
     ],
   },
   {
     key: "devops",
-    label: { pl: "DevOps / CI/CD", en: "DevOps / CI/CD" },
-    color: {
-      dot: "bg-blue-900",
-      bar: "bg-gradient-to-b from-blue-900 via-blue-900/40 to-transparent",
-      text: "text-blue-900",
-      chipHoverRing: "hover:ring-blue-900/50",
-    },
+    label: { pl: "DevOps & Cloud", en: "DevOps & Cloud" },
+    badgeBg: "bg-sky-950/10 dark:bg-sky-400/10",
+    badgeText: "text-sky-900 dark:text-sky-300",
+    dotColor: "bg-sky-600 dark:bg-sky-400",
     items: [
       { name: "Docker", className: "devicon-docker-plain colored" },
       { name: "Git", className: "devicon-git-plain colored" },
@@ -111,18 +87,13 @@ export const TECH_CATEGORIES: readonly TechCategory[] = [
   },
   {
     key: "testing",
-    label: { pl: "Testowanie i narzędzia", en: "Testing & Tools" },
-    color: {
-      dot: "bg-violet-700",
-      bar: "bg-gradient-to-b from-violet-700 via-violet-700/40 to-transparent",
-      text: "text-violet-800",
-      chipHoverRing: "hover:ring-violet-700/50",
-    },
+    label: { pl: "Testowanie & Narzędzia", en: "Testing & Tools" },
+    badgeBg: "bg-violet-950/10 dark:bg-violet-400/10",
+    badgeText: "text-violet-900 dark:text-violet-300",
+    dotColor: "bg-violet-600 dark:bg-violet-400",
     items: [
-      { name: "pytest", className: "devicon-pytest-plain colored" },
+      { name: "Pytest", className: "devicon-pytest-plain colored" },
       { name: "Vitest", className: "devicon-vitest-plain colored" },
-      { name: "Unit Testing", className: "devicon-junit-plain colored" },
-      { name: "Integration Testing", className: "devicon-postman-plain colored" },
       { name: "Postman", className: "devicon-postman-plain colored" },
       { name: "Claude Code", className: "", imageSrc: anthropicIcon },
       { name: "GitHub Copilot", className: "devicon-github-original" },
@@ -130,7 +101,5 @@ export const TECH_CATEGORIES: readonly TechCategory[] = [
   },
 ] as const;
 
-// Płaska lista — zostaje, gdyby coś innego z niej korzystało.
 export const TECHNOLOGIES = TECH_CATEGORIES.flatMap((c) => c.items);
-
 export type Technology = (typeof TECHNOLOGIES)[number];

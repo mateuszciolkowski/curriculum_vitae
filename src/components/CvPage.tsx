@@ -5,8 +5,16 @@ import { PROJECTS } from "../data/projects";
 import { HACKATHONS } from "../data/hackathons";
 import { CERTIFICATES } from "../data/certificates";
 import { EXPERIENCE } from "../data/experience";
-import { FaLinkedin, FaDownload, FaArrowRight } from "react-icons/fa";
-import { HiSun, HiMoon } from "react-icons/hi";
+import {
+  FaLinkedin,
+  FaDownload,
+  FaArrowRight,
+  FaTrophy,
+  FaMedal,
+  FaGraduationCap,
+  FaArrowUp,
+} from "react-icons/fa6";
+import { HiSun, HiMoon } from "react-icons/hi2";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
@@ -19,10 +27,9 @@ type CvPageProps = {
   onProjectsClick: (id?: string) => void;
 };
 
-// Kolory motywu editorial / warm paper. Trzymamy jako stałe, żeby utrzymać
-// spójność i ułatwić ewentualną podmianę palety.
-const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
-const PAPER_BG_TRANSLUCENT = "bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85";
+// Warm Paper & Terracotta palette
+const CANVAS_BG = "bg-[#f4ecdc] dark:bg-[#181512]";
+const CANVAS_BG_TRANSLUCENT = "bg-[#f4ecdc]/90 dark:bg-[#181512]/90";
 
 export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): ReactElement {
   const { language, setLanguage, t } = useLanguage();
@@ -36,15 +43,31 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
   const [selectedCert, setSelectedCert] = useState<(typeof CERTIFICATES)[number] | null>(null);
   const [showCertModal, setShowCertModal] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const certModalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const els = document.querySelectorAll(".reveal");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
-    }, { threshold: 0.05, rootMargin: "0px" });
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            obs.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px" }
+    );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, []);
@@ -78,9 +101,9 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
     setTimeout(() => setHighlightedSection(null), 1800);
   };
 
-  const sectionLabel = (id: string) =>
-    `text-[10px] font-bold uppercase tracking-[0.35em] transition-colors duration-500 ${
-      highlightedSection === id ? "text-orange-700" : "text-stone-500 dark:text-stone-400"
+  const sectionHeadingClass = (id: string) =>
+    `text-xs font-semibold tracking-wider transition-colors duration-300 ${
+      highlightedSection === id ? "text-orange-700 dark:text-orange-400" : "text-stone-500 dark:text-stone-400"
     }`;
 
   const defaultTech = [
@@ -91,13 +114,19 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   ];
 
   const minSwipeDistance = 50;
-  const onTouchStart = (e: React.TouchEvent) => { setTouchEnd(null); setTouchStart(e.targetTouches[0].clientX); };
-  const onTouchMove = (e: React.TouchEvent) => { setTouchEnd(e.targetTouches[0].clientX); };
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd || !selectedHobby) return;
     const d = touchStart - touchEnd;
     if (d > minSwipeDistance) setActiveHobbySlide((p) => (p + 1) % selectedHobby.images.length);
-    else if (d < -minSwipeDistance) setActiveHobbySlide((p) => (p - 1 + selectedHobby.images.length) % selectedHobby.images.length);
+    else if (d < -minSwipeDistance)
+      setActiveHobbySlide((p) => (p - 1 + selectedHobby.images.length) % selectedHobby.images.length);
   };
 
   const navSections = [
@@ -111,20 +140,20 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   ];
 
   return (
-    <div className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased selection:bg-orange-700/20`}>
+    <div className={`${CANVAS_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased`}>
       {/* ─── NAVBAR ─── */}
-      <nav className={`sticky top-0 z-40 w-full border-b border-stone-300/60 dark:border-stone-700/60 ${PAPER_BG_TRANSLUCENT} backdrop-blur-md`}>
+      <nav className={`sticky top-0 z-40 w-full border-b border-stone-300/70 dark:border-stone-800/80 ${CANVAS_BG_TRANSLUCENT} backdrop-blur-md transition-colors`}>
         <div className="mx-auto flex h-14 max-w-screen-lg items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          {/* Center: section anchor links */}
-          <div className="hidden items-center gap-3 lg:flex">
+          {/* Section anchor links */}
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-1">
             {navSections.map(({ label, id }) => (
               <button
                 key={id}
                 onClick={() => scrollToSection(id)}
-                className={`rounded-md px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] whitespace-nowrap transition-all ${
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
                   highlightedSection === id
-                    ? "text-orange-700"
-                    : "text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+                    ? "bg-stone-200/80 dark:bg-stone-800 text-orange-700 dark:text-orange-400 font-semibold"
+                    : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/50 dark:hover:bg-stone-800/50"
                 }`}
               >
                 {label}
@@ -132,18 +161,25 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             ))}
           </div>
 
-          {/* Right */}
-          <div className="flex shrink-0 items-center gap-2">
+          {/* Right Controls: Theme & Language */}
+          <div className="flex shrink-0 items-center gap-1.5">
             <button
-              onClick={() => { toggleTheme(); trackEvent("theme_toggle", { to: theme === "light" ? "dark" : "light" }); }}
-              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
-              aria-label="Toggle dark mode"
+              onClick={() => {
+                toggleTheme();
+                trackEvent("theme_toggle", { to: theme === "light" ? "dark" : "light" });
+              }}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-stone-300/80 dark:border-stone-700 bg-stone-100/80 dark:bg-stone-800/80 text-stone-700 dark:text-stone-300 transition-all hover:bg-stone-200 dark:hover:bg-stone-700 hover:text-stone-900 dark:hover:text-white"
+              aria-label="Przełącz motyw"
             >
               {theme === "light" ? <HiMoon className="text-sm" /> : <HiSun className="text-sm" />}
             </button>
             <button
-              onClick={() => { const next = language === "pl" ? "en" : "pl"; setLanguage(next); trackEvent("language_switch", { to: next }); }}
-              className="rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:bg-stone-200 dark:hover:bg-[#3d3530]"
+              onClick={() => {
+                const next = language === "pl" ? "en" : "pl";
+                setLanguage(next);
+                trackEvent("language_switch", { to: next });
+              }}
+              className="h-8 rounded-full border border-stone-300/80 dark:border-stone-700 bg-stone-100/80 dark:bg-stone-800/80 px-2.5 text-xs font-semibold text-stone-700 dark:text-stone-300 transition-all hover:bg-stone-200 dark:hover:bg-stone-700 hover:text-stone-900 dark:hover:text-white"
             >
               {language === "pl" ? "EN" : "PL"}
             </button>
@@ -153,102 +189,132 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
       {/* ─── EDITORIAL CONTENT ─── */}
       <main
-        className={`mx-auto max-w-screen-lg px-6 sm:px-8 lg:px-12 transition-opacity duration-1000 ease-[var(--ease-out)] ${
+        className={`mx-auto max-w-screen-lg px-6 sm:px-8 lg:px-12 transition-opacity duration-700 ease-[var(--ease-out)] ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
       >
         {/* ── HERO ── */}
-        <header className="pt-16 pb-12 lg:pt-24 lg:pb-16">
-          <p className={`text-[10px] font-bold uppercase tracking-[0.4em] text-orange-700 transition-all duration-700 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-            {t(translations.jobTitle)}
-          </p>
-          <h1 className={`mt-4 font-['Instrument_Serif'] text-7xl sm:text-7xl md:text-8xl lg:text-9xl font-normal leading-[0.95] tracking-tight transition-all duration-1000 delay-150 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <header className="pt-14 pb-12 lg:pt-20 lg:pb-16">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-700/20 bg-orange-700/10 px-3 py-1 text-xs font-semibold tracking-wide text-orange-800 dark:text-orange-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-orange-600 dark:bg-orange-400" />
+              {t(translations.jobTitle)}
+            </span>
+          </div>
+
+          <h1 className="mt-5 font-['Instrument_Serif'] text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal leading-[0.92] tracking-tight text-stone-950 dark:text-stone-50">
             Mateusz<br />Ciołkowski
           </h1>
-          <p className={`mt-10 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300 transition-all duration-1000 delay-300 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+
+          <p className="mt-8 max-w-2xl text-lg sm:text-xl leading-relaxed text-stone-700 dark:text-stone-300">
             {language === "pl"
-              ? "Projektuję i tworzę aplikacje od A do Z. Tworzę strony internetowe oraz aplikacje mobilne, w których estetyczny wygląd idzie w parze z niezawodnym działaniem. Dbając o każdy detal, łączę technologie frontendowe i backendowe z przemyślanym designem, tworząc rozwiązania, z których korzysta się z przyjemnością."
-              : "I design and build applications from A to Z. I create websites and mobile apps where aesthetic design goes hand in hand with reliable performance. Paying attention to every detail, I combine frontend and backend technologies with thoughtful design, creating solutions that are a pleasure to use."}
+              ? "Projektuję i wdrażam skalowalne aplikacje webowe od architektury baz danych i asynchronicznego backendu (Python/FastAPI), po responsywne interfejsy użytkownika (React 19/TypeScript). Łączę precyzję inżynierską z dbałością o estetykę i doświadczenie użytkownika."
+              : "I design and build end-to-end scalable web applications, from database architectures and asynchronous backends (Python/FastAPI) to polished user interfaces (React 19/TypeScript). I pair rigorous engineering with thoughtful craft and user experience."}
           </p>
 
-          {/* Contact links — inline, hairline-separated */}
-          <div className={`mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm transition-all duration-1000 delay-500 ease-[var(--ease-out)] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          {/* Contact links */}
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
             <a
               href="mailto:ciolkowski.m1@gmail.com"
               onClick={() => trackEvent("contact_link_click", { type: "email" })}
-              className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700"
+              className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
             >
-              <i className="devicon-google-plain text-base" />
-              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">ciolkowski.m1@gmail.com</span>
+              <i className="devicon-google-plain text-base text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors" />
+              <span className="border-b border-stone-300 dark:border-stone-700 pb-0.5 group-hover:border-orange-700 dark:group-hover:border-orange-400">
+                ciolkowski.m1@gmail.com
+              </span>
             </a>
-            <a href="https://github.com/mateuszciolkowski" onClick={() => trackEvent("contact_link_click", { type: "github" })} className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
-              <i className="devicon-github-original text-base" />
-              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">GitHub</span>
+            <a
+              href="https://github.com/mateuszciolkowski"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("contact_link_click", { type: "github" })}
+              className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
+            >
+              <i className="devicon-github-original text-base text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors" />
+              <span className="border-b border-stone-300 dark:border-stone-700 pb-0.5 group-hover:border-orange-700 dark:group-hover:border-orange-400">
+                GitHub
+              </span>
             </a>
-            <a href="https://www.linkedin.com/in/mateuszciolkowski" onClick={() => trackEvent("contact_link_click", { type: "linkedin" })} className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 transition-colors hover:text-orange-700">
-              <FaLinkedin className="text-sm" />
-              <span className="border-b border-stone-300 dark:border-stone-600 pb-0.5 group-hover:border-orange-700">LinkedIn</span>
+            <a
+              href="https://www.linkedin.com/in/mateuszciolkowski"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("contact_link_click", { type: "linkedin" })}
+              className="group flex items-center gap-2 font-medium text-stone-700 dark:text-stone-300 hover:text-orange-700 dark:hover:text-orange-400 transition-colors"
+            >
+              <FaLinkedin className="text-base text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors" />
+              <span className="border-b border-stone-300 dark:border-stone-700 pb-0.5 group-hover:border-orange-700 dark:group-hover:border-orange-400">
+                LinkedIn
+              </span>
             </a>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          {/* Action CTAs */}
+          <div className="mt-8 flex flex-wrap gap-3">
             <button
-              onClick={() => { onProjectsClick(); trackEvent("navigate_projects"); }}
-              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
+              onClick={() => {
+                onProjectsClick();
+                trackEvent("navigate_projects");
+              }}
+              className="group inline-flex items-center gap-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100/90 dark:bg-stone-800/90 px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-stone-200 shadow-sm transition-all hover:border-stone-400 dark:hover:border-stone-600 hover:bg-stone-200/80 dark:hover:bg-stone-700/80"
             >
               {language === "pl" ? "Projekty" : "Projects"}
-              <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
+              <FaArrowRight className="text-[11px] transition-transform group-hover:translate-x-1 text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400" />
             </button>
             <button
-              onClick={() => { onHackathonsClick(); trackEvent("navigate_hackathons"); }}
-              className="group inline-flex items-center gap-2 rounded-md border border-stone-300 dark:border-stone-600 bg-stone-100 dark:bg-[#2a2320] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700"
+              onClick={() => {
+                onHackathonsClick();
+                trackEvent("navigate_hackathons");
+              }}
+              className="group inline-flex items-center gap-2 rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-100/90 dark:bg-stone-800/90 px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-stone-200 shadow-sm transition-all hover:border-stone-400 dark:hover:border-stone-600 hover:bg-stone-200/80 dark:hover:bg-stone-700/80"
             >
               {t(translations.hackathons)}
-              <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
+              <FaArrowRight className="text-[11px] transition-transform group-hover:translate-x-1 text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400" />
             </button>
             <a
               href={cvPdf}
               download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
               onClick={() => trackEvent("cv_download", { language })}
-              className="inline-flex items-center gap-2 rounded-md bg-orange-700 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.2em] !text-white transition-all hover:bg-orange-800"
+              className="inline-flex items-center gap-2 rounded-lg bg-orange-700 dark:bg-orange-600 px-4 py-2.5 text-xs font-semibold !text-white shadow-sm transition-all hover:bg-orange-800 dark:hover:bg-orange-500 hover:shadow-md"
             >
-              <FaDownload className="text-[10px]" />
-              {language === "pl" ? "Pobierz CV" : "Download CV"}
+              <FaDownload className="text-[11px]" />
+              {language === "pl" ? "Pobierz CV (PDF)" : "Download Resume (PDF)"}
             </a>
           </div>
         </header>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── ABOUT ── */}
         <section id="about" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("about")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("about")}`}>
             {t(translations.aboutMe)}
           </h2>
           <div className="lg:col-span-9">
             <p className="text-base sm:text-lg leading-relaxed text-stone-700 dark:text-stone-300 max-w-3xl">
               {language === "pl"
-                ? "Na co dzień studiuję informatykę stosowaną na Politechnice Łódzkiej i rozwijam się w kierunku technologii webowych. Poza uczelnią tworzę własne strony i aplikacje. Zależy mi na tym, żeby moje projekty były po prostu użyteczne, dlatego projektuję narzędzia, z których sam chętnie korzystam. To właśnie praktyczne zastosowanie kodu daje mi największego kopa do nauki i stałego podnoszenia poprzeczki."
-                : "I study Applied Computer Science at Łódź University of Technology and focus on web technologies. Outside of university, I build my own websites and applications. I care about making my projects genuinely useful, so I design tools that I myself enjoy using. It's the practical application of code that gives me the biggest drive to learn and constantly raise the bar."}
+                ? "Studiuję informatykę stosowaną na Politechnice Łódzkiej i specjalizuję się w tworzeniu nowoczesnych rozwiązań webowych. Moje podejście opiera się na budowaniu systemów, które rozwiązują realne problemy biznesowe — od ergonomii interfejsu po wydajną architekturę danych. Udział w hackathonach pozwala mi regularnie testować umiejętność błyskawicznego prototypowania i pracy pod presją czasu."
+                : "I study Applied Computer Science at Lodz University of Technology, specializing in full-stack web engineering. My focus is on building systems that solve tangible business problems — from intuitive interfaces to resilient data architectures. Participating in high-stakes hackathons allows me to continuously refine rapid prototyping and end-to-end delivery."}
             </p>
           </div>
         </section>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── EXPERIENCE ── */}
         <section id="experience" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("experience")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("experience")}`}>
             {t(translations.experience)}
           </h2>
-          <div className="lg:col-span-9 flex flex-col gap-8">
+          <div className="lg:col-span-9 flex flex-col gap-10">
             {EXPERIENCE.map((exp) => (
-              <div key={exp.id} className="flex flex-col gap-2">
+              <div key={exp.id} className="relative flex flex-col gap-3">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100">
                     {language === "pl" ? exp.role.pl : exp.role.en}
                   </h3>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">
+                  <span className="rounded-full bg-stone-200/80 dark:bg-stone-800 px-2.5 py-0.5 text-xs font-semibold text-orange-800 dark:text-orange-400">
                     {language === "pl" ? exp.date.pl : exp.date.en}
                   </span>
                 </div>
@@ -259,10 +325,10 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                   {language === "pl" ? exp.description.pl : exp.description.en}
                 </p>
                 {exp.details && (
-                  <ul className="mt-2 space-y-1.5 pl-2">
+                  <ul className="mt-2 space-y-2">
                     {(language === "pl" ? exp.details.pl.bullets : exp.details.en.bullets).map((bullet, i) => (
-                      <li key={i} className="flex gap-3 items-start leading-relaxed text-sm text-stone-600 dark:text-stone-400">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
+                      <li key={i} className="flex gap-3 items-start leading-relaxed text-sm text-stone-700 dark:text-stone-300">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700 dark:bg-orange-400" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -271,11 +337,12 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
                 {exp.technologies && exp.technologies.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {exp.technologies.map((tech) => (
-                      <div key={tech.name} className="flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm">
+                      <div
+                        key={tech.name}
+                        className="flex items-center gap-1.5 rounded-md bg-stone-100/90 dark:bg-stone-800/90 px-2.5 py-1 text-xs font-medium text-stone-700 dark:text-stone-300 border border-stone-300/70 dark:border-stone-700 shadow-sm"
+                      >
                         {tech.icon && <i className={`${tech.icon} text-xs text-stone-500`} />}
-                        <span className="text-[9px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
-                          {tech.name}
-                        </span>
+                        <span>{tech.name}</span>
                       </div>
                     ))}
                   </div>
@@ -285,28 +352,44 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── EDUCATION & CERTIFICATES ── */}
         <section id="education" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("education")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("education")}`}>
             {t(translations.education)}
           </h2>
           <div className="lg:col-span-9 flex flex-col gap-10">
             {/* Sub-section: Edukacja */}
             <div>
-              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+              <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
                 {language === "pl" ? "Edukacja" : "Education"}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
                 {[
-                  { school: translations.eduUniversity, faculty: translations.eduUniversityFaculty, field: translations.eduUniversityField, date: "10/2023 – 03/2027" },
-                  { school: translations.eduSchool, faculty: undefined, field: translations.eduSchoolField, date: "09/2019 – 06/2023" },
+                  {
+                    school: translations.eduUniversity,
+                    faculty: translations.eduUniversityFaculty,
+                    field: translations.eduUniversityField,
+                    date: "10/2023 – 03/2027",
+                  },
+                  {
+                    school: translations.eduSchool,
+                    faculty: undefined,
+                    field: translations.eduSchoolField,
+                    date: "09/2019 – 06/2023",
+                  },
                 ].map((edu) => (
                   <div key={edu.date} className="flex flex-col gap-1">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{edu.date}</p>
-                    <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100">{t(edu.school)}</p>
-                    {edu.faculty && <p className="text-sm text-stone-600 dark:text-stone-400">{t(edu.faculty)}</p>}
+                    <span className="text-xs font-semibold text-orange-800 dark:text-orange-400">
+                      {edu.date}
+                    </span>
+                    <p className="text-base font-semibold leading-snug text-stone-900 dark:text-stone-100">
+                      {t(edu.school)}
+                    </p>
+                    {edu.faculty && (
+                      <p className="text-xs text-stone-600 dark:text-stone-400">{t(edu.faculty)}</p>
+                    )}
                     <p className="text-sm text-stone-700 dark:text-stone-300">{t(edu.field)}</p>
                   </div>
                 ))}
@@ -315,34 +398,52 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
             {/* Sub-section: Certyfikaty */}
             {CERTIFICATES.length > 0 && (
-              <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
-                <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+              <div className="border-t border-stone-300/80 dark:border-stone-800/80 pt-8">
+                <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
                   {t(translations.certificates)}
                 </h3>
-                <div className="grid grid-cols-1 gap-8">
+                <div className="grid grid-cols-1 gap-6">
                   {CERTIFICATES.map((cert) => (
                     <div
                       key={cert.id}
-                      className={`flex flex-col sm:flex-row gap-5 ${cert.details ? "cursor-pointer group/cert rounded-lg p-3 -m-3 transition-colors hover:bg-stone-200/50 dark:hover:bg-stone-800/30" : ""}`}
+                      className={`flex flex-col sm:flex-row gap-5 rounded-xl border border-stone-300/70 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-800/40 p-4 transition-all hover:bg-stone-100 dark:hover:bg-stone-800/70 hover:border-stone-400 dark:hover:border-stone-700 ${
+                        cert.details ? "cursor-pointer group/cert" : ""
+                      }`}
                       onClick={() => cert.details && setSelectedCert(cert)}
                     >
                       {cert.image && (
                         <div className="shrink-0">
-                          <img src={cert.image} alt={language === "pl" ? cert.name.pl : cert.name.en} className="w-full sm:w-44 rounded-md ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm group-hover/cert:scale-[1.02] transition-transform" />
+                          <img
+                            src={cert.image}
+                            alt={language === "pl" ? cert.name.pl : cert.name.en}
+                            className="w-full sm:w-44 rounded-lg border border-stone-300/80 dark:border-stone-700 object-cover shadow-sm group-hover/cert:scale-[1.02] transition-transform"
+                          />
                         </div>
                       )}
-                      <div className="flex flex-col gap-1">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{cert.date} · {cert.issuer}</p>
-                        <p className="mt-1 text-base font-semibold leading-snug text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                          {language === "pl" ? cert.name.pl : cert.name.en}
-                        </p>
-                        <p className="mt-1 text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
-                          {language === "pl" ? cert.description.pl : cert.description.en}
-                        </p>
+                      <div className="flex flex-col justify-between gap-1 flex-1">
+                        <div>
+                          <span className="text-xs font-semibold text-orange-800 dark:text-orange-400">
+                            {cert.date} · {cert.issuer}
+                          </span>
+                          <h4 className="mt-1 text-base font-bold leading-snug text-stone-900 dark:text-stone-100">
+                            {language === "pl" ? cert.name.pl : cert.name.en}
+                          </h4>
+                          <p className="mt-1 text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+                            {language === "pl" ? cert.description.pl : cert.description.en}
+                          </p>
+                        </div>
                         {cert.url && (
-                          <a href={cert.url} target="_blank" rel="noopener noreferrer" className="mt-2 text-xs font-medium text-orange-700 hover:underline">
-                            {language === "pl" ? "Zweryfikuj" : "Verify"}
-                          </a>
+                          <div className="mt-3">
+                            <a
+                              href={cert.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-xs font-semibold text-orange-700 dark:text-orange-400 hover:underline"
+                            >
+                              {language === "pl" ? "Zweryfikuj certyfikat →" : "Verify certificate →"}
+                            </a>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -353,45 +454,43 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── SKILLS / STACK & LANGUAGES ── */}
         <section id="skills" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("skills")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("skills")}`}>
             {t(translations.skills)}
           </h2>
           <div className="lg:col-span-9 flex flex-col gap-10">
             {/* Sub-section: Stack */}
             <div>
-              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
-                Stack
+              <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+                Stack technologiczny
               </h3>
               <div className="flex flex-col gap-6">
-                {TECH_CATEGORIES.map((group, gIdx) => (
-                  <div key={group.key} className="relative grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 pl-3">
-                    {/* pionowy pasek-akcent po lewej */}
-                    <span className={`absolute left-0 top-1 bottom-1 w-[2px] rounded-full ${group.color.bar}`} />
-
-                    {/* etykieta kategorii */}
-                    <div className="sm:col-span-3 flex items-center gap-2">
-                      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${group.color.dot}`} />
-                      <span className={`text-[10px] font-bold uppercase tracking-[0.3em] ${group.color.text}`}>
+                {TECH_CATEGORIES.map((group) => (
+                  <div key={group.key} className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-6 items-baseline">
+                    {/* Category Label */}
+                    <div className="sm:col-span-4 flex items-center gap-2">
+                      <span className={`h-2 w-2 rounded-full ${group.dotColor}`} />
+                      <span className="text-xs font-bold uppercase tracking-wider text-stone-700 dark:text-stone-300">
                         {language === "pl" ? group.label.pl : group.label.en}
                       </span>
                     </div>
 
-                    {/* chipy */}
-                    <div className="sm:col-span-9 flex flex-wrap gap-1.5">
-                      {group.items.map((tech, idx) => (
+                    {/* Chips */}
+                    <div className="sm:col-span-8 flex flex-wrap gap-1.5">
+                      {group.items.map((tech) => (
                         <div
                           key={tech.name}
-                          style={{ transitionDelay: `${100 + gIdx * 70 + idx * 20}ms` }}
-                          className={`group flex items-center gap-1.5 rounded-md bg-white dark:bg-[#2a2320] px-2.5 py-1.5 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all duration-400 ease-[var(--ease-out)] hover:scale-105 ${group.color.chipHoverRing} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+                          className="flex items-center gap-1.5 rounded-lg border border-stone-300/80 dark:border-stone-700/80 bg-stone-100/90 dark:bg-stone-800/90 px-2.5 py-1 text-xs font-medium text-stone-800 dark:text-stone-200 shadow-sm transition-all hover:scale-105 hover:border-stone-400 dark:hover:border-stone-600"
                         >
-                          {tech.imageSrc ? <img src={tech.imageSrc} alt={tech.name} className="h-3.5 w-3.5 transition-transform group-hover:scale-110" /> : <i className={`${tech.className} text-sm transition-transform group-hover:scale-110 ${tech.name === "Python" ? "text-[#3776AB]" : ""}`} />}
-                          <span className="text-[10px] font-bold uppercase tracking-tight text-stone-700 dark:text-stone-200">
-                            {tech.name}
-                          </span>
+                          {tech.imageSrc ? (
+                            <img src={tech.imageSrc} alt={tech.name} className="h-3.5 w-3.5" />
+                          ) : (
+                            <i className={`${tech.className} text-xs text-stone-500`} />
+                          )}
+                          <span>{tech.name}</span>
                         </div>
                       ))}
                     </div>
@@ -401,60 +500,127 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
             </div>
 
             {/* Sub-section: Języki */}
-            <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
-              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
+            <div className="border-t border-stone-300/80 dark:border-stone-800/80 pt-8">
+              <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
                 {t(translations.languages)}
               </h3>
-              <div className="flex flex-col gap-5 max-w-sm">
-                {[
-                  { labelKey: translations.langPolish, level: t(translations.langNative), percent: 100 },
-                  { labelKey: translations.langEnglish, level: "B2", percent: 72 },
-                ].map(({ labelKey, level, percent }) => (
-                  <div key={level} className="flex flex-col gap-1.5">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-sm font-semibold text-stone-900 dark:text-stone-100">{t(labelKey)}</span>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-orange-700">{level}</span>
-                    </div>
-                    <div className="h-[3px] w-full rounded-full bg-stone-200 dark:bg-stone-700">
-                      <div
-                        className="h-[3px] rounded-full bg-orange-700 transition-all duration-1000"
-                        style={{ width: mounted ? `${percent}%` : "0%" }}
-                      />
-                    </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+                <div className="flex flex-col gap-1 rounded-xl border border-stone-300/70 dark:border-stone-800 bg-stone-100/60 dark:bg-stone-800/50 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-stone-900 dark:text-stone-100">
+                      {t(translations.langPolish)}
+                    </span>
+                    <span className="rounded-full bg-emerald-700/10 dark:bg-emerald-400/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+                      {t(translations.langNative)}
+                    </span>
                   </div>
-                ))}
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                    {language === "pl" ? "Język ojczysty" : "Native language"}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-1 rounded-xl border border-stone-300/70 dark:border-stone-800 bg-stone-100/60 dark:bg-stone-800/50 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-stone-900 dark:text-stone-100">
+                      {t(translations.langEnglish)}
+                    </span>
+                    <span className="rounded-full bg-orange-700/10 dark:bg-orange-400/10 px-2.5 py-0.5 text-xs font-semibold text-orange-800 dark:text-orange-300">
+                      B2 / Professional
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                    {language === "pl"
+                      ? "Swobodna komunikacja techniczna i dokumentacja"
+                      : "Professional technical working proficiency"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── ACHIEVEMENTS ── */}
         <section id="achievements" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("achievements")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("achievements")}`}>
             {t(translations.achievements)}
           </h2>
-          <div className="lg:col-span-9 flex flex-col">
+          <div className="lg:col-span-9 flex flex-col gap-3">
             {[
-              { emoji: "🥇", label: t(translations.firstPlace), text: t(translations.achievement5), href: "https://www.linkedin.com/feed/update/urn:li:activity:7478060736074797056/", hackathonId: "blazity" },
-              { emoji: "🥇", label: t(translations.firstPlace), text: t(translations.achievement1), href: "https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh", hackathonId: "fintech" },
-              { emoji: "🥈", label: t(translations.secondPlace), text: t(translations.achievement2), href: "https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH", hackathonId: "pharmaradar" },
-              { emoji: "🥈", label: t(translations.secondPlace), text: t(translations.achievement3), href: "https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m", hackathonId: "synaptis" },
-              { emoji: "🎓", label: t(translations.scholarship), text: t(translations.achievement4), href: undefined, hackathonId: undefined },
-            ].map(({ emoji, label, text, href, hackathonId }, idx, arr) => (
+              {
+                icon: FaTrophy,
+                iconClass: "text-amber-600 dark:text-amber-400",
+                badgeBg: "bg-amber-600/10 dark:bg-amber-400/10",
+                label: t(translations.firstPlace),
+                text: t(translations.achievement5),
+                href: "https://www.linkedin.com/feed/update/urn:li:activity:7478060736074797056/",
+                hackathonId: "blazity",
+              },
+              {
+                icon: FaTrophy,
+                iconClass: "text-amber-600 dark:text-amber-400",
+                badgeBg: "bg-amber-600/10 dark:bg-amber-400/10",
+                label: t(translations.firstPlace),
+                text: t(translations.achievement1),
+                href: "https://www.linkedin.com/posts/lodzki-klaster-ict_lodzabrhack-activity-7402673072841039872-Arxh",
+                hackathonId: "fintech",
+              },
+              {
+                icon: FaMedal,
+                iconClass: "text-slate-600 dark:text-slate-300",
+                badgeBg: "bg-slate-500/10 dark:bg-slate-400/10",
+                label: t(translations.secondPlace),
+                text: t(translations.achievement2),
+                href: "https://www.linkedin.com/posts/p4_play-weplaybetter-hackandplay-activity-7389296147665874944-shiH",
+                hackathonId: "pharmaradar",
+              },
+              {
+                icon: FaMedal,
+                iconClass: "text-slate-600 dark:text-slate-300",
+                badgeBg: "bg-slate-500/10 dark:bg-slate-400/10",
+                label: t(translations.secondPlace),
+                text: t(translations.achievement3),
+                href: "https://www.linkedin.com/posts/wiktor-kopczy%C5%84ski-cs_ubihack-hackathon-agkaejdaho-ugcPost-7396910253503565825-KA2m",
+                hackathonId: "synaptis",
+              },
+              {
+                icon: FaGraduationCap,
+                iconClass: "text-orange-700 dark:text-orange-400",
+                badgeBg: "bg-orange-700/10 dark:bg-orange-400/10",
+                label: t(translations.scholarship),
+                text: t(translations.achievement4),
+                href: undefined,
+                hackathonId: undefined,
+              },
+            ].map(({ icon: Icon, iconClass, badgeBg, label, text, href, hackathonId }) => (
               <div
                 key={text}
                 onClick={() => hackathonId && onHackathonsClick(hackathonId)}
-                className={`flex items-start gap-4 py-4 ${idx < arr.length - 1 ? "border-b border-stone-200 dark:border-stone-700/50" : ""} ${hackathonId ? "cursor-pointer transition-colors hover:bg-stone-50 dark:hover:bg-[#2a2320] -mx-3 px-3 rounded-md" : ""}`}
+                className={`group flex items-start gap-4 rounded-xl border border-stone-300/60 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-800/40 p-4 transition-all hover:bg-stone-100 dark:hover:bg-stone-800/80 hover:border-stone-400 dark:hover:border-stone-700 ${
+                  hackathonId ? "cursor-pointer" : ""
+                }`}
               >
-                <span className="shrink-0 text-2xl leading-none">{emoji}</span>
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${badgeBg}`}>
+                  <Icon className={`text-base ${iconClass}`} />
+                </div>
                 <div className="min-w-0 flex-1">
-                  <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{label}</p>
-                  <p className="text-sm leading-relaxed text-stone-800 dark:text-stone-300">{text}</p>
+                  <span className="text-xs font-semibold text-orange-800 dark:text-orange-400">
+                    {label}
+                  </span>
+                  <p className="mt-1 text-sm leading-relaxed text-stone-800 dark:text-stone-200">
+                    {text}
+                  </p>
                 </div>
                 {href && (
-                  <a href={href} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="ml-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-stone-100 dark:bg-[#2a2320] text-stone-500 dark:text-stone-400 transition-all hover:bg-stone-900 hover:text-[#f4ecdc]">
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-stone-300/70 dark:border-stone-700 bg-white dark:bg-stone-800 text-stone-500 dark:text-stone-400 shadow-sm transition-all hover:bg-stone-900 hover:text-white dark:hover:bg-stone-100 dark:hover:text-stone-900"
+                    aria-label="Zobacz post na LinkedIn"
+                  >
                     <FaLinkedin className="text-xs" />
                   </a>
                 )}
@@ -463,42 +629,63 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
-        <hr className="border-stone-300/70 dark:border-stone-700/50" />
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
 
         {/* ── PROJECTS & HACKATHONS ── */}
         <section id="projects" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("projects")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("projects")}`}>
             {language === "pl" ? "Projekty" : "Projects"}
           </h2>
           <div className="lg:col-span-9 flex flex-col gap-10">
-            {/* Sub-section: Projekty Osobiste */}
+            {/* Sub-section: Projekty */}
             <div>
-              <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
-                {language === "pl" ? "Projekty Osobiste" : "Personal Projects"}
-              </h3>
-              <div className="flex flex-col gap-3 pl-8">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
+                  {language === "pl" ? "Projekty" : "Projects"}
+                </h3>
+                <button
+                  onClick={() => onProjectsClick()}
+                  className="text-xs font-semibold text-orange-700 dark:text-orange-400 hover:underline inline-flex items-center gap-1"
+                >
+                  {language === "pl" ? "Wszystkie szczegóły" : "View all details"} →
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-3">
                 {PROJECTS.map((project) => (
                   <button
                     key={project.id}
                     onClick={() => onProjectsClick(project.id)}
-                    className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
+                    className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-stone-300/70 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-800/40 p-4 text-left transition-all hover:bg-stone-100 dark:hover:bg-stone-800/80 hover:border-stone-400 dark:hover:border-stone-700 hover-lift"
                   >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-baseline gap-2">
-                        <span className="text-base font-semibold uppercase tracking-tight text-stone-900 dark:text-stone-100">{project.name}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-base font-bold text-stone-900 dark:text-stone-100">
+                          {project.name}
+                        </span>
                         {project.status && (
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
-                            · {project.status[language]}
+                          <span className="rounded-full bg-orange-700/10 dark:bg-orange-400/10 px-2 py-0.5 text-[11px] font-semibold text-orange-800 dark:text-orange-300">
+                            {project.status[language]}
                           </span>
                         )}
+                        <span className="text-xs text-stone-500 dark:text-stone-400">
+                          · {project.role[language]}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-stone-600 dark:text-stone-400 line-clamp-2 leading-relaxed">
+                        {project.description[language]}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex items-center gap-1">
+                        {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
+                          <i key={tech.name} className={`${tech.icon} text-sm text-stone-500`} />
+                        ))}
+                      </div>
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-stone-200/70 dark:bg-stone-700/70 group-hover:bg-orange-700 group-hover:text-white dark:group-hover:bg-orange-600 transition-colors">
+                        <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
                       </div>
                     </div>
-                    <div className="hidden sm:flex shrink-0 gap-1">
-                      {(project.technologies ?? defaultTech).slice(0, 4).map((tech) => (
-                        <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
-                      ))}
-                    </div>
-                    <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
                   </button>
                 ))}
               </div>
@@ -506,33 +693,54 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
 
             {/* Sub-section: Hackathony */}
             {HACKATHONS.length > 0 && (
-              <div className="border-t border-stone-300/70 dark:border-stone-700/50 pt-8">
-                <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider mb-6">
-                  {t(translations.hackathons)}
-                </h3>
-                <div className="flex flex-col gap-3 pl-8">
+              <div className="border-t border-stone-300/80 dark:border-stone-800/80 pt-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 uppercase tracking-wider">
+                    {t(translations.hackathons)}
+                  </h3>
+                  <button
+                    onClick={() => onHackathonsClick()}
+                    className="text-xs font-semibold text-orange-700 dark:text-orange-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    {language === "pl" ? "Wszystkie hackathony" : "View all hackathons"} →
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
                   {HACKATHONS.map((hack) => (
                     <button
                       key={hack.id}
                       onClick={() => onHackathonsClick(hack.id)}
-                      className="group flex items-center gap-4 border-b border-stone-200 dark:border-stone-700/50 py-4 text-left transition-colors hover:border-orange-700"
+                      className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-stone-300/70 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-800/40 p-4 text-left transition-all hover:bg-stone-100 dark:hover:bg-stone-800/80 hover:border-stone-400 dark:hover:border-stone-700 hover-lift"
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-baseline gap-2">
-                          <span className="text-base font-semibold uppercase tracking-tight text-stone-900 dark:text-stone-100">{hack.name}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-base font-bold text-stone-900 dark:text-stone-100">
+                            {hack.name}
+                          </span>
                           {hack.inProgress && (
-                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-700">
-                              · {language === "pl" ? "W trakcie" : "In Progress"}
+                            <span className="rounded-full bg-amber-600/10 dark:bg-amber-400/10 px-2 py-0.5 text-[11px] font-semibold text-amber-800 dark:text-amber-300">
+                              {language === "pl" ? "W trakcie" : "In Progress"}
                             </span>
                           )}
+                          <span className="text-xs text-stone-500 dark:text-stone-400">
+                            · {hack.role[language]}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs text-stone-600 dark:text-stone-400 line-clamp-2 leading-relaxed">
+                          {hack.description[language]}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-3 shrink-0">
+                        <div className="flex items-center gap-1">
+                          {(hack.technologies ?? []).slice(0, 4).map((tech) => (
+                            <i key={tech.name} className={`${tech.icon} text-sm text-stone-500`} />
+                          ))}
+                        </div>
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-stone-200/70 dark:bg-stone-700/70 group-hover:bg-orange-700 group-hover:text-white dark:group-hover:bg-orange-600 transition-colors">
+                          <FaArrowRight className="text-[10px] transition-transform group-hover:translate-x-0.5" />
                         </div>
                       </div>
-                      <div className="hidden sm:flex shrink-0 gap-1">
-                        {(hack.technologies ?? []).slice(0, 4).map((tech) => (
-                          <i key={tech.name} className={`${tech.icon} text-base text-stone-500`} />
-                        ))}
-                      </div>
-                      <FaArrowRight className="text-xs text-stone-400 transition-all group-hover:translate-x-1 group-hover:text-orange-700" />
                     </button>
                   ))}
                 </div>
@@ -541,9 +749,11 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </div>
         </section>
 
+        <hr className="border-stone-300/80 dark:border-stone-800/80" />
+
         {/* ── HOBBIES ── */}
         <section id="hobbies" className="reveal grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12 py-14 scroll-mt-20">
-          <h2 className={`lg:col-span-3 ${sectionLabel("hobbies")}`}>
+          <h2 className={`lg:col-span-3 ${sectionHeadingClass("hobbies")}`}>
             {t(translations.hobbies)}
           </h2>
           <div className="lg:col-span-9 flex flex-wrap gap-3">
@@ -551,56 +761,77 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               <button
                 key={idx}
                 onClick={() => setSelectedHobby(hobby)}
-                className="group flex items-center gap-3 rounded-md bg-white dark:bg-[#2a2320] px-4 py-3 ring-1 ring-stone-200 dark:ring-[#3d3530] shadow-sm transition-all hover:ring-orange-700/50 hover:scale-[1.02] hover-lift"
+                className="group flex items-center gap-3 rounded-xl border border-stone-300/80 dark:border-stone-800 bg-stone-100/70 dark:bg-stone-800/60 px-4 py-2.5 text-xs font-semibold text-stone-800 dark:text-stone-200 shadow-sm transition-all hover:bg-stone-100 dark:hover:bg-stone-800 hover:border-stone-400 dark:hover:border-stone-700 hover-lift"
               >
-                <span className="text-sm font-medium text-stone-800 dark:text-stone-200 transition-colors group-hover:text-orange-700">{t(hobby.label)}</span>
+                <span>{hobby.icon}</span>
+                <span className="group-hover:text-orange-700 dark:group-hover:text-orange-400 transition-colors">
+                  {t(hobby.label)}
+                </span>
               </button>
             ))}
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-stone-300/70 dark:border-stone-700/50 py-10 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-500">
-            © Mateusz Ciołkowski
+        <footer className="border-t border-stone-300/80 dark:border-stone-800/80 py-12 text-center">
+          <p className="text-xs text-stone-500 dark:text-stone-400">
+            © {new Date().getFullYear()} Mateusz Ciołkowski — Full-Stack Developer
           </p>
         </footer>
       </main>
 
-      {/* ─── HOBBY MODAL ─── */}
+      {/* ─── CERTIFICATE MODAL ─── */}
       {selectedCert && selectedCert.details && (
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-900/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${showCertModal ? "opacity-100" : "opacity-0"}`}
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${
+            showCertModal ? "opacity-100" : "opacity-0"
+          }`}
           onClick={() => setSelectedCert(null)}
         >
           <div
-            className={`relative max-w-2xl w-full transition-all duration-500 ease-[var(--ease-out)] ${showCertModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"}`}
+            className={`relative max-w-2xl w-full transition-all duration-400 ease-[var(--ease-out)] ${
+              showCertModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedCert(null)}
-              className="absolute -top-12 right-0 z-10 rounded-md bg-orange-700 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] shadow-lg transition-all hover:bg-orange-800 hover:scale-105 active:scale-95"
+              className="absolute -top-12 right-0 z-10 rounded-full bg-stone-800 dark:bg-stone-700 px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg transition-all hover:bg-stone-900"
             >
               {language === "pl" ? "Zamknij" : "Close"}
             </button>
-            <div ref={certModalRef} className="rounded-2xl border border-stone-300 dark:border-stone-700 bg-[#f4ecdc] dark:bg-[#1b1712] shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
+            <div
+              ref={certModalRef}
+              className="rounded-2xl border border-stone-300 dark:border-stone-800 bg-[#f4ecdc] dark:bg-[#181512] shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
+            >
               {selectedCert.image && (
-                <div className="px-4 pt-4">
-                  <img src={selectedCert.image} alt={language === "pl" ? selectedCert.name.pl : selectedCert.name.en} className="w-full rounded-lg object-cover" />
+                <div className="p-4 bg-stone-200/50 dark:bg-stone-900/50">
+                  <img
+                    src={selectedCert.image}
+                    alt={language === "pl" ? selectedCert.name.pl : selectedCert.name.en}
+                    className="w-full rounded-xl border border-stone-300/80 dark:border-stone-800 object-cover shadow-sm"
+                  />
                 </div>
               )}
-              <div className="p-7">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-700">{selectedCert.date} · {selectedCert.issuer}</p>
-                <h3 className="mt-2 text-xl font-bold leading-snug text-stone-900 dark:text-stone-100">
+              <div className="p-6 sm:p-8">
+                <span className="text-xs font-semibold text-orange-800 dark:text-orange-400">
+                  {selectedCert.date} · {selectedCert.issuer}
+                </span>
+                <h3 className="mt-1 text-xl font-bold leading-snug text-stone-900 dark:text-stone-100">
                   {language === "pl" ? selectedCert.name.pl : selectedCert.name.en}
                 </h3>
-                <ul className="mt-5 space-y-3">
-                  {(language === "pl" ? selectedCert.details.pl.bullets : selectedCert.details.en.bullets).map((bullet, i) => (
-                    <li key={i} className="flex gap-3 text-sm leading-relaxed text-stone-700 dark:text-stone-300">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700" />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
+                <ul className="mt-5 space-y-2.5">
+                  {(language === "pl" ? selectedCert.details.pl.bullets : selectedCert.details.en.bullets).map(
+                    (bullet, i) => (
+                      <li
+                        key={i}
+                        className="flex gap-3 text-sm leading-relaxed text-stone-700 dark:text-stone-300"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-700 dark:bg-orange-400" />
+                        <span>{bullet}</span>
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
             </div>
@@ -608,53 +839,113 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
         </div>
       )}
 
+      {/* ─── HOBBY MODAL ─── */}
       {selectedHobby && (
         <div
-          className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-900/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${showModal ? "opacity-100" : "opacity-0"}`}
-          onClick={() => { setSelectedHobby(null); setActiveHobbySlide(0); }}
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 p-4 backdrop-blur-sm transition-all duration-300 ease-[var(--ease-out)] ${
+            showModal ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => {
+            setSelectedHobby(null);
+            setActiveHobbySlide(0);
+          }}
         >
           <div
-            className={`relative max-w-4xl max-h-[90vh] w-full transition-all duration-500 ease-[var(--ease-out)] ${showModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"}`}
+            className={`relative max-w-4xl max-h-[90vh] w-full transition-all duration-400 ease-[var(--ease-out)] ${
+              showModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => { setSelectedHobby(null); setActiveHobbySlide(0); }}
-              className="absolute -top-12 right-0 z-10 rounded-md bg-orange-700 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.2em] text-[#f4ecdc] shadow-lg transition-all hover:bg-orange-800 hover:scale-105 active:scale-95"
+              onClick={() => {
+                setSelectedHobby(null);
+                setActiveHobbySlide(0);
+              }}
+              className="absolute -top-12 right-0 z-10 rounded-full bg-stone-800 dark:bg-stone-700 px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg transition-all hover:bg-stone-900"
             >
               {language === "pl" ? "Zamknij" : "Close"}
             </button>
-            <div className="rounded-2xl border border-stone-300 bg-[#f4ecdc] p-8 shadow-2xl">
+            <div className="rounded-2xl border border-stone-300 dark:border-stone-800 bg-[#f4ecdc] dark:bg-[#181512] p-6 sm:p-8 shadow-2xl">
               <div className="flex flex-col lg:flex-row gap-8 items-center">
                 {selectedHobby.images.length > 0 ? (
-                  <div className="relative w-80 h-80 lg:w-96 lg:h-96" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-                    <img src={selectedHobby.images[activeHobbySlide]} alt={t(selectedHobby.label)} className="w-full h-full object-cover rounded-xl shadow-2xl ring-2 ring-orange-700/20 select-none" />
+                  <div
+                    className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 shrink-0"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                  >
+                    <img
+                      src={selectedHobby.images[activeHobbySlide]}
+                      alt={t(selectedHobby.label)}
+                      className="w-full h-full object-cover rounded-xl shadow-lg border border-stone-300/80 dark:border-stone-700 select-none"
+                    />
                     {selectedHobby.images.length > 1 && (
                       <>
-                        <button onClick={() => setActiveHobbySlide((p) => (p - 1 + selectedHobby.images.length) % selectedHobby.images.length)} className="absolute left-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-stone-900/70 text-2xl text-[#f4ecdc] shadow-lg transition-all hover:bg-orange-700 active:scale-90">‹</button>
-                        <button onClick={() => setActiveHobbySlide((p) => (p + 1) % selectedHobby.images.length)} className="absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-stone-900/70 text-2xl text-[#f4ecdc] shadow-lg transition-all hover:bg-orange-700 active:scale-90">›</button>
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                        <button
+                          onClick={() =>
+                            setActiveHobbySlide(
+                              (p) => (p - 1 + selectedHobby.images.length) % selectedHobby.images.length
+                            )
+                          }
+                          className="absolute left-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-stone-900/80 text-xl text-white shadow-lg transition-all hover:bg-orange-700 active:scale-90"
+                        >
+                          ‹
+                        </button>
+                        <button
+                          onClick={() =>
+                            setActiveHobbySlide((p) => (p + 1) % selectedHobby.images.length)
+                          }
+                          className="absolute right-2 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-stone-900/80 text-xl text-white shadow-lg transition-all hover:bg-orange-700 active:scale-90"
+                        >
+                          ›
+                        </button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
                           {selectedHobby.images.map((_, i) => (
-                            <button key={i} onClick={() => setActiveHobbySlide(i)} className={`h-2 rounded-full transition-all duration-300 ease-[var(--ease-out)] active:scale-90 ${i === activeHobbySlide ? "w-6 bg-orange-700" : "w-2 bg-stone-400 hover:bg-stone-500"}`} />
+                            <button
+                              key={i}
+                              onClick={() => setActiveHobbySlide(i)}
+                              className={`h-2 rounded-full transition-all duration-300 ${
+                                i === activeHobbySlide ? "w-6 bg-orange-700 dark:bg-orange-500" : "w-2 bg-stone-400/80"
+                              }`}
+                            />
                           ))}
                         </div>
                       </>
                     )}
                   </div>
                 ) : (
-                  <div className="flex h-80 w-80 items-center justify-center rounded-xl bg-stone-100 shadow-2xl ring-2 ring-orange-700/20 lg:h-96 lg:w-96">
-                    <span className="animate-pulse text-8xl">{selectedHobby.icon}</span>
+                  <div className="flex h-72 w-72 sm:h-80 sm:w-80 lg:h-96 lg:w-96 shrink-0 items-center justify-center rounded-xl bg-stone-200/60 dark:bg-stone-800/60 border border-stone-300 dark:border-stone-700">
+                    <span className="text-7xl">{selectedHobby.icon}</span>
                   </div>
                 )}
                 <div className="text-center lg:text-left">
-                  <div className="mb-4 text-4xl lg:text-5xl">{selectedHobby.icon}</div>
-                  <h3 className="mb-4 text-2xl font-bold uppercase tracking-[0.2em] text-orange-700">{t(selectedHobby.label)}</h3>
-                  <p className="max-w-md leading-relaxed text-stone-700">{language === "pl" ? selectedHobby.description.pl : selectedHobby.description.en}</p>
+                  <span className="text-4xl">{selectedHobby.icon}</span>
+                  <h3 className="mt-2 text-2xl font-bold text-stone-900 dark:text-stone-100">
+                    {t(selectedHobby.label)}
+                  </h3>
+                  <p className="mt-3 max-w-md leading-relaxed text-sm text-stone-700 dark:text-stone-300">
+                    {language === "pl" ? selectedHobby.description.pl : selectedHobby.description.en}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* ─── FLOATING BACK TO TOP BUTTON ─── */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-stone-300/80 dark:border-stone-700 bg-stone-100/90 dark:bg-stone-800/90 text-stone-700 dark:text-stone-300 shadow-lg backdrop-blur-sm transition-all duration-300 hover:bg-stone-200 dark:hover:bg-stone-700 hover:text-orange-700 dark:hover:text-orange-400 hover:border-orange-700/50 hover:scale-110 active:scale-95 ${
+          showScrollTop
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 translate-y-4 pointer-events-none"
+        }`}
+        aria-label={language === "pl" ? "Przewiń na samą górę" : "Scroll to top"}
+        title={language === "pl" ? "Na samą górę" : "Scroll to top"}
+      >
+        <FaArrowUp className="text-sm" />
+      </button>
     </div>
   );
 }

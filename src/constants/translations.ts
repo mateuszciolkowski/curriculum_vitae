@@ -1,7 +1,7 @@
 export const translations = {
   // Navigation & Buttons
-  hackathons: { pl: "HACKATHONY", en: "HACKATHONS" },
-  backToCv: { pl: "POWRÓT DO CV", en: "BACK TO CV" },
+  hackathons: { pl: "Hackathony", en: "Hackathons" },
+  backToCv: { pl: "Powrót do CV", en: "Back to CV" },
   downloadCv: { pl: "Curriculum Vitae", en: "Curriculum Vitae" },
 
   // Sections

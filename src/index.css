@@ -5,7 +5,7 @@
 :root {
   font-family: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
 
   color-scheme: light;
@@ -17,16 +17,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Design Engineering: Strong ease-out for UI interactions */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Easing curves */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 :root.dark {
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.92);
-  background-color: #1b1712;
+  color: #f5f5f4;
+  background-color: #181512;
 }
 
 body {
@@ -34,12 +34,36 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-family: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -0.01em;
 }
 
+/* Custom text selection */
+::selection {
+  background-color: rgba(194, 65, 12, 0.22);
+  color: inherit;
+}
+
+.dark ::selection {
+  background-color: rgba(234, 88, 12, 0.32);
+  color: #ffffff;
+}
+
+/* Accessible, crisp focus outlines */
+:focus-visible {
+  outline: 2px solid #c2410c;
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline-color: #ea580c;
+}
+
+/* Links */
 a {
   font-weight: 500;
   color: #c2410c;
   text-decoration: none;
+  transition: color 180ms var(--ease-out);
 }
 
 a:hover {
@@ -51,20 +75,20 @@ a:hover {
 }
 
 .dark a:hover {
-  color: #c2410c;
+  color: #fb923c;
 }
 
 /* Global button responsiveness */
 button, 
 .button,
 a[role="button"] {
-  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out), border-color 160ms var(--ease-out), color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
 
 button:active, 
 .button:active,
 a[role="button"]:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 /* Smooth scroll */
@@ -75,13 +99,45 @@ html {
 /* Section reveal animation */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
+  transform: translateY(20px);
+  transition: opacity 650ms var(--ease-out), transform 650ms var(--ease-out);
 }
 
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ede3ce;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #14110e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c8bba8;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #383029;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a99a84;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #52473d;
 }
 
 /* Reduced motion */
@@ -92,18 +148,16 @@ html {
   * { animation-duration: 0ms !important; transition-duration: 0ms !important; }
 }
 
-/* Smooth link underline transitions */
-a {
-  transition: color 200ms var(--ease-out);
-}
-
-/* Hover lift for interactive cards */
+/* Tactile card hover */
 @media (hover: hover) and (pointer: fine) {
   .hover-lift {
-    transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out);
+    transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out), border-color 250ms var(--ease-out);
   }
   .hover-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 28px -10px rgba(28, 25, 23, 0.12);
+  }
+  .dark .hover-lift:hover {
+    box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.45);
   }
 }

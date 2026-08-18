@@ -13,7 +13,7 @@ type HackathonsPageProps = {
   initialHackathonId?: string;
 };
 
-const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#1b1712]";
+const PAPER_BG = "bg-[#f4ecdc] dark:bg-[#181512]";
 
 export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPageProps) {
   const { language, setLanguage, t } = useLanguage();
@@ -74,10 +74,10 @@ export function HackathonsPage({ onBackToCv, initialHackathonId }: HackathonsPag
 
   return (
     <div
-      className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased selection:bg-orange-700/20`}
+      className={`${PAPER_BG} min-h-screen text-stone-900 dark:text-stone-100 antialiased`}
     >
       {/* ── TOP BAR ── */}
-      <div className={`border-b border-stone-300/70 dark:border-stone-700/60 bg-[#f4ecdc]/85 dark:bg-[#1b1712]/85 sticky top-0 z-30 backdrop-blur-md`}>
+      <div className={`border-b border-stone-300/70 dark:border-stone-800/80 bg-[#f4ecdc]/90 dark:bg-[#181512]/90 sticky top-0 z-30 backdrop-blur-md`}>
         <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <button
             onClick={onBackToCv}
