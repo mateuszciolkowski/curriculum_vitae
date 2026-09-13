@@ -310,7 +310,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           <div className="lg:col-span-9 flex flex-col gap-10">
             {EXPERIENCE.map((exp) => (
               <div key={exp.id} className="relative flex flex-col gap-3">
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div className="flex flex-col items-start gap-2">
                   <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100">
                     {language === "pl" ? exp.role.pl : exp.role.en}
                   </h3>
