@@ -13,6 +13,49 @@ export type Experience = {
 
 export const EXPERIENCE: Experience[] = [
   {
+    id: "hrk",
+    company: "HRK S.A.",
+    role: {
+      pl: "Młodszy specjalista ds. rozwoju oprogramowania i automatyzacji procesów biznesowych",
+      en: "Junior Software Development and Business Process Automation Specialist",
+    },
+    date: {
+      pl: "09/2026 – Obecnie",
+      en: "09/2026 – Present",
+    },
+    description: {
+      pl: "Rozwój wewnętrznych aplikacji webowych oraz integracji między systemami firmowymi, wspierających automatyzację procesów biznesowych.",
+      en: "Developing internal web applications and integrations between company systems that support business process automation.",
+    },
+    technologies: [
+      { name: "Python", icon: "devicon-python-plain" },
+      { name: "FastAPI", icon: "devicon-fastapi-plain" },
+      { name: "SQLAlchemy", icon: "devicon-sqlalchemy-plain" },
+      { name: "PostgreSQL", icon: "devicon-postgresql-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" },
+      { name: "Docker", icon: "devicon-docker-plain" },
+    ],
+    details: {
+      pl: {
+        bullets: [
+          "Budowa i rozwój wewnętrznych aplikacji webowych w React i TypeScript, usprawniających codzienną pracę zespołów.",
+          "Tworzenie API w FastAPI (Python) obsługujących logikę biznesową i wymianę danych między systemami.",
+          "Integracje z systemami firmowymi przez REST API – synchronizacja i przetwarzanie danych.",
+          "Automatyzacja powtarzalnych procesów biznesowych, ograniczająca pracę ręczną.",
+        ],
+      },
+      en: {
+        bullets: [
+          "Building and developing internal web applications in React and TypeScript that streamline daily team work.",
+          "Creating FastAPI (Python) APIs handling business logic and data exchange between systems.",
+          "Integrating company systems via REST APIs – data synchronisation and processing.",
+          "Automating repetitive business processes to reduce manual work.",
+        ],
+      },
+    },
+  },
+  {
     id: "shm",
     company: "SHM Sp. z o.o.",
     role: {
@@ -20,12 +63,12 @@ export const EXPERIENCE: Experience[] = [
       en: "Full-Stack Developer",
     },
     date: {
-      pl: "06/2026 – Obecnie",
-      en: "06/2026 – Present",
+      pl: "06/2026 – 08/2026",
+      en: "06/2026 – 08/2026",
     },
     description: {
       pl: "Praca nad projektem GreenTransit – platformą do zarządzania transportem (TMS) oraz cyfrowym obiegiem dokumentów przewozowych.",
-      en: "Working on the GreenTransit project – a Transport Management System (TMS) platform for digital transport document workflows.",
+      en: "Worked on the GreenTransit project – a Transport Management System (TMS) platform for digital transport document workflows.",
     },
     technologies: [
       { name: "React", icon: "devicon-react-original" },
