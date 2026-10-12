@@ -1,4 +1,4 @@
-import { type ReactElement, useState, useEffect, useRef } from "react";
+import { type MouseEvent, type ReactElement, useState, useEffect, useRef } from "react";
 import { TECH_CATEGORIES } from "../constants/technologies";
 import { HOBBIES } from "../constants/hobbies";
 import { PROJECTS } from "../data/projects";
@@ -7,7 +7,9 @@ import { CERTIFICATES } from "../data/certificates";
 import { EXPERIENCE } from "../data/experience";
 import {
   FaLinkedin,
+  FaEye,
   FaDownload,
+  FaXmark,
   FaArrowRight,
   FaTrophy,
   FaMedal,
@@ -18,9 +20,10 @@ import { HiSun, HiMoon } from "react-icons/hi2";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { translations } from "../constants/translations";
+import { PdfViewer } from "./PdfViewer";
 import { trackEvent } from "../utils/analytics";
-import cvPdfPL from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_PL.pdf";
-import cvPdfEN from "../assets/cv/CV_MATEUSZ_CIOLKOWSKI_ENG.pdf";
+const cvPdfPL = "/cv/CV_MATEUSZ_CIOLKOWSKI_PL.pdf";
+const cvPdfEN = "/cv/CV_MATEUSZ_CIOLKOWSKI_ENG.pdf";
 
 type CvPageProps = {
   onHackathonsClick: (id?: string) => void;
@@ -43,6 +46,7 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
   const [selectedCert, setSelectedCert] = useState<(typeof CERTIFICATES)[number] | null>(null);
   const [showCertModal, setShowCertModal] = useState(false);
+  const [showCvPreview, setShowCvPreview] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const certModalRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +96,20 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
   }, [selectedCert]);
 
   const cvPdf = language === "pl" ? cvPdfPL : cvPdfEN;
+
+  // Otwiera PDF jako blob: omija serwer dev Vite, który dla nawigacji w kartę potrafi zwrócić index.html zamiast pliku.
+  const openCvInNewTab = async (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const tab = window.open("", "_blank"); // otwarte synchronicznie, żeby nie zablokował tego popup-blocker
+    try {
+      const blob = await (await fetch(cvPdf)).blob();
+      const url = URL.createObjectURL(new Blob([blob], { type: "application/pdf" }));
+      if (tab) tab.location.href = url;
+      else window.location.href = url;
+    } catch {
+      if (tab) tab.location.href = cvPdf;
+    }
+  };
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -272,15 +290,16 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
               {t(translations.hackathons)}
               <FaArrowRight className="text-[11px] transition-transform group-hover:translate-x-1 text-stone-500 group-hover:text-orange-700 dark:group-hover:text-orange-400" />
             </button>
-            <a
-              href={cvPdf}
-              download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
-              onClick={() => trackEvent("cv_download", { language })}
+            <button
+              onClick={() => {
+                setShowCvPreview(true);
+                trackEvent("cv_preview", { language });
+              }}
               className="inline-flex items-center gap-2 rounded-lg bg-orange-700 dark:bg-orange-600 px-4 py-2.5 text-xs font-semibold !text-white shadow-sm transition-all hover:bg-orange-800 dark:hover:bg-orange-500 hover:shadow-md"
             >
-              <FaDownload className="text-[11px]" />
-              {language === "pl" ? "Pobierz CV (PDF)" : "Download Resume (PDF)"}
-            </a>
+              <FaEye className="text-[11px]" />
+              {language === "pl" ? "Zobacz CV" : "View Resume"}
+            </button>
           </div>
         </header>
 
@@ -779,6 +798,54 @@ export function CvPage({ onHackathonsClick, onProjectsClick }: CvPageProps): Rea
           </p>
         </footer>
       </main>
+
+      {/* ─── CV PREVIEW MODAL ─── */}
+      {showCvPreview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 p-2 sm:p-6 backdrop-blur-sm"
+          onClick={() => setShowCvPreview(false)}
+        >
+          <div
+            className="flex h-full max-h-[95dvh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-stone-300 dark:border-stone-800 bg-[#f4ecdc] dark:bg-[#181512] shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-300 dark:border-stone-800 p-3">
+              <a
+                href={cvPdf}
+                download={`CV_Mateusz_Ciolkowski_${language === "pl" ? "PL" : "EN"}.pdf`}
+                onClick={() => trackEvent("cv_download", { language })}
+                className="inline-flex items-center gap-2 rounded-lg bg-orange-700 dark:bg-orange-600 px-4 py-2 text-xs font-semibold !text-white shadow-sm transition-all hover:bg-orange-800 dark:hover:bg-orange-500"
+              >
+                <FaDownload className="text-[11px]" />
+                {language === "pl" ? "Pobierz CV (PDF)" : "Download Resume (PDF)"}
+              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href={cvPdf}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={openCvInNewTab}
+                  className="rounded-lg border border-stone-300 dark:border-stone-700 px-3 py-2 text-xs font-semibold text-stone-700 dark:text-stone-200 transition-all hover:border-orange-700 hover:text-orange-700 dark:hover:text-orange-400"
+                >
+                  {language === "pl" ? "Otwórz w nowej karcie" : "Open in new tab"}
+                </a>
+                <button
+                  onClick={() => setShowCvPreview(false)}
+                  aria-label={language === "pl" ? "Zamknij" : "Close"}
+                  className="rounded-full bg-stone-800 dark:bg-stone-700 p-2.5 text-white transition-all hover:bg-stone-900"
+                >
+                  <FaXmark />
+                </button>
+              </div>
+            </div>
+            <PdfViewer
+              key={cvPdf}
+              url={cvPdf}
+              errorLabel={language === "pl" ? "Nie udało się wczytać CV. Użyj „Otwórz w nowej karcie”." : "Could not load the resume. Use “Open in new tab”."}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ─── CERTIFICATE MODAL ─── */}
       {selectedCert && selectedCert.details && (

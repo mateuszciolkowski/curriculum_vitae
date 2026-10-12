@@ -29,7 +29,7 @@ WHERE TO EDIT WHAT
 - Project details view: src/components/ProjectDetailPage.tsx
 - Constants: src/constants/{skills,hobbies,technologies}.ts
 - Assets:
-  - CV files: src/assets/cv/
+  - CV files: public/cv/
   - Images: src/assets/images/
 
 MOST COMMON CHANGES
